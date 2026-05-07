@@ -1,6 +1,6 @@
 ---
 name: agile-refine-backlog
-description: Story Issueの要件をCodingAgentが実装開始できるレベルまで具体化する。シーケンス図で全パターンを洗い出し、画面仕様・API仕様・受入基準を確定させる。implementableは実装可能な仕様に、experimentalは実験計画に仕上げる。Use when ストーリー詳細化、リファインメント、受入基準作成、仕様書作成、実験計画。Triggers: バックログ詳細化, ストーリー詳細化, リファインメント, 受入基準作成, acceptance criteria, refine story, 仕様書作成, 実験計画.
+description: "Story Issueの要件をCodingAgentが実装開始できるレベルまで具体化する。シーケンス図で全パターンを洗い出し、画面仕様・API仕様・受入基準を確定させる。implementableは実装可能な仕様に、experimentalは実験計画に仕上げる。Use when ストーリー詳細化、リファインメント、受入基準作成、仕様書作成、実験計画。Triggers: バックログ詳細化, ストーリー詳細化, リファインメント, 受入基準作成, acceptance criteria, refine story, 仕様書作成, 実験計画."
 ---
 
 # Agile Refine Backlog

@@ -1,6 +1,6 @@
 ---
 name: create-issue
-description: GitHub Issue を作成する共通スキル。Issue Type（Epic/Story/Task）に応じたテンプレート適用、Mermaid検証、ステータス設定、親子リンクを一括で実行する。他のアジャイルスキルから呼び出されるほか、単独でも使用可能。Use when Issue作成、チケット作成。Triggers: issue作成, チケット作成, create issue, イシュー作って.
+description: "GitHub Issue を作成する共通スキル。Issue Type（Epic/Story/Task）に応じたテンプレート適用、Mermaid検証、ステータス設定、親子リンクを一括で実行する。他のアジャイルスキルから呼び出されるほか、単独でも使用可能。Use when Issue作成、チケット作成。Triggers: issue作成, チケット作成, create issue, イシュー作って."
 ---
 
 # Create Issue

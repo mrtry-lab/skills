@@ -1,6 +1,6 @@
 ---
 name: agile-story-to-task
-description: リファインメント済みの Story Issue を実装可能な Task Sub-issue に分解する。Use when ストーリーをタスクに分解、Sub-issue作成、実装タスク分解、PR単位の分割。Triggers: タスク分解, Sub-issue作成, 実装計画, PR分割, story to task, task decomposition, サブイシュー.
+description: "リファインメント済みの Story Issue を実装可能な Task Sub-issue に分解する。Use when ストーリーをタスクに分解、Sub-issue作成、実装タスク分解、PR単位の分割。Triggers: タスク分解, Sub-issue作成, 実装計画, PR分割, story to task, task decomposition, サブイシュー."
 ---
 
 # Agile Story to Task

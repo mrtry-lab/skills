@@ -1,6 +1,6 @@
 ---
 name: agile-epic
-description: Opportunity CanvasでGitHub Epic Issue（Issue Type: Epic）を対話的に作成・更新する。Use when ビジョンからEpic導出(0→1)、新トリガーからEpic追加(1→N)、既存Epic更新。Triggers: エピック作成, Epic作成, epic更新, Opportunity Canvas, 機会分析, 新機能提案, feature proposal, 4リスク評価, エピック定義.
+description: "Opportunity CanvasでGitHub Epic Issue（Issue Type: Epic）を対話的に作成・更新する。Use when ビジョンからEpic導出(0→1)、新トリガーからEpic追加(1→N)、既存Epic更新。Triggers: エピック作成, Epic作成, epic更新, Opportunity Canvas, 機会分析, 新機能提案, feature proposal, 4リスク評価, エピック定義."
 ---
 
 # Agile Epic

@@ -1,6 +1,6 @@
 ---
 name: agile-product-vision
-description: プロダクトビジョンドキュメント（docs/VISION.md）を対話的に作成・更新する。チームの前提認知を揃えるためのWhy/Who/What/How/When-Risk 5層構造で、ミッション・エレベーターピッチ・ペルソナ・Not-to-doリスト・トレードオフスライダー・リスクリストを網羅する。Use when creating or updating product vision, aligning team premises, defining product direction, or starting a new product. Triggers: ビジョン作成, ビジョン更新, VISION.md, product vision, エレベーターピッチ, ペルソナ定義, トレードオフ, Not-to-doリスト, プロダクトの方向性, inception deck, チーム前提を揃えたい.
+description: "プロダクトビジョンドキュメント（docs/VISION.md）を対話的に作成・更新する。チームの前提認知を揃えるためのWhy/Who/What/How/When-Risk 5層構造で、ミッション・エレベーターピッチ・ペルソナ・Not-to-doリスト・トレードオフスライダー・リスクリストを網羅する。Use when creating or updating product vision, aligning team premises, defining product direction, or starting a new product. Triggers: ビジョン作成, ビジョン更新, VISION.md, product vision, エレベーターピッチ, ペルソナ定義, トレードオフ, Not-to-doリスト, プロダクトの方向性, inception deck, チーム前提を揃えたい."
 ---
 
 # Agile Product Vision

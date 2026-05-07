@@ -1,6 +1,6 @@
 ---
 name: agile-create-backlog
-description: EpicをStory Mappingで分解し、Cynefinドメイン分類でnature:implementable/experimentalに仕分けてGitHub Issue（Issue Type: Story）を作成する。Use when EpicからStory分解、ストーリーマッピング、バックログ作成、リリーススライス定義。Triggers: バックログ作成, ストーリー分解, story mapping, ストーリーマッピング, backlog creation, epic分解, スライス, リリース計画, Cynefin, カネヴィン.
+description: "EpicをStory Mappingで分解し、Cynefinドメイン分類でnature:implementable/experimentalに仕分けてGitHub Issue（Issue Type: Story）を作成する。Use when EpicからStory分解、ストーリーマッピング、バックログ作成、リリーススライス定義。Triggers: バックログ作成, ストーリー分解, story mapping, ストーリーマッピング, backlog creation, epic分解, スライス, リリース計画, Cynefin, カネヴィン."
 ---
 
 # Agile Create Backlog

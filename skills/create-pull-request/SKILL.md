@@ -1,6 +1,6 @@
 ---
 name: create-pull-request
-description: 実装済みの変更から Draft PR を作成し、`.github/pull_request_template.md` に従って本文を埋める。Use when PR作成、プルリクエスト作成、レビュー依頼。Triggers: PR作成, pull request作って, プルリク, レビュー出して, draft PR, PRつくって.
+description: "実装済みの変更から Draft PR を作成し、`.github/pull_request_template.md` に従って本文を埋める。Use when PR作成、プルリクエスト作成、レビュー依頼。Triggers: PR作成, pull request作って, プルリク, レビュー出して, draft PR, PRつくって."
 ---
 
 # Create Pull Request
