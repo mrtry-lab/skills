@@ -99,7 +99,7 @@ GitHub MCP の `issue_read` で親 Story Issue を読み込む。
 1. リポジトリ側 `.github/ISSUE_TEMPLATE/task.md` を最優先
 2. 無ければ本スキル同梱の `templates/task.md` をフォールバック
 
-テンプレートの全セクションを保持し、独自セクションを追加しない。テンプレート解決・登録確認は `/create-issue` 委譲時に処理されるため、本ステップでは構造把握として読み込むのみ。
+テンプレートの全セクションを保持し、独自セクションを追加しない。テンプレート解決・登録確認は `/agile-create-issue` 委譲時に処理されるため、本ステップでは構造把握として読み込むのみ。
 
 **Do NOT Load**: Step 3 の分解検討フェーズではテンプレートを読むな。分解の思考がテンプレートの枠に引きずられることを防ぐ。
 
@@ -120,7 +120,7 @@ GitHub MCP の `issue_read` で親 Story Issue を読み込む。
 **7 点中 6 点以上で合格。5 点以下は書き直し。** ユーザーに各 Task のスコアを提示して承認を得てから Issue を作成する。
 
 **作成手順:**
-`/create-issue` スキルに委譲する。Issue Type: `"Task"`、親 Issue: 対象の Story Issue を指定。テンプレート解決・登録確認・親子リンクは `/create-issue` が処理する。
+`/agile-create-issue` スキルに委譲する。Issue Type: `"Task"`、親 Issue: 対象の Story Issue を指定。テンプレート解決・登録確認・親子リンクは `/agile-create-issue` が処理する。
 
 ## Step 6: カバレッジ検証（サブエージェント）
 

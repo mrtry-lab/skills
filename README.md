@@ -18,8 +18,8 @@ gh skill install mrtry-lab/skills <skill-name> --agent claude-code --scope user
 | [agile-refine-backlog](skills/agile-refine-backlog/) | Story の要件を実装可能なレベルまで詳細化（シーケンス図・受入基準） |
 | [agile-story-to-task](skills/agile-story-to-task/) | リファインメント済み Story を実装可能な Task Sub-issue に分解 |
 | [agile-task-implementation](skills/agile-task-implementation/) | Task Issue → Plan mode 計画 → TDD 実装（XP ペアプロ体制） |
-| [create-issue](skills/create-issue/) | Issue Type に応じたテンプレート適用・Mermaid 検証・ステータス設定・親子リンクを共通化 |
-| [create-pull-request](skills/create-pull-request/) | 実装済み変更から Draft PR を作成 |
+| [agile-create-issue](skills/agile-create-issue/) | Issue Type に応じたテンプレート適用・Mermaid 検証・ステータス設定・親子リンクを共通化 |
+| [agile-create-pull-request](skills/agile-create-pull-request/) | 実装済み変更から Draft PR を作成 |
 
 ---
 
@@ -33,8 +33,8 @@ flowchart LR
   refine[agile-refine-backlog]
   story2task[agile-story-to-task]
   impl[agile-task-implementation]
-  ci[create-issue]
-  cpr[create-pull-request]
+  ci[agile-create-issue]
+  cpr[agile-create-pull-request]
 
   vision --> epic --> backlog --> refine --> story2task --> impl
   refine -.実験成功.-> backlog
@@ -44,7 +44,7 @@ flowchart LR
   impl --> cpr
 ```
 
-実線 = 通常フロー、破線 = `nature:experimental` の検証成功時。`create-issue` は agile-* から呼ばれる共通スキル、`create-pull-request` は `agile-task-implementation` の最終ステップから呼ばれる。
+実線 = 通常フロー、破線 = `nature:experimental` の検証成功時。`agile-create-issue` は agile-* から呼ばれる共通スキル、`agile-create-pull-request` は `agile-task-implementation` の最終ステップから呼ばれる。
 
 ---
 
@@ -87,7 +87,7 @@ flowchart LR
 # 例: 全 skill を user スコープでインストール
 for skill in agile-product-vision agile-epic agile-create-backlog \
              agile-refine-backlog agile-story-to-task agile-task-implementation \
-             create-issue create-pull-request; do
+             agile-create-issue agile-create-pull-request; do
   gh skill install mrtry-lab/skills $skill --agent claude-code --scope user
 done
 ```
@@ -167,10 +167,10 @@ npm install --save-dev jsdom@^29 dompurify@2 mermaid@^11
 
 | Issue Type | 同梱先（複数） |
 |---|---|
-| Epic | `skills/agile-epic/templates/epic.md`, `skills/create-issue/templates/epic.md` |
-| Story | `skills/agile-create-backlog/templates/story.md`, `skills/create-issue/templates/story.md` |
-| Task | `skills/agile-story-to-task/templates/task.md`, `skills/create-issue/templates/task.md` |
-| PR | `skills/create-pull-request/templates/pull_request_template.md` |
+| Epic | `skills/agile-epic/templates/epic.md`, `skills/agile-create-issue/templates/epic.md` |
+| Story | `skills/agile-create-backlog/templates/story.md`, `skills/agile-create-issue/templates/story.md` |
+| Task | `skills/agile-story-to-task/templates/task.md`, `skills/agile-create-issue/templates/task.md` |
+| PR | `skills/agile-create-pull-request/templates/pull_request_template.md` |
 
 将来的に CI で diff チェックを入れる予定。
 

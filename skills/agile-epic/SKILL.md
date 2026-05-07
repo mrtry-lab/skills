@@ -159,7 +159,7 @@ Opportunity Canvas 対話の後、 **サブエージェントを起動** して4
 
 **テンプレートの全セクションを必ず保持し**、埋められない箇所は `> TBD: {なぜ未定か}` で残す（セクションごと削除しない）。テンプレートに存在しないセクション（例: `### ラベル`）を独自に追加してはならない。
 
-- **新規作成**: `/create-issue` スキルに委譲する。Issue Type: `"Epic"`、本文に Opportunity Canvas の対話結果 + 4リスクチェック結果を構造化して記載。テンプレート解決・登録確認・Mermaid 検証は `/create-issue` が処理する
+- **新規作成**: `/agile-create-issue` スキルに委譲する。Issue Type: `"Epic"`、本文に Opportunity Canvas の対話結果 + 4リスクチェック結果を構造化して記載。テンプレート解決・登録確認・Mermaid 検証は `/agile-create-issue` が処理する
 - **更新**: 既存 Issue の本文を `issue_write` で書き換える。変更箇所のみ更新し、他は維持。更新前に mermaid ブロックがあれば `node .claude/scripts/validate-mermaid.mjs` で検証する
 - **Do NOT Load**: Opportunity Canvas対話フェーズではテンプレートを読むな。ユーザーの回答がテンプレートの枠に引きずられることを防ぐ
 
