@@ -19,6 +19,8 @@ gh skill install mrtry-lab/skills <skill-name> --agent claude-code --scope user
 
 ### agile-* — アジャイル運用ファミリー
 
+ワークフロー全体像と運用方針は **[docs/agile-workflow.md](docs/agile-workflow.md)** を参照。
+
 | skill | 役割 |
 |---|---|
 | [agile-product-vision](skills/agile-product-vision/) | `docs/VISION.md` を対話で作成・更新（Why / Who / What / How / When-Risk の 5 層構造） |
