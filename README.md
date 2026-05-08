@@ -1,25 +1,41 @@
 # skills
 
-Claude Code 用のアジャイル開発スキル集。`gh skill install`（GitHub 公式、2026-04 リリース）で個別にインストールして使う。
+Claude Code 用のスキル集。`gh skill install`（GitHub 公式、2026-04 リリース）で個別にインストールして使う。
 
 ```bash
 gh skill install mrtry-lab/skills <skill-name> --agent claude-code --scope user
 ```
 
+このリポジトリには **2 系統** の skill がある:
+
+- **`agile-*`** — アジャイル運用ワークフロー専用。Epic→Story→Task→PR の階層、GitHub Projects のステータス管理、テンプレ強制構造を伴う
+- **`create-*`（軽量版）** — 普通の GitHub プロジェクト向け。「`.github/` にテンプレあったら使う」程度のシンプルさ
+
+両者は名前空間で分離されており、それぞれ独立してインストールできる。
+
 ---
 
 ## 同梱スキル一覧
+
+### agile-* — アジャイル運用ファミリー
 
 | skill | 役割 |
 |---|---|
 | [agile-product-vision](skills/agile-product-vision/) | `docs/VISION.md` を対話で作成・更新（Why / Who / What / How / When-Risk の 5 層構造） |
 | [agile-epic](skills/agile-epic/) | Opportunity Canvas で Epic Issue を作成（Issue Type: `Epic`） |
 | [agile-create-backlog](skills/agile-create-backlog/) | Epic を Story Mapping で分解、Cynefin 分類で `nature:implementable` / `nature:experimental` に仕分け |
-| [agile-refine-backlog](skills/agile-refine-backlog/) | Story の要件を実装可能なレベルまで詳細化（シーケンス図・受入基準） |
+| [agile-refine-backlog](skills/agile-refine-backlog/) | Story の要件を実装可能なレベルまで詳細化(シーケンス図・受入基準) |
 | [agile-story-to-task](skills/agile-story-to-task/) | リファインメント済み Story を実装可能な Task Sub-issue に分解 |
 | [agile-task-implementation](skills/agile-task-implementation/) | Task Issue → Plan mode 計画 → TDD 実装（XP ペアプロ体制） |
 | [agile-create-issue](skills/agile-create-issue/) | Issue Type に応じたテンプレート適用・Mermaid 検証・ステータス設定・親子リンクを共通化 |
-| [agile-create-pull-request](skills/agile-create-pull-request/) | 実装済み変更から Draft PR を作成 |
+| [agile-create-pull-request](skills/agile-create-pull-request/) | 実装済み変更から Draft PR を作成（Task Issue のステータス更新を伴う） |
+
+### 軽量版 — 普通の GitHub プロジェクト向け
+
+| skill | 役割 |
+|---|---|
+| [create-issue](skills/create-issue/) | `.github/ISSUE_TEMPLATE/` を使ってシンプルに Issue 作成（agile 運用フックなし） |
+| [create-pull-request](skills/create-pull-request/) | `.github/pull_request_template.md` を使ってシンプルに Draft PR 作成（agile 運用フックなし） |
 
 ---
 
@@ -46,17 +62,32 @@ flowchart LR
 
 実線 = 通常フロー、破線 = `nature:experimental` の検証成功時。`agile-create-issue` は agile-* から呼ばれる共通スキル、`agile-create-pull-request` は `agile-task-implementation` の最終ステップから呼ばれる。
 
+軽量版（`create-issue` / `create-pull-request`）はこのフローに含まれない独立スキルで、agile 運用とは無関係に呼び出せる。
+
 ---
 
 ## テンプレートの仕組み
 
-各 skill が Issue / PR を作成するとき、本文テンプレートを以下の 3 段階で解決する:
+系統によって振る舞いが異なる:
 
-1. **リポジトリ設定を最優先** — `.github/ISSUE_TEMPLATE/<type>.md`（Issue）または `.github/pull_request_template.md`（PR）が存在すれば、それを使う
+### agile-* 系（3 段階解決）
+
+`agile-create-issue` / `agile-create-pull-request` および呼び出し元の agile スキル群は、以下の順で本文テンプレを解決する:
+
+1. **リポジトリ設定を最優先** — `.github/ISSUE_TEMPLATE/<type>.md`（Issue）または `.github/pull_request_template.md`（PR）があればそれを使う
 2. **同梱デフォルトをフォールバック** — リポジトリ側に無ければ、skill 同梱の `templates/<type>.md` を使う
-3. **登録の確認** — フォールバックを使った場合、Issue / PR 作成後に「これをリポジトリに登録しますか？」と確認。Yes ならリポジトリの `.github/` 配下に書き出してコミット案内
+3. **登録の確認** — フォールバックを使った場合、Issue / PR 作成後に「これをリポジトリに登録しますか？」と確認
 
-これにより、テンプレ未整備のリポジトリでも壁なく動作開始でき、必要に応じてテンプレを根付かせていける。
+テンプレ未整備のリポジトリでも壁なく動作開始でき、必要に応じてテンプレを根付かせていける。
+
+### 軽量版（リポジトリ参照のみ）
+
+`create-issue` / `create-pull-request` は同梱テンプレを持たない:
+
+1. **リポジトリにテンプレあり** → そのテンプレを使う
+2. **無し** → 汎用構造（概要 / 詳細 / etc）で本文を組み立てる
+
+「登録の確認」も行わない。シンプルなリポジトリで気軽に使うための設計。
 
 ---
 
@@ -87,10 +118,20 @@ flowchart LR
 # 例: 全 skill を user スコープでインストール
 for skill in agile-product-vision agile-epic agile-create-backlog \
              agile-refine-backlog agile-story-to-task agile-task-implementation \
-             agile-create-issue agile-create-pull-request; do
+             agile-create-issue agile-create-pull-request \
+             create-issue create-pull-request; do
   gh skill install mrtry-lab/skills $skill --agent claude-code --scope user
 done
 ```
+
+軽量版だけ欲しい場合:
+
+```bash
+gh skill install mrtry-lab/skills create-issue --agent claude-code --scope user
+gh skill install mrtry-lab/skills create-pull-request --agent claude-code --scope user
+```
+
+軽量版はプレースホルダ置換や Mermaid スクリプトの配置を**必要としない** — インストールしてすぐ使える。
 
 ### 2. shared references の配置（プレースホルダ置換）
 
