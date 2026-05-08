@@ -31,6 +31,7 @@ gh skill install mrtry-lab/skills <skill-name> --agent claude-code --scope user
 | [agile-task-implementation](skills/agile-task-implementation/) | Task Issue → Plan → TDD → Draft PR |
 | [agile-create-issue](skills/agile-create-issue/) | agile-* から呼ばれる Issue 作成共通スキル |
 | [agile-create-pull-request](skills/agile-create-pull-request/) | agile-* から呼ばれる PR 作成共通スキル |
+| [agile-project-setup](skills/agile-project-setup/) | 初回セットアップ用。GitHub Project の作成・Status オプション登録・shared references 生成を対話で完了 |
 
 ### 軽量版 — 普通の GitHub プロジェクト向け
 

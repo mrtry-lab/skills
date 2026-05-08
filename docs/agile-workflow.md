@@ -17,6 +17,8 @@
 
 ## セットアップ
 
+> 💡 初回セットアップは `/agile-project-setup` スキルを使うと、GitHub Project 作成・Status オプション登録・ビュー作成案内・shared references 生成までを対話で一気通貫で完了できる。下記の手動手順は内部で何が起きているかを把握したい場合の参考。
+
 ### 1. skill のインストール
 
 ```bash
