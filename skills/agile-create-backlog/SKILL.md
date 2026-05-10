@@ -167,6 +167,18 @@ NG の Story がある場合は、具体的にどの Story がどの観点で不
 
 ---
 
+## 決定境界
+
+全体マップは `docs/agile-workflow.md` の「AI 決定境界」章を参照。本スキル固有の人間承認ゲート:
+
+- **nature 分類確定（implementable / experimental）** — 「受入基準を今すぐ書けるか / やってみないとわからないか」の判定は人間。AI は質問を投げるだけ
+- **リリーススライスの境界決定** — Opening Game / Mid Game / End Game をどこで切るかは人間判断
+- **Story 起票実行** — `/agile-create-issue` への委譲前の最終確認
+
+NEVER（次節）はこのゲートの違反を具体的に列挙している。
+
+---
+
 ## エッジケース
 
 | 状況 | 対応 |

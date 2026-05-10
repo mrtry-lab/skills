@@ -255,6 +255,19 @@ grep -n "<YOUR_\|<STATUS_OPTION" .claude/skills/references/github-projects.md
 
 ---
 
+## 決定境界
+
+全体マップは `docs/agile-workflow.md` の「AI 決定境界」章を参照。本スキル固有の人間承認ゲート:
+
+- **Org 選択 / Issue Type 登録** — Web UI 操作のため完全に人間。AI は手順を案内するだけ
+- **Project 作成 vs 既存利用** — Step 3 の判断は人間。新規 Project URL を作るのは取り消しコストが高い操作
+- **Status オプション登録** — `gh project field-create` 実行前に人間承認
+- **Done 遷移ポリシー選択** — Step 6 の Auto-archive 利用 / 手動運用は人間判断
+
+NEVER（次節）はこのゲートの違反を具体的に列挙している。
+
+---
+
 ## エッジケース
 
 | 状況 | 対応 |
