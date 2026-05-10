@@ -164,7 +164,7 @@ GitHub MCP の `issue_read` で親 Story Issue を読み込む。
 
 ## 決定境界
 
-全体マップは `docs/agile-workflow.md` の「AI 決定境界」章を参照。本スキル固有の人間承認ゲート:
+全体マップは `docs/agile-workflow/concepts/ai-decision-boundary.md`を参照。本スキル固有の人間承認ゲート:
 
 - **分解粒度の確定** — Step 5 の 7 点品質スコアリング後、各 Task の採否は人間
 - **テスト戦略選択** — ユニット / 統合 / E2E の配分は人間判断（テストピラミッドの解釈）

@@ -447,7 +447,7 @@ Step 4 のシーケンス図パターンと **Step 5f のルール / 具体例**
 
 ## 決定境界
 
-全体マップは `docs/agile-workflow.md` の「AI 決定境界」章を参照。本スキル固有の人間承認ゲート:
+全体マップは `docs/agile-workflow/concepts/ai-decision-boundary.md`を参照。本スキル固有の人間承認ゲート:
 
 - **Example Mapping のルール抽出** — Step 5f のビジネスルール列挙はドメイン知識が必要で、AI は問いを投げるだけ。ルール本体は人間が言語化する
 - **Outcome Done の確定** — Step 5e の観測手段・期待する変化は人間判断（観測コストと学習価値のトレードオフ）

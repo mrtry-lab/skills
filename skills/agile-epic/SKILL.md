@@ -199,7 +199,7 @@ Epic Issue作成後、以下を案内する:
 
 ## 決定境界
 
-全体マップは `docs/agile-workflow.md` の「AI 決定境界」章を参照。本スキル固有の人間承認ゲート:
+全体マップは `docs/agile-workflow/concepts/ai-decision-boundary.md`を参照。本スキル固有の人間承認ゲート:
 
 - **Problem Space の事実確定** — ユーザーの課題・現在の解決策・ビジネス上の課題は事実。AI は推測せず、人間が知識を提供する
 - **4 リスク評価結果の採否** — サブエージェントが各リスクを判定するが、リスク許容と Epic 進行の判断は人間
