@@ -289,19 +289,6 @@ Story 単位の Outcome Done は、親 Epic の Outcome 仮説テーブルから
 
 既存の Story / Epic / VISION は遡及書き換えしない。新規作成からのみ Outcome 仮説を必須化する方針で、既存資産の改修コストを払わずに段階的に置き換える。
 
-### Intent と Focus（Strategy as Empirical Capability より）
-
-Scrum Expansion Pack の Strategy 拡張は、戦略が満たすべき 10 性質を挙げている。`agile-product-vision` ではそのうち実用上効きやすい **Intent** と **Focus** だけを拾って、既存の Layer 1 / Layer 4 の問いを補強している。
-
-| 性質 | 反映先 | 問い |
-|---|---|---|
-| **Intent**（戦略の継続性） | Layer 1 ミッション | 「2-5 年後に振り返ったとき、このプロダクトは『何を成し遂げた』と語られたいか?」 |
-| **Focus**（選別の鋭さ） | Layer 4 ソリューション概要 | 「いま書いた内容は『方向性』か『具体策』か?」 |
-
-Intent の問いは「短期的に流行りの機能をミッションと混同する」失敗を防ぐ。Focus の問いは「ビジョン段階で具体策（特定 SaaS 名・特定ライブラリ名）に踏み込んで意思決定の自由度を奪う」失敗を防ぐ。
-
-他の 8 性質（Differentiation / Hard-to-imitate / Coherence / Resourcefulness / Robustness / Plasticity / Memorability / Sustainability）は副業チーム規模の運用には重すぎるため拾っていない。必要になった時点で個別に検討する余地は残してある。
-
 ---
 
 ## Example Mapping によるビジネスルール網羅
