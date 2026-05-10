@@ -68,6 +68,7 @@ GitHub MCP の `issue_read` で親 Story Issue を読み込む。
 | スキーマ定義がある | Schema → BE/FE 並行 → Test |
 | 小さい Story | コア実装 + エッジケース の 2分割 |
 | インフラ変更が前提 | Infra → ロジック → UI → Test |
+| Outcome Done に観測指標がある | 上記に加えて [Telemetry] Task を分解末尾に追加（粒度は独立 Sub-issue / 既存 Task に統合のどちらでも可） |
 
 **Sub-issue にすべきかの判断:**
 - ① 担当者・レビュー・blocked状態を持たせる価値があるか
@@ -89,8 +90,9 @@ GitHub MCP の `issue_read` で親 Story Issue を読み込む。
 | 2 | [BE] エンドポイント実装 | #1 | AC1, AC3 |
 | 3 | [FE] フォーム画面実装 | #1 | AC2, AC4 |
 | 4 | [Test] E2Eテスト | #2, #3 | AC1〜AC4 |
+| 5 | [Telemetry] 観測イベント追加と確認 | #2, #3 | Outcome Done の観測指標 |
 
-**タイトル:** `[軸] 動詞 + 対象`。軸はレイヤーに限らない（`[Flow]`, `[Validation]`, `[Migration]` 等もOK）。親 Story のタイトルを繰り返さない。
+**タイトル:** `[軸] 動詞 + 対象`。軸はレイヤーに限らない（`[Flow]`, `[Validation]`, `[Migration]`, `[Telemetry]` 等もOK）。親 Story のタイトルを繰り返さない。
 
 ## Step 5: Task Issue作成 + 品質スコアリング
 
@@ -116,8 +118,9 @@ GitHub MCP の `issue_read` で親 Story Issue を読み込む。
 | 5 | **受入確認の明示** | PdO/QA が手動で確認するシナリオが書かれている（自動テストでカバーしにくい UI・文言・操作感等） |
 | 6 | **親の受入基準との対応** | カバーする受入基準が明示され、この Task の存在理由が明確 |
 | 7 | **着手可能性** | 対象モジュール・参考実装・ADR が明記され、CodingAgent が「どこから手をつけるか」迷わない |
+| 8 | **Outcome Done の観測保証** | 親 Story の Outcome Done に観測指標がある場合、その観測手段（イベント追加・ダッシュボード作成・ログ送信）が Task として明示されている。「観測しない」と明示されている Story は対象外（観点スキップ可） |
 
-**7 点中 6 点以上で合格。5 点以下は書き直し。** ユーザーに各 Task のスコアを提示して承認を得てから Issue を作成する。
+**8 点中 7 点以上で合格。6 点以下は書き直し。** ユーザーに各 Task のスコアを提示して承認を得てから Issue を作成する。
 
 **作成手順:**
 `/agile-create-issue` スキルに委譲する。Issue Type: `"Task"`、親 Issue: 対象の Story Issue を指定。テンプレート解決・登録確認・親子リンクは `/agile-create-issue` が処理する。
@@ -137,8 +140,9 @@ GitHub MCP の `issue_read` で親 Story Issue を読み込む。
 4. 各 Task の振る舞い仕様に、CodingAgent が TDD を開始できるだけの具体性があるか
 5. テスト設計がテストピラミッドに沿っているか（ユニットテスト中心、E2E 最小限）
 6. 手動の受入確認シナリオが書かれているか
+7. Outcome Done の観測保証: 親 Story の Outcome Done に観測指標がある場合、その実装 Task（イベント追加 / ダッシュボード作成 / ログ送信）が存在しているか。「観測しない」が明示されている Story はこの観点は対象外
 
-未カバーの受入基準/ 情報不足の Task があれば報告。
+未カバーの受入基準 / 情報不足の Task / 観測実装の欠落があれば報告。
 ```
 
 **結果に基づく対応:**
