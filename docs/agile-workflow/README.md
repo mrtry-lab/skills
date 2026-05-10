@@ -10,6 +10,7 @@
 
 - **[setup.md](setup.md)** — 前提条件・チームコンテキスト・セットアップ手順・テンプレート解決ロジック
 - **[operations.md](operations.md)** — Issue 分類体系・GitHub Projects ビュー・Status フロー・トラブルシューティング・Contributing
+- **[references.md](references.md)** — 参考にしている書籍・記事・フレームワークの一覧と各スキルへの紐付け
 
 ### 概念（Scrum Expansion Pack 準拠）
 
