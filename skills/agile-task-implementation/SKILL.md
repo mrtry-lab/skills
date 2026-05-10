@@ -152,3 +152,15 @@ NEVER（次節）はこのゲートの違反を具体的に列挙している。
 - **絶対に** テストより先にプロダクションコードを書かない — このプロジェクトでは振る舞い仕様がテストの設計書。先にテストを書くことで仕様の曖昧さを早期に発見できる
 - **絶対に** 受入基準の解釈をナビゲーターに確認せず決めない — 「たぶんこういう意味だろう」で実装すると、PR レビューで全面書き直しになる
 - **絶対に** 振る舞い仕様にない機能を追加しない — スコープは Task Issue が定義する。「ついでに直す」はスコープクリープの入口
+
+---
+
+## References
+
+このスキルが参考にしている書籍・記事・フレームワーク:
+
+- 📖 [エクストリームプログラミング入門](https://www.amazon.co.jp/s?k=エクストリームプログラミング)（Kent Beck）— XP ペアプログラミング・TDD・ナビゲーター/ドライバー役割
+- 📖 [Clean Agile](https://www.amazon.co.jp/s?k=Clean+Agile+Robert+Martin)（Robert C. Martin）— TDD・Clean Code・Definition of Done
+- 📦 [Scrum Guide Expansion Pack](https://scrumexpansion.org/) — AI and Scrum（決定境界）/ Software Engineering Practices（Engineering Constraints / Small Steps）
+
+スキル横断で効いているソースは [docs/agile-workflow/references.md](../../docs/agile-workflow/references.md) を参照。

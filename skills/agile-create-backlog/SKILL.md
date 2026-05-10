@@ -220,3 +220,17 @@ NEVER（次節）はこのゲートの違反を具体的に列挙している。
 - **NEVER: Story の下に Sub-issue（タスク）を作るな** — Issue 階層は Epic → Story の2層のみ。タスク分解は CodingAgent の責務。人間がタスク管理する粒度ではない
 - **NEVER: スコープを探索フェーズ（Step 3）で絞るな** — 探索は発散のフェーズ。収束はリリーススライス（Step 5）で行う。早すぎるスコープ削減はイノベーションを殺す
 - **NEVER: ストーリーマップの精密さにこだわるな** — マップは会話の道具であって、正式な仕様書ではない。完璧なマップより、チームの共有理解のほうが100倍価値がある
+
+---
+
+## References
+
+このスキルが参考にしている書籍・記事・フレームワーク:
+
+- 🌐 [Story Map Concepts](https://www.jpattonassociates.com/wp-content/uploads/2015/03/story_mapping.pdf)（Jeff Patton, PDF）— Story Mapping・バックボーン・Walking Skeleton・Opening/Mid/End Game リリーススライス
+- 📖 [不確実な世界を確実に生きる カネヴィンフレームワークへの招待](https://www.amazon.co.jp/s?k=不確実な世界を確実に生きる+カネヴィン)（コグニティブ・エッジ / 田村洋一）— Cynefin 4 区分（Clear / Complicated / Complex / Chaotic）
+- 🌐 [Agile Story Essentials](https://www.jpattonassociates.com/wp-content/uploads/2015/03/story_essentials_quickref.pdf)（Jeff Patton, PDF）— INVEST 性質
+- 📖 [アートオブアジャイルデベロップメント](https://www.amazon.co.jp/s?k=アートオブアジャイルデベロップメント)（Jim Shore）— リリース計画
+- 📦 [Scrum Guide Expansion Pack](https://scrumexpansion.org/) — Complexity 拡張（Cynefin 4 区分の現代解釈）
+
+スキル横断で効いているソースは [docs/agile-workflow/references.md](../../docs/agile-workflow/references.md) を参照。

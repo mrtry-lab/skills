@@ -475,3 +475,21 @@ NEVER（次節）はこのゲートの違反を具体的に列挙している。
 - **NEVER: 未定義のパターンを残したまま Ready 状態にするな** — CodingAgentは未定義パターンに遭遇すると自己判断で実装するが、その判断がビジネスルールと合わない場合、本番で初めて問題が発覚する
 - **NEVER: シーケンス図を省略するな（複数アクターが関わる場合）** — 図なしでパターンを列挙すると「フロントエンド→バックエンド」間は考えても「バックエンド→外部サービス」間を見落とす。図が全インタラクションの検討漏れを防ぐ唯一の手段
 - **NEVER: Claude が洗い出したパターンだけで完了とするな** — LLMは一般的なパターンは網羅できるが、ドメイン固有の業務ルール（例: 特定時間帯の制約、法的要件）は知り得ない。必ずユーザーに確認する
+
+---
+
+## References
+
+このスキルが参考にしている書籍・記事・フレームワーク:
+
+- 🌐 Painless Functional Specifications by Joel Spolsky — 仕様書記法
+  - [Part 1: Why Bother?](https://www.joelonsoftware.com/2000/10/02/painless-functional-specifications-part-1-why-bother/)
+  - [Part 2: What's a Spec?](https://www.joelonsoftware.com/2000/10/03/painless-functional-specifications-part-2-whats-a-spec/)
+  - [Part 3: But… How?](https://www.joelonsoftware.com/2000/10/04/painless-functional-specifications-part-3-but-how/)
+  - [Part 4: Tips](https://www.joelonsoftware.com/2000/10/15/painless-functional-specifications-part-4-tips/)
+- 🌐 [Agile Models](http://www.agilemodeling.com/artifacts/)（Scott Ambler）— シーケンス図・ステートマシン図のモデリング技法
+- 🌐 [Agile Story Essentials](https://www.jpattonassociates.com/wp-content/uploads/2015/03/story_essentials_quickref.pdf)（Jeff Patton, PDF）— Refinement・受入基準
+- 📖 [INSPIRED](https://www.amazon.co.jp/s?k=INSPIRED+Marty+Cagan)（Marty Cagan）— Refinement の進め方
+- 📦 [Scrum Guide Expansion Pack](https://scrumexpansion.org/) — Holistic Testing（Step 5e Definition of Outcome Done / Step 5f Example Mapping / Step 7 Three Amigos 並列サブエージェント）
+
+スキル横断で効いているソースは [docs/agile-workflow/references.md](../../docs/agile-workflow/references.md) を参照。

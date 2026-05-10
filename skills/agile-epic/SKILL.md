@@ -231,3 +231,16 @@ NEVER（次節）はこのゲートの違反を具体的に列挙している。
 - **NEVER: Canvas全項目の完璧な記入を強制するな** — 不明な箇所は `> TBD: {なぜ未定か}` で残す。特にSolution Spaceは仮説なので、最初から完璧である必要はない
 - **NEVER: Epic Issueにタスクレベルの詳細を書くな** — EpicはOpportunity Canvas粒度。具体的なStory/タスク分解は `/agile-create-backlog` の責務
 - **NEVER: Epic Issueに具体的な技術名・実装手段を書くな** — EpicはPdOがサービス視点で書くもの。「Better Auth」「Stripe Identity」「Stripe Connect」のような具体技術ではなく「メール+パスワード認証」「本人確認」「エスクロー決済」のようにユーザー・ビジネス視点で記述する。技術選定はStory以降の責務
+
+---
+
+## References
+
+このスキルが参考にしている書籍・記事・フレームワーク:
+
+- 🌐 [Opportunity Canvas](https://www.jpattonassociates.com/opportunity-canvas/)（Jeff Patton）— Opportunity Canvas 構造そのもの
+- 📖 [INSPIRED](https://www.amazon.co.jp/s?k=INSPIRED+Marty+Cagan)（Marty Cagan）— 4 リスクチェック（Value / Usability / Feasibility / Business Viability）
+- 🌐 [Product Discovery Immersion](https://jpattonassociates.com/product-discovery-immersion/)（Jeff Patton）— 0→1 / 1→N の Discovery 手法
+- 📖 [アートオブアジャイルデベロップメント](https://www.amazon.co.jp/s?k=アートオブアジャイルデベロップメント)（Jim Shore）— Epic / Theme の扱い
+
+スキル横断で効いているソースは [docs/agile-workflow/references.md](../../docs/agile-workflow/references.md) を参照。

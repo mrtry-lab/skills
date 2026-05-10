@@ -227,3 +227,16 @@ NEVER（次節）はこのゲートの違反を具体的に列挙している。
 - **NEVER: 全セクション完了を強制するな** — TBDが残ることは正常。無理に埋めると検証されていない仮定が「決定事項」として扱われ、後工程で手戻りを起こす
 - **NEVER: 2時間以上かけるな** — 認知負荷が限界を超えると「とりあえず全部大事」という非決定に陥る。30-60分で区切り、残りは次回に
 - **NEVER: Step 4 の 5 層整合レビューと Strategy 点検の結果を統合してまとめるな** — 性格の違う検査を 1 つの結論にすると、ユーザーが「整合性はあるが戦略性が弱い」のような微妙な指摘を見落とす。視点別に分けて提示する
+
+---
+
+## References
+
+このスキルが参考にしている書籍・記事・フレームワーク:
+
+- 📖 [アジャイルサムライ](https://www.amazon.co.jp/s?k=アジャイルサムライ)（Jonathan Rasmusson）— Inception Deck・エレベーターピッチ・Not-to-do リスト・トレードオフスライダー
+- 📖 [INSPIRED](https://www.amazon.co.jp/s?k=INSPIRED+Marty+Cagan)（Marty Cagan）— プロダクトビジョンの必要性
+- 📖 [コーチングアジャイルチームス](https://www.amazon.co.jp/s?k=コーチングアジャイルチームス)（Lyssa Adkins）— GROW モデル・対話で引き出すコーチング
+- 📦 [Scrum Guide Expansion Pack](https://scrumexpansion.org/) — Strategy as Empirical Capability（Step 4 Strategy 4 性質: Intent / Focus / Coherence / Memorability）
+
+スキル横断で効いているソースは [docs/agile-workflow/references.md](../../docs/agile-workflow/references.md) を参照。

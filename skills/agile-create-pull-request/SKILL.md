@@ -129,3 +129,13 @@ NEVER（次節）はこのゲートの違反を具体的に列挙している。
 
 - **絶対に** テスト未実行で PR を出さない — CI 失敗が確定している PR はレビュワーの時間を奪う
 - **絶対に** テンプレートのセクションを空欄で残さない — 該当なしなら「なし」と明記。空欄はレビュワーに「書き忘れか意図的か」を判断させる
+
+---
+
+## References
+
+このスキルが参考にしている書籍・記事・フレームワーク:
+
+- 📦 [Scrum Guide Expansion Pack](https://scrumexpansion.org/) — AI and Scrum（決定境界: Draft → Ready 切り替え / マージは人間判断）
+
+スキル横断で効いているソースは [docs/agile-workflow/references.md](../../docs/agile-workflow/references.md) を参照。

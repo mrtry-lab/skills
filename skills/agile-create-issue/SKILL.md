@@ -160,3 +160,13 @@ NEVER（次節）はこのゲートの違反を具体的に列挙している。
 - **絶対に** Mermaid 検証をスキップして Issue を作成しない — GitHub 上でレンダリングエラーになり、読めない Issue が残る
 - **絶対に** CLI にインラインで markdown を渡さない — エスケープが壊れる。必ず `/tmp/issue-body.md` 経由
 - **絶対に** テンプレートにないセクションを追加しない — テンプレートの構造が崩れると後工程のスキルが正しく解析できなくなる
+
+---
+
+## References
+
+このスキルが参考にしている書籍・記事・フレームワーク:
+
+- 📦 [Scrum Guide Expansion Pack](https://scrumexpansion.org/) — AI and Scrum（決定境界: Issue 起票実行は人間判断）
+
+スキル横断で効いているソースは [docs/agile-workflow/references.md](../../docs/agile-workflow/references.md) を参照。

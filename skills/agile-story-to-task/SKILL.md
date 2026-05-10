@@ -190,3 +190,15 @@ NEVER（次節）はこのゲートの違反を具体的に列挙している。
 - **NEVER: 親の受入基準をそのままコピーするな** — Task の完了条件は実装視点で書き直す。コピーすると「何をテストすれば閉じてよいか」が曖昧になる
 - **NEVER: 単なる作業メモを Sub-issue にするな** — 独立してレビューできない作業はチェックリストで十分
 - **NEVER: カバレッジ検証を省略するな** — 全 Task 完了しても親の受入基準が満たせない事態を防ぐ唯一の手段
+
+---
+
+## References
+
+このスキルが参考にしている書籍・記事・フレームワーク:
+
+- 🌐 [Agile Story Essentials](https://www.jpattonassociates.com/wp-content/uploads/2015/03/story_essentials_quickref.pdf)（Jeff Patton, PDF）— INVEST・Task 分解粒度
+- 📖 [アジャイル型プロジェクトマネジメント](https://www.amazon.co.jp/s?k=アジャイル型プロジェクトマネジメント)（Jim Highsmith）— Task 設計
+- 📦 [Scrum Guide Expansion Pack](https://scrumexpansion.org/) — Holistic Testing Observe 段階（Telemetry Task 必須化、品質スコアリング #8）
+
+スキル横断で効いているソースは [docs/agile-workflow/references.md](../../docs/agile-workflow/references.md) を参照。
