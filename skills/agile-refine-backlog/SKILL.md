@@ -73,7 +73,40 @@ flowchart TB
 
 Issue 本文が解決したテンプレートに沿っていない場合は、テンプレートの構造に合わせて整形してから詳細化を開始する。
 
-**nature ラベルがない場合**: 「このストーリーの受入基準（{状況}のとき、{操作}したら、{結果}になる）を今すぐ書けますか?」と聞き、Cynefin 分類を実施してラベルを付与してから詳細化を開始する。
+**nature ラベルがない場合**: 「このストーリーの受入基準（{状況}のとき、{操作}したら、{結果}になる）を今すぐ書けますか?」と聞き、Cynefin 分類を実施してラベルを付与してから詳細化を開始する。Chaotic の判定（事業継続への深刻な影響の有無）も同時に確認する。
+
+---
+
+## Step 1.5: nature:chaotic の場合の軽量フロー（該当時のみ）
+
+Story が `nature:chaotic` ラベルを持つ場合、通常の Step 2 〜 Step 7 を流すと時間がかかりすぎ、Cynefin Chaotic ドメインの原則（`act → sense → respond`）に反する。安定化を最優先するため、以下の最小限で完了とする。
+
+**実施するステップ**:
+- **Step 6 受入基準のみ**: hotfix 完了の判定条件を最小限で記述（例: 「ユーザー X が再ログインできる」「エラー率が Y% 以下に戻る」）
+- **PdO 視点 1 サブエージェントだけ走らせる**（Step 7 の Sub-agent A 相当のみ）: 「事業影響観点で hotfix 内容が妥当か」だけ検査。Dev/QA 視点は安定化後の postmortem で代替する
+
+**スキップするステップ**:
+- Step 2 ビジョン整合レビュー（緊急対応にビジョン整合検査は時間的に合わない）
+- Step 3-4 シーケンス図（仕様化より先に修正する）
+- Step 5a-d 画面 / API / ロギング設計
+- Step 5e Outcome Done（緊急対応の Outcome は「事業継続」一択で自明）
+- Step 5f Example Mapping（ルール抽出より先に修正する）
+- Step 7 通常の Three Amigos 並列検査（PdO 視点だけで完了とする）
+
+**完了後**:
+- Status を **"Ready"** に直接設定（In Plan Refinement / In Plan Review はスキップ）
+- `/agile-task-implementation` または緊急時は手動修正フローへ直結
+- 「Chaotic でも CI green は守る」: TDD を妥協しない。修正ロジックには必ずテストを書く
+
+**事後 — 必ず実施**:
+安定化後、別 Issue として **postmortem** を記録する。内容:
+- なぜ Chaotic に至ったか（観測抜け / モニタリング不足 / 予防可能だったか）
+- 再発防止策（観測強化 / プロセス改善 / 教育）
+- 追加すべきテスト（hotfix で慌てて書けなかった部分）
+
+postmortem を残すことで、Chaotic ドメイン → Complicated / Complex への学習移行が起きる。
+
+`nature:chaotic` でない通常の Story は Step 2 へ進む。
 
 ---
 

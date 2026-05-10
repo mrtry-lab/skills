@@ -51,7 +51,9 @@ GitHub MCP の `issue_read` で親 Story Issue を読み込む。
 
 ## Step 2: Ready判定
 
-分解に進む前に、以下を確認する:
+**`nature:chaotic` の場合**: Task 分解は不要。Story 自体を 1 つの Task として扱い、`/agile-task-implementation` に直接渡す。緊急対応で複数 Task に分割する時間的余裕がない前提で、軽量フローを最後まで貫く。詳細化が必要になった場合は安定化後の postmortem 別 Issue に切り出す。
+
+通常の Story（`nature:implementable` / `nature:experimental`）は以下を確認してから分解に進む:
 
 - 受入基準が具体的で、Yes/No で判定可能か
 - パターン一覧と画面仕様が TBD ではなく埋まっているか
