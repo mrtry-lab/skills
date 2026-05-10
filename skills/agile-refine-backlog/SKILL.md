@@ -418,16 +418,28 @@ Step 4 のシーケンス図パターンと **Step 5f のルール / 具体例**
 
 視点間で **矛盾する指摘** が出た場合（例: PdO「Not-to-do 違反」 vs Dev「技術的には容易」）は、それ自体を論点としてユーザーに提示し、採否判断を仰ぐ。視点を勝手に統合してまとめない。
 
+### 視点別の合格基準（点数化）
+
+各サブエージェントが返す観点を点数化し、視点ごとに合格判定する:
+
+| 視点 | 観点総数 | 合格ライン |
+|---|---:|---|
+| Sub-agent A（PdO） | 4 | **4 点中 3 点以上 OK で合格** |
+| Sub-agent B（Dev） | 7 | **7 点中 6 点以上 OK で合格** |
+| Sub-agent C（QA） | 6 | **6 点中 5 点以上 OK で合格** |
+
+**3 視点すべて合格でリファインメント完了**。1 視点でも不合格なら次の「結果に基づく対応」へ。
+
 ### 結果に基づく対応
 
-- **いずれかの視点で未定義 / 要確認 / NG**: ユーザーに提示し追加質問。回答を反映後、**該当視点のサブエージェントだけ** 再起動する（OK 判定の視点は再検査しない）
-- **3 視点すべて OK**: Issue 本文を `issue_write` で更新する **前に** Mermaid 構文を検証する:
+- **いずれかの視点で不合格 / 未定義 / 要確認 / NG**: ユーザーに提示し追加質問。回答を反映後、**該当視点のサブエージェントだけ** 再起動する（OK / 合格判定の視点は再検査しない）
+- **3 視点すべて合格**: Issue 本文を `issue_write` で更新する **前に** Mermaid 構文を検証する:
   ```bash
   echo "{Issue本文}" | node .claude/scripts/validate-mermaid.mjs
   ```
   バリデーションエラーがあれば Mermaid 図を修正してから更新する。
 
-  リファインメント完了とし、`.claude/skills/references/github-projects.md` のコマンドテンプレートに従い Status を **"In Plan Review"** に自動更新する。nature に応じて次のアクションを案内:
+  3 視点合格を確認したうえでリファインメント完了とし、`.claude/skills/references/github-projects.md` のコマンドテンプレートに従い Status を **"In Plan Review"** に自動更新する。nature に応じて次のアクションを案内:
   - `nature:implementable` → 「リファインメント完了です。`/agile-story-to-task` で Task Sub-issue に分解してください。分解後、各 Task を CodingAgent に渡せます」
   - `nature:experimental` → 「実験計画が完成しました。スパイクを実施してください。完了後、結果をもとに `/agile-create-backlog` で新たな Story を作成してください」
 

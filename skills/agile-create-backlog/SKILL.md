@@ -150,6 +150,21 @@ NG の Story がある場合は、具体的にどの Story がどの観点で不
 
 各スライスに名前・ターゲットアウトカム・成功指標を設定する。
 
+## Step 5.5: 品質スコアリング
+
+Story Issue を登録する **前に**、各 Story 候補について以下の 6 点スコアリングで提案品質をチェックする:
+
+| # | 観点 | 合格基準 |
+|---|------|---------|
+| 1 | **ストーリーマップ整合** | アクティビティ → タスク → 詳細 の階層が成立しており、Step 2 のマップ上で位置が明確 |
+| 2 | **nature 分類妥当** | Cynefin 4 区分（Clear / Complicated / Complex / Chaotic）のいずれかに明確に当てはまる。判定根拠を提示できる |
+| 3 | **リリーススライス整合** | Opening Game / Mid Game / End Game のいずれに属するかが Step 5 で決まっている |
+| 4 | **Epic との対応明示** | 親 Epic を sub-issue としてリンクできる状態（Epic Issue 番号が確定） |
+| 5 | **ビジョン整合** | Story 群とビジョンの整合サブエージェント検査で OK 判定（NG / 要確認なら修正済み） |
+| 6 | **INVEST 性質** | Independent / Negotiable / Valuable / Estimable / Small / Testable のチェックを通過 |
+
+**6 点中 5 点以上で合格。4 点以下は書き直し。** ユーザーに各 Story のスコアを一覧で提示し、書き直しが必要な Story は Step 3-5 を再開する。合格した Story 群について Step 6 で起票する。
+
 ## Step 6: Story Issue 登録
 
 ユーザーの指示で GitHub Issue を作成する。
