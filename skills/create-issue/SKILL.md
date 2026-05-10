@@ -1,6 +1,6 @@
 ---
 name: create-issue
-description: ".github/ISSUE_TEMPLATE/ にテンプレートがあれば使い、なければシンプルな構造で GitHub Issue を作成する軽量スキル。GitHub Projects のステータス管理や Issue Type 強制は行わない。Use when 普通の Issue を作りたい、軽くチケットを起票したい。Triggers: issue作成, チケット作成, create issue, イシュー作って."
+description: "普通のリポジトリで GitHub Issue をシンプルに作成する軽量スキル。.github/ISSUE_TEMPLATE/ があれば使い、なければ素の構造で起票する。Issue Type 強制 / GitHub Projects ステータス管理 / 親子リンクなど agile-* 系の重い処理は一切行わない。agile workflow を使っていないリポジトリ、または軽くチケットだけ起票したいとき向け（agile workflow の Epic/Story/Task 起票は /agile-create-issue）。Use when 軽量に Issue 作成、シンプルにチケット起票。Triggers: issue作成, チケット作成, create issue, イシュー作って, シンプルな issue, 軽量 issue, 普通の issue."
 ---
 
 # Create Issue

@@ -1,6 +1,6 @@
 ---
 name: agile-create-issue
-description: "GitHub Issue を作成する共通スキル。Issue Type（Epic/Story/Task）に応じたテンプレート適用、Mermaid検証、ステータス設定、親子リンクを一括で実行する。他のアジャイルスキルから呼び出されるほか、単独でも使用可能。Use when Issue作成、チケット作成。Triggers: issue作成, チケット作成, create issue, イシュー作って."
+description: "Epic / Story / Task の Issue Type 付きで GitHub Issue を作成する agile-* 共通スキル。テンプレート適用・Mermaid 検証・GitHub Projects ステータス設定・親子リンクを一括実行する。他のアジャイルスキル（/agile-epic, /agile-create-backlog, /agile-story-to-task）から呼び出される前提で設計されており、単独利用には軽量な /create-issue を使う方が適切。Use when agile workflow で Epic/Story/Task を起票するとき。Triggers: Epic起票, Story起票, Task起票, agile issue作成, agile チケット作成, agile workflow Issue, Issue Type 付き issue, sub-issue 作成."
 ---
 
 # Create Issue

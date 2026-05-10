@@ -1,6 +1,6 @@
 ---
 name: create-pull-request
-description: ".github/pull_request_template.md があれば使い、なければシンプルな構造で Draft PR を作成する軽量スキル。GitHub Projects のステータス更新や Task Issue 連携は行わない。Use when 普通の PR を作りたい、軽くプルリクを出したい。Triggers: PR作成, pull request作って, プルリク, レビュー出して, draft PR, PRつくって."
+description: "普通のリポジトリで Draft PR をシンプルに作成する軽量スキル。.github/pull_request_template.md があれば使い、なければ素の構造で本文を埋める。GitHub Projects のステータス更新や Task Issue 連携など agile-* 系の重い処理は一切行わない。agile workflow を使っていないリポジトリ、または軽くプルリクを出したいとき向け（agile workflow の Task 完了 PR は /agile-create-pull-request）。Use when 軽量に PR 作成、シンプルにプルリク。Triggers: PR作成, pull request作って, プルリク, レビュー出して, draft PR, PRつくって, シンプルな PR, 軽量 PR, 普通の PR."
 ---
 
 # Create Pull Request

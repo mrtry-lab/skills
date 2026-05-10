@@ -1,6 +1,6 @@
 ---
 name: agile-create-pull-request
-description: "実装済みの変更から Draft PR を作成し、`.github/pull_request_template.md` に従って本文を埋める。Use when PR作成、プルリクエスト作成、レビュー依頼。Triggers: PR作成, pull request作って, プルリク, レビュー出して, draft PR, PRつくって."
+description: "Task Issue の実装完了後に Draft PR を作成する agile-* 共通スキル。`/agile-task-implementation` の Step 6 から呼び出される前提で、Task Issue 連携・GitHub Projects のステータス更新（In Code Review への遷移）・テンプレート埋めを一括実行する。単独利用には軽量な /create-pull-request を使う方が適切。Use when agile workflow で Task 完了 → PR 作成するとき。Triggers: agile PR作成, Task PR作成, agile プルリク, agile-create-pull-request, Task Issue PR, In Code Review へ移行."
 ---
 
 # Create Pull Request
