@@ -75,6 +75,65 @@ gh org list
 
 ---
 
+## Step 2.5: チームコンテキストヒアリング
+
+agile-* スキル群の閾値（タイムボックス・Epic 同時数・ペルソナ数など）はチームの稼働状況に依存する。フルタイムチームと副業チームで同じ閾値を使うと、前者は緩すぎ、後者は厳しすぎになる。本ステップで前提を聞き取って `~/.claude/skills/references/team-context.md`（または利用先プロジェクトの `.claude/skills/references/team-context.md`）に保存し、各 agile-* スキルが参照できるようにする。
+
+### ヒアリング項目
+
+ユーザーに以下を聞く（既知なら飛ばしてよい）:
+
+1. **体制**: 全員フルタイム / 副業混合 / 全員副業 のどれか
+2. **メンバー数**: 何人か
+3. **週合計稼働時間**: チーム全体での 1 週間の合計（推定でよい）
+4. **チーム固有事情**: 時差・拠点・スキル偏りなど、閾値に影響しそうな前提
+
+### プリセット提案
+
+ヒアリング結果から **3 プリセットのいずれか** を提案する:
+
+| プリセット | 想定 | 主な閾値 |
+|---|---|---|
+| **軽量** | 全員副業 / 週合計 20 時間以下 | Epic 2-3、ペルソナ 1-2、refine 25-30 分、Vision 30-60 分 |
+| **標準** | フルタイム 1-2 名 + 副業混合 / 週合計 40-80 時間 | Epic 5-7、ペルソナ 2-3、refine 30-60 分、Vision 60-90 分 |
+| **集中** | 全員フルタイム / 週合計 100 時間以上 | Epic 10+、ペルソナ 3-5、refine 60-90 分、Vision 2-3 時間 |
+
+ユーザーがプリセットを選択（またはカスタマイズ希望）したら、Step 7 の shared references 生成で `team-context.md.template` をベースに値を埋めて配置する。
+
+### team-context.md.template の取得とプレースホルダ置換
+
+```bash
+mkdir -p .claude/skills/references
+curl -fsSL https://raw.githubusercontent.com/mrtry-lab/skills/main/shared/references/team-context.md.template \
+  -o .claude/skills/references/team-context.md
+
+# 例: 軽量プリセット採用
+sed -i '' \
+  -e 's|<FULL_TIME / SIDE_PROJECT / MIXED>|SIDE_PROJECT|g' \
+  -e 's|<軽量 / 標準 / 集中>|軽量|g' \
+  -e 's|<N>|3|g' \
+  -e 's|<HOURS>|15|g' \
+  .claude/skills/references/team-context.md
+
+# 採用値の <VALUE> 列も軽量プリセット値で置換
+sed -i '' \
+  -e 's|<VALUE>|2-3|1' \
+  -e 's|<VALUE>|1-2|1' \
+  -e 's|<VALUE>|30-60 分|1' \
+  -e 's|<VALUE>|25-30 分|1' \
+  -e 's|<VALUE>|5 個|1' \
+  -e 's|<VALUE>|3 個|1' \
+  .claude/skills/references/team-context.md
+```
+
+> ⚠️ プリセットを置換しないまま `<VALUE>` を残すと、agile-* スキルがプレースホルダ文字列を読んでしまう。Step 7 で github-projects.md を生成するのと同じタイミングで team-context.md も配置を完了させる。
+
+### 設定なしでも動く（軽量プリセットがデフォルト）
+
+`team-context.md` が配置されていない場合、agile-* スキル群は **軽量プリセット**（副業チーム想定）をデフォルトとして動作する。最初は team-context なしで始めて、運用しながら必要を感じたタイミングで作成しても OK。
+
+---
+
 ## Step 3: Project 用意
 
 ユーザーに既存 Project を使うか新規作成かを聞く。
@@ -177,7 +236,7 @@ A を選ぶ場合の手順:
 
 ## Step 7: shared references 生成
 
-`mrtry-lab/skills/shared/references/github-projects.md.template` を取得し、ここまでで集めた値で置換して `.claude/skills/references/github-projects.md` に書き出す。
+`mrtry-lab/skills/shared/references/github-projects.md.template` を取得し、ここまでで集めた値で置換して `.claude/skills/references/github-projects.md` に書き出す。**Step 2.5 で team-context.md.template も同じディレクトリに配置済み**であることを確認する（未済なら Step 2.5 のコマンドを再実行）。
 
 ### 値の整理
 
@@ -263,6 +322,7 @@ grep -n "<YOUR_\|<STATUS_OPTION" .claude/skills/references/github-projects.md
 - **Project 作成 vs 既存利用** — Step 3 の判断は人間。新規 Project URL を作るのは取り消しコストが高い操作
 - **Status オプション登録** — `gh project field-create` 実行前に人間承認
 - **Done 遷移ポリシー選択** — Step 6 の Auto-archive 利用 / 手動運用は人間判断
+- **チームコンテキストとプリセット選択** — Step 2.5 の体制ヒアリングと「軽量 / 標準 / 集中」プリセット選択は人間判断。AI は提案するだけ
 
 NEVER（次節）はこのゲートの違反を具体的に列挙している。
 
