@@ -1,24 +1,24 @@
 ---
-name: agile-story-to-task
-description: "リファインメント済みの Story Issue を実装可能な Task Sub-issue に分解する。Use when ストーリーをタスクに分解、Sub-issue作成、実装タスク分解、PR単位の分割。Triggers: タスク分解, Sub-issue作成, 実装計画, PR分割, story to task, task decomposition, サブイシュー."
+name: agile-implementation-plan-to-task
+description: "リファインメント済みの Implementation Plan Issue から Task Sub-issue を起票する。Plan の Task 分解計画を踏襲。軽量パスで Plan 不要の Story 場合は Story 入力モードで直接 Task 起票も可能。Use when Plan から Task 起票、Plan ベースの Task 分解、軽量 Story の Task 直接起票。Triggers: Plan から Task 作成, Implementation Plan to Task, Task 起票, タスク分解, Sub-issue作成, 実装タスク分解, PR単位の分割."
 ---
 
-# Agile Story to Task
+# Agile Implementation Plan to Task
 
-リファインメント済みの Story Issue を、CodingAgent が実行可能な Task Sub-issue に分解する。
+Refinement 完了済みの Implementation Plan Issue から Task Sub-issue を起票する。Plan の「Task 分解計画」セクションを踏襲して Task を作る。Plan 不要の軽量 Story では Story から直接 Task 起票する軽量モードも対応。
 
 ## When to Use
 
-- リファインメント完了（受入基準確定済み）の Story を実装タスクに分解するとき
-- Sub-issue を作りたいとき
-- PR 単位で作業を分割したいとき
-- `/agile-story-to-task` で手動実行
+- Implementation Plan Issue が Done になり、Task Sub-issue を起票するとき
+- 軽量パス (Plan 不要) の Story から直接 Task を起票するとき
+- `/agile-implementation-plan-to-task` で手動実行
 
 ## When NOT to Use
 
-- Story の受入基準がまだ決まっていない（→ `/agile-refine-backlog`）
+- Plan も Story も未 Refined（→ `/agile-refine-backlog` または `/agile-refine-implementation-plan`）
 - Epic を Story に分解したい（→ `/agile-create-backlog`）
-- 1 PR で完結する小さな Story → Sub-issue は不要、チェックリストで十分
+- `nature:chaotic` Story → Task 分解不要、`/agile-task-implementation` 直行
+- 1 PR で完結する小さな Story → Sub-issue は不要、チェックリストで十分 (= 軽量パス)
 
 ## コーチングの原則
 
@@ -30,46 +30,98 @@ description: "リファインメント済みの Story Issue を実装可能な T
 
 ```mermaid
 flowchart TB
-  read["1. 親Issue読み込み"]
-  ready["2. Ready判定"]
+  input["1. 入力種別判定"]
+  plan_mode["2. Plan ベースモード"]
+  story_mode["2'. 軽量モード"]
   decompose["3. 受入基準→Task マッピング\n+ 分解案の提示"]
   confirm["4. Sub-issue一覧の確定"]
   create["5. Task Issue作成\n(type: Task)"]
   verify["6. カバレッジ検証\n(サブエージェント)"]
   report["7. 完了報告"]
 
-  read --> ready
-  ready -- "Ready" --> decompose --> confirm --> create --> verify --> report
-  ready -- "Not Ready" --> refine["/agile-refine-backlog\nに誘導"]
+  input -- "Plan Issue 指定" --> plan_mode --> decompose
+  input -- "Story Issue (軽量)" --> story_mode --> decompose
+  input -- "chaotic" --> chaotic["中断:\n/agile-task-implementation 案内"]
+  input -- "Plan 必要だが未作成" --> need_plan["中断:\n/agile-refine-implementation-plan 案内"]
+  decompose --> confirm --> create --> verify --> report
 ```
 
 ---
 
-## Step 1: 親Issue読み込み
+## Step 1: 入力種別判定 + Plan 必要性判定
 
-GitHub MCP の `issue_read` で親 Story Issue を読み込む。
+入力に応じて分岐する。判定基準は `docs/agile-workflow/concepts/implementation-plan.md` を参照。
 
-## Step 2: Ready判定
+### 入力種別の判定
 
-**`nature:chaotic` の場合**: Task 分解は不要。Story 自体を 1 つの Task として扱い、`/agile-task-implementation` に直接渡す。緊急対応で複数 Task に分割する時間的余裕がない前提で、軽量フローを最後まで貫く。詳細化が必要になった場合は安定化後の postmortem 別 Issue に切り出す。
+| 入力 | 判定 | 動作 |
+|------|------|------|
+| **Plan Issue 番号指定** | Plan ベースモード | Step 2 へ進む (Plan の Task 分解計画を踏襲) |
+| **Story Issue だけ指定 + nature:chaotic** | 中断 | 「Task 分解不要。`/agile-task-implementation` 直行を案内」 |
+| **Story Issue だけ指定 + Plan 必要パス** | 中断 | 「先に `/agile-refine-implementation-plan` を呼んでください」 |
+| **Story Issue だけ指定 + 軽量パス** | 軽量モード | Step 2' へ進む (Story から直接 Task 起票) |
 
-通常の Story（`nature:implementable` / `nature:experimental`）は以下を確認してから分解に進む:
+### Plan 必要性の判定 (Story Issue だけ指定の場合)
 
-- 受入基準が具体的で、Yes/No で判定可能か
-- パターン一覧と画面仕様が TBD ではなく埋まっているか
-- 未解決の論点やブロッカーがないか
+`team-context.md` の閾値を参照:
 
-いずれかが未充足なら `/agile-refine-backlog` に誘導する。
+- `nature:experimental` → Plan 必要
+- `nature:implementable` で「想定 Task が閾値超え or 横断的判断あり」→ Plan 必要
+- それ以外 → 軽量パス (Story 入力モード で続行)
 
-## Step 3: 受入基準→Task マッピング + 分解案の提示
+人間承認ゲート: 判定結果をユーザーに提示し、確認を得てから進む。
 
-**まず親の受入基準を 1つずつ見て、どの Task でカバーするかをマッピングする。** これが分解の出発点。
+---
+
+## Step 2: Plan ベースモードでの Task 起票
+
+GitHub MCP の `issue_read` で **Plan Issue** を読み込み、本文の「Task 分解 (PR 計画)」セクションを抽出。
+
+Plan に書かれた Task 一覧をそのまま起票候補とする。Plan の Task ごとに以下を確認:
+
+- タイトル (Plan の Task テーブルから取得)
+- スコープ (Plan のスコープ列)
+- 依存関係 (Plan の依存列)
+- カバーする受入基準 (Plan の Strategy / 受入基準マッピングから推定)
+
+Plan の Task が 10 個超えていたら Plan 自体に問題がある (`/agile-refine-implementation-plan` での見直しを案内)。
+
+---
+
+## Step 2': 軽量モードでの Task 起票
+
+Story Issue を読み込み、Plan なしで Task を起票する。
+
+**軽量モードの想定**:
+- Task 数 1-2 個 (軽量プリセットなら 3 個まで許可)
+- 横断的判断なし
+- アーキ選択肢が決まっている
+
+**親の受入基準を 1つずつ見て、どの Task でカバーするかをマッピングする。**
 
 | 分解の起点 | 切り方 |
 |-----------|--------|
-| スキーマ定義がある | Schema → BE/FE 並行 → Test |
-| 小さい Story | コア実装 + エッジケース の 2分割 |
-| インフラ変更が前提 | Infra → ロジック → UI → Test |
+| 単純な実装 | コア実装 1 つ |
+| エッジケース対応必要 | コア実装 + エッジケース の 2分割 |
+| Outcome Done に観測指標がある | 上記に加えて [Telemetry] チェックリスト項目を追加 |
+
+軽量モードで Task が 3 個超えそうなら、「これは Plan 作成パスにすべきです」と提案し中断、`/agile-refine-implementation-plan` を案内する。
+
+---
+
+## Step 3: 受入基準→Task マッピング + 分解案の提示
+
+**入力モード別の分解出発点**:
+
+- **Plan ベースモード**: Plan の「Task 分解 (PR 計画)」セクションを起点に、各 Task が親 Story のどの受入基準をカバーするかをマッピング
+- **軽量モード**: 親 Story の受入基準を 1つずつ見て、どの Task でカバーするかを直接マッピング
+
+| 分解の起点 | 切り方 |
+|-----------|--------|
+| Plan あり | Plan の Task 分解計画を踏襲 (Plan で確定済み) |
+| Plan なし軽量モード + スキーマ定義あり | Schema → BE/FE 並行 → Test (3-4 個目安) |
+| Plan なし軽量モード + 小さい Story | コア実装 + エッジケース の 2分割 |
+| Plan なし軽量モード + インフラ変更が前提 | Infra → ロジック → UI → Test → ただし複雑になりすぎなら Plan 作成パスに引き戻す |
 | Outcome Done に観測指標がある | 上記に加えて [Telemetry] Task を分解末尾に追加（粒度は独立 Sub-issue / 既存 Task に統合のどちらでも可） |
 
 **Sub-issue にすべきかの判断:**
@@ -190,6 +242,8 @@ NEVER（次節）はこのゲートの違反を具体的に列挙している。
 - **NEVER: 親の受入基準をそのままコピーするな** — Task の完了条件は実装視点で書き直す。コピーすると「何をテストすれば閉じてよいか」が曖昧になる
 - **NEVER: 単なる作業メモを Sub-issue にするな** — 独立してレビューできない作業はチェックリストで十分
 - **NEVER: カバレッジ検証を省略するな** — 全 Task 完了しても親の受入基準が満たせない事態を防ぐ唯一の手段
+- **NEVER: Plan を作るべき複雑度の Story を軽量モードで強引に処理するな** — Task 数が想定より増えそうなら中断し、`/agile-refine-implementation-plan` を案内する
+- **NEVER: Plan ベースモードで Plan の Task 分解計画を勝手に書き換えるな** — Plan が確定済みの分解計画は踏襲する。変更が必要なら Plan を再 Refinement する
 
 ---
 
