@@ -136,3 +136,12 @@ gh issue create \
 - **絶対に** `gh issue create --body "..."` でインライン渡ししない — 改行や引用符のエスケープが壊れる。必ず `--body-file`
 - **絶対に** ブランチ名なしの固定ファイル名（`/tmp/issue-body.md`）を使わない — 並列セッション・複数ブランチで上書き事故が起きる
 - **絶対に** GitHub Projects のステータス更新を試みない — 本スキルの責務外。アジャイル運用が必要なら `/agile-create-issue` を使う
+
+---
+
+## References
+
+このスキルが参考にしている公式ドキュメント:
+
+- 🌐 [Configuring issue templates for your repository](https://docs.github.com/en/communities/using-templates-to-encourage-useful-issues-and-pull-requests/configuring-issue-templates-for-your-repository) (GitHub Docs) — `.github/ISSUE_TEMPLATE/` の構造、Issue forms (`.yml`) の扱い
+- 🌐 [gh issue create](https://cli.github.com/manual/gh_issue_create) (GitHub CLI Manual) — `--body-file` / `--template` オプション仕様
