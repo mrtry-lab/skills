@@ -62,16 +62,23 @@ gh org list
 
 ## Step 2: Issue Type 確認
 
-`Epic` / `Story` / `Task` の 3 つの Issue Type が Organization に登録されている必要がある。**これは Web UI でしか設定できない**ので、案内のみ。
+`Epic` / `Story` / `Implementation Plan` / `Task` の 4 つの Issue Type が Organization に登録されている必要がある。**これは Web UI でしか設定できない**ので、案内のみ。
 
 確認手順:
 
-> Organization Settings → Planning → Issue types に移動し、`Epic` / `Story` / `Task` が登録されているか確認してください。
+> Organization Settings → Planning → Issue types に移動し、`Epic` / `Story` / `Implementation Plan` / `Task` が登録されているか確認してください。
 > URL: `https://github.com/organizations/<ORG>/settings/issue-types`
 
 未登録ならその場で作成してもらう。色やアイコンの選択肢は自由。
 
-確認できたら次へ。3 つ揃わないと agile-* スキルは Issue 作成時にエラーになる。
+| Issue Type | 主責務 |
+|------------|--------|
+| Epic | プロダクト機会 (Opportunity Canvas) |
+| Story | PdO/QA 視点の要件 (受入基準・Outcome 仮説・ビジネスルール) |
+| Implementation Plan | Dev リード視点の戦略 (技術詳細・API 仕様・Task 分解) |
+| Task | 1 PR 単位の実装作業 |
+
+確認できたら次へ。4 つ揃わないと agile-* スキルは Issue 作成時にエラーになる。
 
 ---
 
@@ -115,7 +122,7 @@ sed -i '' \
   -e 's|<HOURS>|15|g' \
   .claude/skills/references/team-context.md
 
-# 採用値の <VALUE> 列も軽量プリセット値で置換
+# 採用値の <VALUE> 列も軽量プリセット値で置換 (8 個の閾値、上から順に)
 sed -i '' \
   -e 's|<VALUE>|2-3|1' \
   -e 's|<VALUE>|1-2|1' \
@@ -123,8 +130,12 @@ sed -i '' \
   -e 's|<VALUE>|25-30 分|1' \
   -e 's|<VALUE>|5 個|1' \
   -e 's|<VALUE>|3 個|1' \
+  -e 's|<VALUE>|3 個|1' \
+  -e 's|<VALUE>|2 件以上|1' \
   .claude/skills/references/team-context.md
 ```
+
+> 7 番目の `3 個` は「Plan 作成パスの想定 Task 数閾値」、8 番目の `2 件以上` は「Plan 作成パスの横断的判断閾値」。標準プリセットならそれぞれ `2 個` / `1 件以上`、集中なら `1 個` / `1 件以上`。
 
 > ⚠️ プリセットを置換しないまま `<VALUE>` を残すと、agile-* スキルがプレースホルダ文字列を読んでしまう。Step 7 で github-projects.md を生成するのと同じタイミングで team-context.md も配置を完了させる。
 
