@@ -19,7 +19,8 @@ Task Issue → Plan mode 計画 → TDD 実装 → Draft PR + レビューコメ
 ## When NOT to Use
 
 - Story の詳細化（→ `/agile-refine-backlog`）
-- Story → Task 分解（→ `/agile-story-to-task`）
+- Implementation Plan の作成・詳細化（→ `/agile-refine-implementation-plan`）
+- Plan → Task 分解（→ `/agile-implementation-plan-to-task`）
 
 ## Workflow
 
@@ -41,15 +42,22 @@ flowchart TB
 
 ---
 
-## Step 1: Task Issue 読み込み
+## Step 1: Task Issue 読み込み + 関連 Implementation Plan 確認
 
 **Task Issue の特定**: ユーザーが Issue 番号や URL を指定していない場合、`.claude/skills/references/github-projects.md` のコマンドテンプレートで **Status "Ready"** のアイテムを抽出し一覧提示。0 件なら「Ready のチケットがありません。Issue 番号を直接指定してください」と案内。
 
-GitHub MCP の `issue_read` で読み込み、以下を確認:
+GitHub MCP の `issue_read` で Task Issue を読み込み、以下を確認:
 
-- **Issue Type が Task であること** — Task でなければ「`/agile-story-to-task` で Task 分解してください」と案内して中断
+- **Issue Type が Task であること** — Task でなければ「`/agile-implementation-plan-to-task` で Task 分解してください」と案内して中断
 - **依存** — `blocked by #XX` が未解決なら警告し、ナビゲーターに判断を仰ぐ
 - **振る舞い仕様・テスト設計・完了条件・技術メモ** を把握
+
+**関連 Implementation Plan の取得 (重要)**:
+
+親 Story の sub-issue 一覧から **Issue Type=Implementation Plan** を抽出し、存在すれば Plan Issue 本文も読み込む。Plan は実装戦略 / API 仕様詳細 / データモデル / 画面詳細 / ロギング実装 / テスト戦略 / 横断的判断 / 意図的に扱わないこと を含むので、Task 実装時の参照ドキュメントとなる。
+
+- Plan が **ある** 場合: Plan 本文を context として読み込み、Task の実装方針を Plan の Strategy / 横断的判断と整合させる
+- Plan が **ない** 場合 (軽量パス): Task 本文と親 Story の情報だけで進める
 
 **ステータス → "In Coding Progress"**: `.claude/skills/references/github-projects.md` のコマンドテンプレートに従い更新。fallback もそちらに記載。
 
