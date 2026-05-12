@@ -170,5 +170,3 @@ NEVER（次節）はこのゲートの違反を具体的に列挙している。
 - 📖 [エクストリームプログラミング入門](https://www.amazon.co.jp/s?k=エクストリームプログラミング)（Kent Beck）— XP ペアプログラミング・TDD・ナビゲーター/ドライバー役割
 - 📖 [Clean Agile](https://www.amazon.co.jp/s?k=Clean+Agile+Robert+Martin)（Robert C. Martin）— TDD・Clean Code・Definition of Done
 - 📦 [Scrum Guide Expansion Pack](https://scrumexpansion.org/) — AI and Scrum（決定境界）/ Software Engineering Practices（Engineering Constraints / Small Steps）
-
-スキル横断で効いているソースは [docs/agile-workflow/references.md](../../docs/agile-workflow/references.md) を参照。

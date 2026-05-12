@@ -172,5 +172,3 @@ NEVER（次節）はこのゲートの違反を具体的に列挙している。
 このスキルが参考にしている書籍・記事・フレームワーク:
 
 - 📦 [Scrum Guide Expansion Pack](https://scrumexpansion.org/) — AI and Scrum（決定境界: Issue 起票実行は人間判断）
-
-スキル横断で効いているソースは [docs/agile-workflow/references.md](../../docs/agile-workflow/references.md) を参照。

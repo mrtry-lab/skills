@@ -31,3 +31,10 @@
 ## Example Mapping と既存 Issue
 
 既存の Story は遡及書き換えしない（DoOD と同じ方針）。新規 Story から段階的に Example Mapping 形式の構造化を導入する。
+
+---
+
+## References
+
+- 📦 [Scrum Guide Expansion Pack](https://scrumexpansion.org/) — Holistic Testing 章で Example Mapping を受入基準網羅手法として取り込んでいる
+- 🌐 [Introducing Example Mapping](https://cucumber.io/blog/bdd/example-mapping-introduction/)（Matt Wynne, Cucumber Blog）— Example Mapping の元概念（黄/青/緑/赤の 4 色マップ）

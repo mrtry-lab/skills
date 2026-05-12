@@ -232,5 +232,3 @@ NEVER（次節）はこのゲートの違反を具体的に列挙している。
 - 🌐 [Agile Story Essentials](https://www.jpattonassociates.com/wp-content/uploads/2015/03/story_essentials_quickref.pdf)（Jeff Patton, PDF）— INVEST 性質
 - 📖 [アートオブアジャイルデベロップメント](https://www.amazon.co.jp/s?k=アートオブアジャイルデベロップメント)（Jim Shore）— リリース計画
 - 📦 [Scrum Guide Expansion Pack](https://scrumexpansion.org/) — Complexity 拡張（Cynefin 4 区分の現代解釈）
-
-スキル横断で効いているソースは [docs/agile-workflow/references.md](../../docs/agile-workflow/references.md) を参照。

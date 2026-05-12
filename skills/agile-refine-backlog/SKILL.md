@@ -435,5 +435,3 @@ NEVER（次節）はこのゲートの違反を具体的に列挙している。
 - 🌐 [Agile Story Essentials](https://www.jpattonassociates.com/wp-content/uploads/2015/03/story_essentials_quickref.pdf)（Jeff Patton, PDF）— Refinement・受入基準・INVEST
 - 📖 [INSPIRED](https://www.amazon.co.jp/s?k=INSPIRED+Marty+Cagan)（Marty Cagan）— Refinement の進め方
 - 📦 [Scrum Guide Expansion Pack](https://scrumexpansion.org/) — Holistic Testing（Definition of Outcome Done / Example Mapping / Three Amigos）/ PBI フォーマット自由
-
-スキル横断で効いているソースは [docs/agile-workflow/references.md](../../docs/agile-workflow/references.md) を参照。

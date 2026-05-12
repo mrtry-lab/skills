@@ -177,3 +177,12 @@ Story #45 (Status: In Plan Refinement → ... → Ready)
 ```
 
 Plan と Task は時系列で並ぶが、GitHub Project View では「Type=Implementation Plan」と「Type=Task」を別 lane にすると視覚的に整理できる。
+
+---
+
+## References
+
+- 📦 [Scrum Guide Expansion Pack v1.0 (June 2025)](https://scrumexpansion.org/) — Sprint Backlog の "actionable plan for the Increment" 定義、PBI フォーマット自由原則
+- 🌐 [Is Your Product Backlog Ready for the AI Agents?](https://www.scrum.org/resources/blog/your-product-backlog-ready-ai-agents)（scrum.org blog）— "Prompt-Ready PBIs" 概念（PBI に explicit schemas / negative constraints / API context を含める）
+- 🌐 [The AI-Augmented Scrum Guide (March 2026, community)](https://agileleadershipdayindia.org/blogs/ai-augmented-scrum-framework/the-ai-augmented-scrum-guide.html) — 人間と AI の hybrid teams 向け Scrum 拡張
+- 📖 [Architecture Decision Records (ADR)](https://adr.github.io/) — Plan を「実装中に進化してよい使い捨てドキュメント」と位置づける考え方の参考

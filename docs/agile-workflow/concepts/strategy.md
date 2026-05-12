@@ -38,3 +38,11 @@ Step 4 は性格の違う 2 種類の検査を扱う:
 ## 定期実行で機能する設計
 
 `agile-product-vision` は **四半期〜半年で定期実行** する想定。市場・チーム・技術環境の変化に追従するために Vision 自体を見直すたびに、Strategy 点検も自動的に毎回走る。別途 Strategy レビュー専用 skill を作らず Vision に統合した理由はこれで、定期実行のリズムが Strategy 検査のリズムと一致する。
+
+---
+
+## References
+
+- 📦 [Scrum Guide Expansion Pack](https://scrumexpansion.org/) — Strategy as Empirical Capability 章（John Coleman）。戦略の 10 性質と経験主義的な扱い方
+- 📖 [Good Strategy Bad Strategy](https://www.amazon.co.jp/s?k=Good+Strategy+Bad+Strategy)（Richard Rumelt）— Diagnosis / Guiding Policy / Coherent Action という戦略の核（Focus / Coherence の原典的議論）
+- 📖 [プレイ・バイ・ザ・ルールズ](https://www.amazon.co.jp/s?k=プレイ・バイ・ザ・ルールズ)（Roger L. Martin）— Where to play / How to win の選別（Focus の鋭さの参考）

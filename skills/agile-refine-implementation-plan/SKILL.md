@@ -429,5 +429,3 @@ NEVER（次節）はこのゲートの違反を具体的に列挙している。
 - 📦 [Scrum Guide Expansion Pack](https://scrumexpansion.org/) — Sprint Backlog "actionable plan for the Increment" / AI and Scrum (Plan 作成への AI 活用)
 - 📖 [INSPIRED](https://www.amazon.co.jp/s?k=INSPIRED+Marty+Cagan)（Marty Cagan）— Discovery → Delivery への引き渡しドキュメント
 - 📖 [アジャイル型プロジェクトマネジメント](https://www.amazon.co.jp/s?k=アジャイル型プロジェクトマネジメント)（Jim Highsmith）— 実装戦略の設計
-
-スキル横断で効いているソースは [docs/agile-workflow/references.md](../../docs/agile-workflow/references.md) を参照。

@@ -254,5 +254,3 @@ NEVER（次節）はこのゲートの違反を具体的に列挙している。
 - 🌐 [Agile Story Essentials](https://www.jpattonassociates.com/wp-content/uploads/2015/03/story_essentials_quickref.pdf)（Jeff Patton, PDF）— INVEST・Task 分解粒度
 - 📖 [アジャイル型プロジェクトマネジメント](https://www.amazon.co.jp/s?k=アジャイル型プロジェクトマネジメント)（Jim Highsmith）— Task 設計
 - 📦 [Scrum Guide Expansion Pack](https://scrumexpansion.org/) — Holistic Testing Observe 段階（Telemetry Task 必須化、品質スコアリング #8）
-
-スキル横断で効いているソースは [docs/agile-workflow/references.md](../../docs/agile-workflow/references.md) を参照。

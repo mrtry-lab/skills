@@ -242,5 +242,3 @@ NEVER（次節）はこのゲートの違反を具体的に列挙している。
 - 📖 [INSPIRED](https://www.amazon.co.jp/s?k=INSPIRED+Marty+Cagan)（Marty Cagan）— 4 リスクチェック（Value / Usability / Feasibility / Business Viability）
 - 🌐 [Product Discovery Immersion](https://jpattonassociates.com/product-discovery-immersion/)（Jeff Patton）— 0→1 / 1→N の Discovery 手法
 - 📖 [アートオブアジャイルデベロップメント](https://www.amazon.co.jp/s?k=アートオブアジャイルデベロップメント)（Jim Shore）— Epic / Theme の扱い
-
-スキル横断で効いているソースは [docs/agile-workflow/references.md](../../docs/agile-workflow/references.md) を参照。

@@ -34,3 +34,12 @@ Chaotic は学習機会。安定化後に **別 Issue** として:
 ## Chaotic 濫用への警戒
 
 「単に急ぎ」「上司が機嫌悪い」「金曜夕方リリース」は Chaotic ではない。Chaotic は **事業継続が損なわれる切迫した状況** に限定する。濫用すると軽量フローの恩恵がなくなり、ただ受入基準が薄い Story が量産される。判定の問いは「いま行動を起こさないと事業や顧客に深刻な被害が出るか」。No なら通常フロー。
+
+`agile-create-backlog/references/cynefin-guide.md` に Story 単位での具体的な分類例を記載している。
+
+---
+
+## References
+
+- 📖 [不確実な世界を確実に生きる カネヴィンフレームワークへの招待](https://www.amazon.co.jp/s?k=不確実な世界を確実に生きる+カネヴィン)（コグニティブ・エッジ / 田村洋一）— Cynefin 4 区分（Clear / Complicated / Complex / Chaotic）と行動原則
+- 📦 [Scrum Guide Expansion Pack](https://scrumexpansion.org/) — Complexity 拡張章（Cynefin 4 区分の現代解釈）

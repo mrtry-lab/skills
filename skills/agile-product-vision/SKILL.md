@@ -238,5 +238,3 @@ NEVER（次節）はこのゲートの違反を具体的に列挙している。
 - 📖 [INSPIRED](https://www.amazon.co.jp/s?k=INSPIRED+Marty+Cagan)（Marty Cagan）— プロダクトビジョンの必要性
 - 📖 [コーチングアジャイルチームス](https://www.amazon.co.jp/s?k=コーチングアジャイルチームス)（Lyssa Adkins）— GROW モデル・対話で引き出すコーチング
 - 📦 [Scrum Guide Expansion Pack](https://scrumexpansion.org/) — Strategy as Empirical Capability（Step 4 Strategy 4 性質: Intent / Focus / Coherence / Memorability）
-
-スキル横断で効いているソースは [docs/agile-workflow/references.md](../../docs/agile-workflow/references.md) を参照。

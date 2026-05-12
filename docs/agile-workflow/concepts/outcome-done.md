@@ -45,3 +45,11 @@ Story 単位の Outcome Done は、親 Epic の Outcome 仮説テーブルから
 ## Outcome Done と既存 Issue
 
 既存の Story / Epic / VISION は遡及書き換えしない。新規作成からのみ Outcome 仮説を必須化する方針で、既存資産の改修コストを払わずに段階的に置き換える。
+
+---
+
+## References
+
+- 📦 [Scrum Guide Expansion Pack](https://scrumexpansion.org/) — Definition of Outcome Done 章。Output Done と Outcome Done の分離概念
+- 📖 [Lean Analytics](https://www.amazon.co.jp/s?k=Lean+Analytics)（Alistair Croll / Benjamin Yoskovitz）— Outcome 観測の因果仮説とメトリクス設計
+- 📖 [INSPIRED](https://www.amazon.co.jp/s?k=INSPIRED+Marty+Cagan)（Marty Cagan）— Output vs Outcome、価値検証の運用

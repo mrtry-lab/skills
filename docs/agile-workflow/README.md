@@ -10,7 +10,6 @@
 
 - **[setup.md](setup.md)** — 前提条件・チームコンテキスト・セットアップ手順・テンプレート解決ロジック
 - **[operations.md](operations.md)** — Issue 分類体系・GitHub Projects ビュー・Status フロー・トラブルシューティング・Contributing
-- **[references.md](references.md)** — 参考にしている書籍・記事・フレームワークの一覧と各スキルへの紐付け
 
 ### 概念（Scrum Expansion Pack 準拠）
 
@@ -265,3 +264,14 @@ Story の sub-issue として起票される Plan Issue は、エンジニア視
 2. 無ければ `agile-create-issue/templates/implementation-plan.md`（同梱）をフォールバック
 
 詳細は [concepts/implementation-plan.md](concepts/implementation-plan.md) 参照。
+
+---
+
+## References
+
+ワークフロー全体にわたって効いている横断ソース。個別概念の References は各 `concepts/*.md` 末尾に記載している。
+
+- 📦 [Scrum Guide Expansion Pack v1.0 (June 2025)](https://scrumexpansion.org/) — Holistic Testing / Definition of Outcome Done / Strategy as Empirical Capability / AI and Scrum / Complexity（Cynefin）など現代的拡張章を網羅
+- 📄 [The New New Product Development Game](https://hbr.org/1986/01/the-new-new-product-development-game)（Hirotaka Takeuchi & Ikujiro Nonaka, HBR 1986）— Scrum の起源論文（Self-organizing teams / Overlapping development phases）
+- 📖 [SCRUMMASTER THE BOOK](https://www.amazon.co.jp/s?k=SCRUMMASTER+THE+BOOK)（Zuzana Šochová）— #ScrumMasterWay モデル、サーバントリーダーシップ
+- 📖 [コーチング・アジャイル・チームス](https://www.amazon.co.jp/s?k=コーチング・アジャイル・チームス)（Lyssa Adkins）— アジャイルコーチング、Three Amigos のファシリテーション
