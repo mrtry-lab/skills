@@ -43,7 +43,7 @@ done
 
 if [[ -z "$GP_REF" ]]; then
   echo "ERROR: github-projects.json not found at .claude/skills/references/ (project or user scope)" >&2
-  echo "       Run /agile-project-setup or /agile-update-skills first." >&2
+  echo "       Run /agile-setup-project or /agile-update-skills first." >&2
   exit 2
 fi
 

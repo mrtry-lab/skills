@@ -17,7 +17,7 @@
 
 ## チームコンテキストとプリセット閾値
 
-agile-* スキル群の閾値は `~/.claude/skills/references/team-context.json`（または利用先プロジェクトの `.claude/skills/references/team-context.json`）に集約されている。`agile-project-setup` の Step 2.5 で対話的に生成し、各スキルが実行時に参照する。
+agile-* スキル群の閾値は `~/.claude/skills/references/team-context.json`（または利用先プロジェクトの `.claude/skills/references/team-context.json`）に集約されている。`agile-setup-project` の Step 2.5 で対話的に生成し、各スキルが実行時に参照する。
 
 ### なぜチームコンテキストが必要か
 
@@ -38,7 +38,7 @@ agile-* スキル群の閾値は `~/.claude/skills/references/team-context.json`
 
 ### タスク分割単位（プリセットとは独立）
 
-プリセットの 3 種（軽量 / 標準 / 集中）は **稼働時間** の話で、**Task 粒度（1 PR の範囲）** はリポジトリ構成と運用方針で別に決まる。`agile-project-setup` の Step 2.5 で 3 問ヒアリングし、`team-context.json` に保存する:
+プリセットの 3 種（軽量 / 標準 / 集中）は **稼働時間** の話で、**Task 粒度（1 PR の範囲）** はリポジトリ構成と運用方針で別に決まる。`agile-setup-project` の Step 2.5 で 3 問ヒアリングし、`team-context.json` に保存する:
 
 1. **リポジトリ構成**: `MONOREPO` / `MULTI_REPO`
 2. **機能実装の分割パターン**: `USE_CASE` (モノレポ標準) / `LAYER` (マルチレポ標準) / `COMPONENT` (DDD・マイクロサービス) / `VERTICAL_SLICE` (TDD で半日 1 PR 厳守) / `CUSTOM`
@@ -48,7 +48,7 @@ agile-* スキル群の閾値は `~/.claude/skills/references/team-context.json`
 
 ### 設定なしでも動く（軽量プリセットがデフォルト）
 
-`team-context.json` が配置されていない場合、agile-* スキル群は **軽量プリセット**（稼働時間 ＋ `USE_CASE` + `INLINE`）をデフォルトとして動作する。最初は team-context なしで始めて、運用しながら必要を感じたタイミングで `agile-project-setup` を再実行（または `team-context.json` を直接編集）する流れで OK。
+`team-context.json` が配置されていない場合、agile-* スキル群は **軽量プリセット**（稼働時間 ＋ `USE_CASE` + `INLINE`）をデフォルトとして動作する。最初は team-context なしで始めて、運用しながら必要を感じたタイミングで `agile-setup-project` を再実行（または `team-context.json` を直接編集）する流れで OK。
 
 ### 途中変更（チーム拡大 / 縮小）
 
@@ -57,30 +57,30 @@ agile-* スキル群の閾値は `~/.claude/skills/references/team-context.json`
 - `team-context.json` を直接編集してプリセットと採用値を更新する
 - 既存の Story / Epic は遡及書き換えしない（DoOD と同じ方針）。新規作成分から新しい閾値を適用する
 
-`agile-project-setup` を再実行すると Step 2.5 を含む全ステップが走るので、Project 設定もまとめて見直したいなら有効。
+`agile-setup-project` を再実行すると Step 2.5 を含む全ステップが走るので、Project 設定もまとめて見直したいなら有効。
 
 ---
 
 ## セットアップ手順
 
-> 💡 初回セットアップは `/agile-project-setup` スキルを使うと、GitHub Project 作成・Status オプション登録・ビュー作成案内・shared references 生成までを対話で一気通貫で完了できる。下記の手動手順は内部で何が起きているかを把握したい場合の参考。
+> 💡 初回セットアップは `/agile-setup-project` スキルを使うと、GitHub Project 作成・Status オプション登録・ビュー作成案内・shared references 生成までを対話で一気通貫で完了できる。下記の手動手順は内部で何が起きているかを把握したい場合の参考。
 
 ### 1. skill のインストール
 
 ```bash
 for skill in agile-craft-vision agile-create-epic agile-create-stories \
              agile-refine-story agile-refine-implementation-plan agile-decompose-task-from-implementation-plan \
-             agile-task-implementation agile-create-issue agile-create-pull-request \
-             agile-project-setup agile-update-skills; do
+             agile-implement-task agile-create-issue agile-create-pull-request \
+             agile-setup-project agile-update-skills; do
   gh skill install mrtry-lab/skills $skill --agent claude-code --scope user
 done
 ```
 
-> 💡 一括インストール & docs/agile-workflow/ の取得は `/agile-update-skills` を実行する方法もある (`agile-project-setup` 内からも呼ばれる)。
+> 💡 一括インストール & docs/agile-workflow/ の取得は `/agile-update-skills` を実行する方法もある (`agile-setup-project` 内からも呼ばれる)。
 
 ### 2. shared references の配置（JSON 生成）
 
-`agile-project-setup` の Step 7 で同梱スクリプト `generate-github-projects-ref.sh` を実行する流れが標準。手動で行う場合:
+`agile-setup-project` の Step 7 で同梱スクリプト `generate-github-projects-ref.sh` を実行する流れが標準。手動で行う場合:
 
 ```bash
 PROJECT_NAME="My Project" \
@@ -89,7 +89,7 @@ PROJECT_ID="PVT_xxxxxxxx" \
 STATUS_FIELD_ID="PVTSSF_xxxxxxxx" \
 OPT_PLANNING="xxx" OPT_PLAN_REFINEMENT="xxx" OPT_PLAN_REVIEW="xxx" \
 OPT_READY="xxx" OPT_CODING="xxx" OPT_CODE_REVIEW="xxx" OPT_DONE="xxx" \
-  bash ~/.claude/skills/agile-project-setup/scripts/generate-github-projects-ref.sh
+  bash ~/.claude/skills/agile-setup-project/scripts/generate-github-projects-ref.sh
 ```
 
 スクリプトは `shared/references/github-projects.json.template` を curl で取得し、jq で各値を埋めて `.claude/skills/references/github-projects.json` を生成。未置換のプレースホルダが残っていれば exit 1。

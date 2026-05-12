@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# agile-project-setup Step 4: Status フィールド + 7 オプション作成
+# agile-setup-project Step 4: Status フィールド + 7 オプション作成
 #
 # Usage:
 #   setup-status-field.sh --owner <ORG> --project <NUMBER>

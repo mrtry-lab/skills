@@ -1,5 +1,5 @@
 ---
-name: agile-project-setup
+name: agile-setup-project
 description: "agile-* スキル群を動かすための GitHub Project (v2) を対話的にセットアップする。Project 新規作成または既存 Project の取り込み、Status フィールドの 7 オプション登録、推奨ビュー (Backlog / Sprint) 作成、Issue Type 確認、shared references の生成（プレースホルダ置換）までを 1 セッションで完了する。agile-* スキルを初めて自分のプロジェクトに入れるとき、または Project 設定が中途半端な状態を整えたいときに使う。Triggers: agile project setup, project setup, agile セットアップ, GitHub Projects 設定, github-projects.json 作成, agile 導入, プロジェクトセットアップ."
 ---
 
@@ -52,7 +52,7 @@ flowchart TB
 bash <skill-dir>/scripts/check-prereqs.sh
 ```
 
-(skill-dir は `~/.claude/skills/agile-project-setup/` か `<project>/.claude/skills/agile-project-setup/`。以降同じ)
+(skill-dir は `~/.claude/skills/agile-setup-project/` か `<project>/.claude/skills/agile-setup-project/`。以降同じ)
 
 スクリプトが exit code 2 (project スコープ不足) を返したら `gh auth refresh -s project,read:org` を案内する。
 

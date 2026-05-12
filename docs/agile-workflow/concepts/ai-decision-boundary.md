@@ -15,10 +15,10 @@ agile-* スキル群は CodingAgent（AI）主体のパイプラインだが、S
 | Story 分解 | `agile-create-stories` | Story Mapping 整形・候補列挙 | nature 分類 / Story 確定 | リリーススライス選択 |
 | リファインメント | `agile-refine-story` | シーケンス図作成・網羅性検査・Outcome テーブル整形 | リファインメント完了 / 受入基準確定 | Example Mapping のルール抽出 |
 | Task 分解 | `agile-decompose-task-from-implementation-plan` | Sub-issue 分割案・品質スコアリング | 分解粒度確定 | テスト戦略選択 |
-| 実装 | `agile-task-implementation` | コーディング・TDD・コミット | Plan mode 計画承認 / Draft PR 提出 | エスカレーション判断 |
+| 実装 | `agile-implement-task` | コーディング・TDD・コミット | Plan mode 計画承認 / Draft PR 提出 | エスカレーション判断 |
 | Issue 作成 | `agile-create-issue` | テンプレ適用・本文生成 | Issue 起票実行 | — |
 | PR 作成 | `agile-create-pull-request` | テンプレ適用・本文生成・Draft 作成 | Draft → Ready 切り替え | マージ |
-| Project 初期化 | `agile-project-setup` | ID 取得・プレースホルダ置換 | Project 作成 / Status オプション登録 | Org 選択 / Issue Type 登録 |
+| Project 初期化 | `agile-setup-project` | ID 取得・プレースホルダ置換 | Project 作成 / Status オプション登録 | Org 選択 / Issue Type 登録 |
 
 ## 3 つの不可侵な人間権限
 

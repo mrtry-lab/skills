@@ -17,7 +17,7 @@ agile-* スキル群は **Scrum のフルセットを採用しているわけで
 | Example Mapping | (Scrum 標準にはない) | BDD/Cucumber 由来 (Matt Wynne)。Story の受入基準を 4 色マップで抽出 |
 | Cynefin の nature ラベル | Complexity 拡張章 | Scrum Guide Expansion Pack 経由 (元は Dave Snowden の経営理論) |
 | Holistic Testing (Discover / Understand / Build / Deploy / **Observe**) | Holistic Testing 章 | Scrum Guide Expansion Pack 経由 (元は Lisa Crispin / Janet Gregory) |
-| Plan mode | (Scrum 用語ではない) | Claude Code の機能。`agile-task-implementation` で使用 |
+| Plan mode | (Scrum 用語ではない) | Claude Code の機能。`agile-implement-task` で使用 |
 | Backlog (View 名) | (Scrum 用語ではない) | 本スキル群で導入した GitHub Projects のビュー名。Open な Epic 配下を俯瞰する用途 |
 
 Scrum 経験者は Story を PBI、Implementation Plan を Sprint Backlog の actionable plan、と読み替えればだいたい同じ。
@@ -104,7 +104,7 @@ Story の Done 条件:
 3. 全 Task が Done
 4. 受入確認完了
 
-GitHub Projects 標準 Workflow「Sub-issue all closed → Parent auto-close」を有効化すれば半自動化できる (`agile-project-setup` Step 6 で案内、Web UI のみ。GraphQL API では `createProjectV2Workflow` mutation が未提供のため自動化不可)。
+GitHub Projects 標準 Workflow「Sub-issue all closed → Parent auto-close」を有効化すれば半自動化できる (`agile-setup-project` Step 6 で案内、Web UI のみ。GraphQL API では `createProjectV2Workflow` mutation が未提供のため自動化不可)。
 
 ## Implementation Plan 必要性判定
 

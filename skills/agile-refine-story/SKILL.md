@@ -96,7 +96,7 @@ Story が `nature:chaotic` ラベルを持つ場合、通常の Step 2 〜 Step 
 
 **完了後**:
 - Status を **"Ready"** に直接設定
-- `/agile-task-implementation` に直結 (Task 分解もスキップ)
+- `/agile-implement-task` に直結 (Task 分解もスキップ)
 - 「Chaotic でも CI green は守る」: TDD を妥協しない
 
 **事後 — 必ず実施**:
@@ -385,7 +385,7 @@ Step 3 のユーザー体験フローと **Step 5 のルール / 具体例** か
 
 - **Implementation Plan 必要** → 「次は `/agile-refine-implementation-plan` を実行してください。Implementation Plan Issue を Story の sub-issue として起票します。」
 - **Implementation Plan 不要 (軽量パス)** → 「次は `/agile-decompose-task-from-implementation-plan` を実行してください (Story 入力モード)。Story から直接 Task Issue を起票します。」
-- **chaotic** (Step 1.5 経由) → 「Status を Ready に設定済みです。`/agile-task-implementation` で hotfix 実装に進んでください。」
+- **chaotic** (Step 1.5 経由) → 「Status を Ready に設定済みです。`/agile-implement-task` で hotfix 実装に進んでください。」
 
 ---
 

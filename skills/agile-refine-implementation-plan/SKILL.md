@@ -20,7 +20,7 @@ Story Refinement 完了後、Story の sub-issue として Implementation Plan I
 
 - Story の受入基準・Outcome がまだ未確定（→ `/agile-refine-story` を先に実行）
 - 軽量パス (想定 Task 1-2 個 + 横断判断なし) → Implementation Plan は作らず `/agile-decompose-task-from-implementation-plan` で直接 Task 起票
-- `nature:chaotic` の hotfix → Implementation Plan も Task 分解も不要、`/agile-task-implementation` 直行
+- `nature:chaotic` の hotfix → Implementation Plan も Task 分解も不要、`/agile-implement-task` 直行
 - Implementation Plan の責務マップは `docs/agile-workflow/concepts/implementation-plan.md` を参照
 
 ## コーチングの原則

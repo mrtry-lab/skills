@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# agile-project-setup Step 1: 前提チェック
+# agile-setup-project Step 1: 前提チェック
 #
 # Usage: check-prereqs.sh
 #

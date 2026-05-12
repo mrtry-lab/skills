@@ -1,6 +1,6 @@
 ---
 name: agile-create-pull-request
-description: "Task Issue の実装完了後に Draft PR を作成する agile-* 共通スキル。`/agile-task-implementation` の Step 6 から呼び出される前提で、Task Issue 連携・GitHub Projects のステータス更新（In Code Review への遷移）・テンプレート埋めを一括実行する。単独利用には軽量な /create-pull-request を使う方が適切。Use when agile workflow で Task 完了 → PR 作成するとき。Triggers: agile PR作成, Task PR作成, agile プルリク, agile-create-pull-request, Task Issue PR, In Code Review へ移行."
+description: "Task Issue の実装完了後に Draft PR を作成する agile-* 共通スキル。`/agile-implement-task` の Step 6 から呼び出される前提で、Task Issue 連携・GitHub Projects のステータス更新（In Code Review への遷移）・テンプレート埋めを一括実行する。単独利用には軽量な /create-pull-request を使う方が適切。Use when agile workflow で Task 完了 → PR 作成するとき。Triggers: agile PR作成, Task PR作成, agile プルリク, agile-create-pull-request, Task Issue PR, In Code Review へ移行."
 ---
 
 # Create Pull Request
@@ -13,7 +13,7 @@ description: "Task Issue の実装完了後に Draft PR を作成する agile-* 
 
 - 実装が完了し PR を作成するとき
 - 「PR 作って」「プルリク出して」と指示されたとき
-- `/agile-task-implementation` の Step 6 から呼び出されたとき
+- `/agile-implement-task` の Step 6 から呼び出されたとき
 
 ## When NOT to Use
 

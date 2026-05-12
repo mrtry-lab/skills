@@ -27,10 +27,10 @@ SKILLS=(
   agile-refine-story
   agile-refine-implementation-plan
   agile-decompose-task-from-implementation-plan
-  agile-task-implementation
+  agile-implement-task
   agile-create-issue
   agile-create-pull-request
-  agile-project-setup
+  agile-setup-project
   agile-update-skills
 )
 

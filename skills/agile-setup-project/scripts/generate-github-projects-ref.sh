@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# agile-project-setup Step 7: github-projects.json 生成
+# agile-setup-project Step 7: github-projects.json 生成
 #
 # 必須 env vars:
 #   PROJECT_NAME      Project の表示名

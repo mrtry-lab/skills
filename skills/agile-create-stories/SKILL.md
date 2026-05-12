@@ -125,7 +125,7 @@ NG の Story がある場合は、具体的にどの Story がどの観点で不
 
 - 因果関係を分析する時間的余裕がなく、即時対応が求められる
 - 例: 本番サービス停止、データ破損、セキュリティインシデント
-- → `/agile-refine-story` の **軽量フロー**（受入基準のみ）→ `/agile-task-implementation` で hotfix → 安定化後に postmortem を別 Issue で記録
+- → `/agile-refine-story` の **軽量フロー**（受入基準のみ）→ `/agile-implement-task` で hotfix → 安定化後に postmortem を別 Issue で記録
 
 ### 分類の注意点
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# agile-project-setup Step 2.5: team-context.json 生成
+# agile-setup-project Step 2.5: team-context.json 生成
 #
 # Usage:
 #   generate-team-context.sh \

@@ -1,5 +1,5 @@
 {
-  "_comment": "agile-* スキル群が参照する GitHub Projects 固有値。'agile-project-setup' Step 7 の generate-github-projects-ref.sh が values を埋める。",
+  "_comment": "agile-* スキル群が参照する GitHub Projects 固有値。'agile-setup-project' Step 7 の generate-github-projects-ref.sh が values を埋める。",
   "project": {
     "name": "<YOUR_PROJECT_NAME>",
     "owner": "<YOUR_GITHUB_ORG>",

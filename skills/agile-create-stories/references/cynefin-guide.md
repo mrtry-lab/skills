@@ -50,7 +50,7 @@
 **Chaotic と判定したら**:
 1. `agile-create-stories` で `nature:chaotic` ラベル付きで起票
 2. `agile-refine-story` の **軽量フロー**（受入基準のみ）を通す。シーケンス図・Outcome Done・Example Mapping はスキップ可
-3. `agile-task-implementation` で hotfix 実装（TDD は妥協しない — 安定化後に必ずテスト追加）
+3. `agile-implement-task` で hotfix 実装（TDD は妥協しない — 安定化後に必ずテスト追加）
 4. 安定化後、別 Issue で **postmortem** を記録: なぜ Chaotic に至ったか、再発防止策、追加テスト
 
 **Chaotic と Complex の違い**:

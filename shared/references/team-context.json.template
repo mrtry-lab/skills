@@ -1,5 +1,5 @@
 {
-  "_comment": "agile-* スキル群が参照するチーム前提値。'agile-project-setup' Step 2.5 の generate-team-context.sh が values を埋める。",
+  "_comment": "agile-* スキル群が参照するチーム前提値。'agile-setup-project' Step 2.5 の generate-team-context.sh が values を埋める。",
   "team": {
     "type": "<FULL_TIME / SIDE_PROJECT / MIXED>",
     "members": "<N>",

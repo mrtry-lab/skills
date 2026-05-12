@@ -1,5 +1,5 @@
 ---
-name: agile-task-implementation
+name: agile-implement-task
 description: "Task Issueを読み込み、XPペアプロ体制（ユーザー=ナビゲーター、Claude=ドライバー）でPlan mode計画→TDD実装まで一気通貫で実行する。PR作成は /agile-create-pull-request に委譲。Use when Task Issueの実装、コーディング開始。Triggers: 実装して, implement, コーディング, task実装, ペアプロ, 開発開始, このタスクやって."
 ---
 
