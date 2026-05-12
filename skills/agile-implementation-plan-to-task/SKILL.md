@@ -198,6 +198,20 @@ team-context の `基盤・インフラ系改修の扱い` に従う:
 **作成手順:**
 `/agile-create-issue` スキルに委譲する。Issue Type: `"Task"`、親 Issue: 対象の Story Issue を指定。テンプレート解決・登録確認・親子リンクは `/agile-create-issue` が処理する。
 
+### 親 Story の Status 自動更新 (初回のみ)
+
+**最初の Task Issue 起票完了後**、親 Story の Status を確認して必要なら遷移させる:
+
+| 現在の親 Story Status | 処理 |
+|---|---|
+| `Ready` | `In Coding Progress` に更新 (最初の Task が作成された = 実装フェーズ入り) |
+| `In Coding Progress` | スキップ (Plan 経由で既に遷移済み / 2 回目以降の Task 起票) |
+| `In Code Review` / `Done` | 何もしない (異常ケース、警告のみ) |
+
+複数 Task をまとめて起票する場合も Status 更新コマンドは 1 回だけ実行する。一度 `Ready` → `In Coding Progress` に遷移したら以降の Task 起票では再度の更新は不要。
+
+更新コマンドは `.claude/skills/references/github-projects.md` のテンプレートに従う。失敗時はリトライ 1 回、それでも失敗すれば手動更新を案内して作業継続。
+
 ## Step 6: カバレッジ検証（サブエージェント）
 
 **サブエージェントを起動**し、親の受入基準カバレッジと各 Task の品質を検証する。
@@ -230,6 +244,12 @@ team-context の `基盤・インフラ系改修の扱い` に従う:
 |---|---|---|---|
 | 1 | [Schema] APIスキーマ定義 | owner/repo#XX | なし |
 | 2 | [BE] エンドポイント実装 | owner/repo#XX | #1 |
+
+完了報告には親 Story の Status 更新結果も含める。例:
+```
+✓ Task 起票完了: #X1, #X2, ...
+✓ 親 Story #N: Status を In Coding Progress に更新 (初回 Task 起票のため)
+```
 
 ---
 
