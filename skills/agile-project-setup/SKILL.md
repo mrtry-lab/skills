@@ -366,10 +366,10 @@ grep -n "<YOUR_\|<STATUS_OPTION" .claude/skills/references/github-projects.md
 
 ## Step 7.5: agile-* スキルとドキュメントの一括取得
 
-各 agile-* スキル本体と `docs/agile-workflow/` (判定基準・概念定義・用語マッピング・Status フロー) は対象プロジェクトに揃っている必要がある。これらを **`/agile-update-skills` に委譲して一括取得** する。
+各 agile-* スキル本体と `docs/agile-workflow/` (判定基準・概念定義・用途マッピング・Status フロー) は対象プロジェクトに揃っている必要がある。これらを **`/agile-update-skills` に委譲して一括取得** する (同梱の `scripts/update.sh` が `gh skill install` ループと curl フェッチを実行)。
 
-> 続けて `/agile-update-skills` を実行してください。このスキルは以下を一括で行います:
-> 1. 全 agile-* スキル (10 個 + agile-update-skills) を `gh skill install` で配置
+> 続けて `/agile-update-skills` を実行してください。このスキルは同梱スクリプト `scripts/update.sh` を呼び出し、以下を一括で行います:
+> 1. 全 agile-* スキル (10 個 + agile-update-skills 自身) を `gh skill install` で配置
 > 2. `docs/agile-workflow/` 配下 12 ファイル (README / setup / operations + concepts/ 9) を curl で取得 (配置先はユーザー指定、デフォルト `docs/agile-workflow/`)
 
 `/agile-update-skills` は単独でも呼べる: agile-* の最新版に追従したいとき / `docs/agile-workflow/` を更新したいときに定期実行できる。詳細は `agile-update-skills/SKILL.md` 参照。
