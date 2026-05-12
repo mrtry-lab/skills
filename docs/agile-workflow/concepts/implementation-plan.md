@@ -177,11 +177,3 @@ Story #45 (Status: In Plan Refinement → ... → Ready)
 ```
 
 Plan と Task は時系列で並ぶが、GitHub Project View では「Type=Implementation Plan」と「Type=Task」を別 lane にすると視覚的に整理できる。
-
-## NEVER — アンチパターン
-
-- **絶対に** Plan を Task の親 Issue にしない — Plan と Task はどちらも Story の sub-issue として並列。Plan が Task を子に持つと階層が深くなりすぎ、Done のカスケードも複雑化する
-- **絶対に** Plan で PR を出さない — Plan は実装ドキュメントなので PR は出ない。`In Coding Progress` / `In Code Review` Status は使わない。`In Plan Review → Done` で完結
-- **絶対に** 軽量 Story に Plan を作らない — 想定 Task 1-2 個 + 横断判断なしの Story に Plan を作るのはオーバースペック。team-context preset の閾値に従う
-- **絶対に** Story にエンジニア視点の詳細を残さない (Plan が作成された場合) — Story と Plan の責務が重複すると、PdO/QA レビューが API 仕様等まで踏み込んで認知負荷が上がる
-- **絶対に** Plan を Story の前に作らない — Plan の前提は Story の受入基準・Outcome 仮説。Story Refinement を先に終わらせる
