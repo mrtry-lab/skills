@@ -11,7 +11,7 @@ type: 'Implementation Plan'
 > 親 Story: #{N}
 > 最終更新: {YYYY-MM-DD}
 
-<!-- Story と並列の sub-issue として起票する。Plan は PR を出さないので、Status は In Plan Refinement → In Plan Review → Done で完結 -->
+<!-- Story と並列の sub-issue として起票する。Status は Task と同じ 4 Status (Ready / In Coding Progress / In Code Review / Done) を使い、起票時は In Code Review (Refinement 完了済みのため) -->
 
 ### 全体方針 (Strategy)
 

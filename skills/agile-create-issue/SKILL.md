@@ -107,7 +107,7 @@ GitHub MCP の `issue_write` で Issue を作成する:
 | Issue Type | 初期 Status |
 |------------|------------|
 | Story Issue | **In Planning** |
-| Implementation Plan Issue | **In Planning** |
+| Implementation Plan Issue | **In Code Review** (Refinement 完了済み内容で起票するためレビュー待ち) |
 | Task Issue | **Ready** |
 | Epic Issue | 設定不要 |
 
