@@ -21,7 +21,7 @@ type: 'Story'
 
 ### シーケンス図
 
-> TBD（refine-backlog で作成）
+> TBD（refine-story で作成）
 
 <!-- アクター間のインタラクションを時系列で表現する。alt/opt で正常系/異常系を1つの図に統合する -->
 <!-- この図が正常系・異常系の全パターンを含む = パターン一覧を兼ねる -->
@@ -88,7 +88,7 @@ sequenceDiagram
 
 ### Outcome Done（観測指標）
 
-> TBD（refine-backlog で親 Epic の Outcome 仮説をもとに記述）
+> TBD（refine-story で親 Epic の Outcome 仮説をもとに記述）
 
 | 観測指標 | 期待する変化 | 観測タイミング | 観測手段 |
 |---------|------------|--------------|---------|
@@ -102,13 +102,13 @@ sequenceDiagram
 
 ### ビジネスルール
 
-> TBD（refine-backlog の Example Mapping で抽出）
+> TBD（refine-story の Example Mapping で抽出）
 
 - {ルール 1: 例: 「依頼の編集は依頼者本人と管理者のみ可能」}
 - {ルール 2: 例: 「金額は 1 円以上、上限は会員ランク依存」}
 
 <!-- シーケンス図に出てこない暗黙の業務制約も含める（権限・上限値・状態遷移・業務時間など） -->
-<!-- 5 個超えたら Story が大きすぎる兆候。/agile-create-backlog に戻って分割検討 -->
+<!-- 5 個超えたら Story が大きすぎる兆候。/agile-create-stories に戻って分割検討 -->
 
 ### 受入基準
 
@@ -119,7 +119,7 @@ sequenceDiagram
 
 ### 未解決の質問
 
-> TBD（refine-backlog の Example Mapping で発見、解決待ち）
+> TBD（refine-story の Example Mapping で発見、解決待ち）
 
 - {質問 1: 例: 「キャンセル後の返金は何営業日以内？要法務確認」}
 
@@ -127,7 +127,7 @@ sequenceDiagram
 
 ### ロギング
 
-> TBD（refine-backlog でシーケンス図をもとに作成）
+> TBD（refine-story でシーケンス図をもとに作成）
 
 | インタラクション | 収集方法 | イベント名 | 備考 |
 |----------------|---------|-----------|------|

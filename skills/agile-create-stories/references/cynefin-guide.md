@@ -48,8 +48,8 @@
 - 規制対応の緊急依頼（法令施行日まで時間がない）
 
 **Chaotic と判定したら**:
-1. `agile-create-backlog` で `nature:chaotic` ラベル付きで起票
-2. `agile-refine-backlog` の **軽量フロー**（受入基準のみ）を通す。シーケンス図・Outcome Done・Example Mapping はスキップ可
+1. `agile-create-stories` で `nature:chaotic` ラベル付きで起票
+2. `agile-refine-story` の **軽量フロー**（受入基準のみ）を通す。シーケンス図・Outcome Done・Example Mapping はスキップ可
 3. `agile-task-implementation` で hotfix 実装（TDD は妥協しない — 安定化後に必ずテスト追加）
 4. 安定化後、別 Issue で **postmortem** を記録: なぜ Chaotic に至ったか、再発防止策、追加テスト
 
@@ -85,7 +85,7 @@ flowchart TB
 
 ```
 experimental Story
-  → /agile-refine-backlog で実験計画を設計
+  → /agile-refine-story で実験計画を設計
   → 人間が実験を実施（スパイク/プロトタイプ/ユーザーテスト）
   → 結果を評価
   → 成功: 新たな implementable Story を生成

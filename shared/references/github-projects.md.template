@@ -1,7 +1,7 @@
 # GitHub Projects リファレンス
 
 > ⚠️ **これはテンプレートです。** プレースホルダ（`<...>` 形式）を自プロジェクトの値に置換し、ファイル名から `.template` を外して `~/.claude/skills/references/github-projects.md`（または利用先プロジェクトの `.claude/skills/references/github-projects.md`）に配置してください。
-> 置換が完了するまで、ステータス更新を行うスキル（agile-refine-backlog / agile-task-implementation / create-issue / create-pull-request 等）は呼び出さないでください。
+> 置換が完了するまで、ステータス更新を行うスキル（agile-refine-story / agile-task-implementation / create-issue / create-pull-request 等）は呼び出さないでください。
 
 ## <YOUR_PROJECT_NAME> (Project #<YOUR_PROJECT_NUMBER>)
 

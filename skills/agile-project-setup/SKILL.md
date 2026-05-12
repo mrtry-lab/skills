@@ -379,7 +379,7 @@ grep -n "<YOUR_\|<STATUS_OPTION" .claude/skills/references/github-projects.md
 次のステップ:
 - 必要な agile-* スキルをインストール: gh skill install mrtry-lab/skills <skill-name> --agent claude-code --scope <user|project>
 - Mermaid 検証を使うなら docs/agile-workflow/setup.md の「validate-mermaid スクリプトの配置」を参照
-- 最初の Story 作成は /agile-product-vision → /agile-epic → /agile-create-backlog の順
+- 最初の Story 作成は /agile-product-vision → /agile-epic → /agile-create-stories の順
 ```
 
 `.claude/skills/references/github-projects.md` を git 管理下に置く方針なら `git add` してコミットを促す（Project ID 等は機密ではないので公開リポジトリでも問題ないが、ユーザー判断）。

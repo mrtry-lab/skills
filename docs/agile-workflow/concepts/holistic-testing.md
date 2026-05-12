@@ -7,7 +7,7 @@ Holistic Testing は Janet Gregory / Lisa Crispin が提唱したフレームワ
 | 段階 | やること | 担当スキル |
 |---|---|---|
 | Discover | 何を作るかを確かめる | `agile-product-vision` / `agile-epic` |
-| Understand | 要件を深掘りする | `agile-refine-backlog`（シーケンス図 + Example Mapping） |
+| Understand | 要件を深掘りする | `agile-refine-story`（シーケンス図 + Example Mapping） |
 | Build | コードが正しいか確かめる | `agile-task-implementation`（TDD） |
 | Deploy | リリースが安全かを確かめる | `agile-create-pull-request`（Draft PR / マージ） |
 | **Observe** | **価値が出たかを確かめる** | **`agile-implementation-plan-to-task`（Telemetry Task）** |

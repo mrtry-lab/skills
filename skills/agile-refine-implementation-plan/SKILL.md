@@ -14,11 +14,11 @@ Story Refinement 完了後、Story の sub-issue として Implementation Plan I
 - Story Refinement が完了し、Implementation Plan 作成パスと判定された Story の Implementation Plan を作るとき
 - 既存 Implementation Plan Issue を見直すとき (再 Refinement)
 - `/agile-refine-implementation-plan` で手動実行
-- `/agile-refine-backlog` の Step 9 から案内されたとき
+- `/agile-refine-story` の Step 9 から案内されたとき
 
 ## When NOT to Use
 
-- Story の受入基準・Outcome がまだ未確定（→ `/agile-refine-backlog` を先に実行）
+- Story の受入基準・Outcome がまだ未確定（→ `/agile-refine-story` を先に実行）
 - 軽量パス (想定 Task 1-2 個 + 横断判断なし) → Implementation Plan は作らず `/agile-implementation-plan-to-task` で直接 Task 起票
 - `nature:chaotic` の hotfix → Implementation Plan も Task 分解も不要、`/agile-task-implementation` 直行
 - Implementation Plan の責務マップは `docs/agile-workflow/concepts/implementation-plan.md` を参照
@@ -208,7 +208,7 @@ Story の Outcome Done テーブル「観測手段」欄と整合する形で、
 **粒度の基本ルール**（全パターン共通）:
 - 1 Task = 1 PR
 - 半日〜2日で完了するサイズ
-- 10 個超えたら Story 自体を分割すべき兆候、`/agile-create-backlog` に戻す
+- 10 個超えたら Story 自体を分割すべき兆候、`/agile-create-stories` に戻す
 
 **Task 数の目安と分割の切り口は team-context.md の「タスク分割単位」に従う**。`~/.claude/skills/references/team-context.md`（または利用先プロジェクトの `.claude/skills/references/team-context.md`）を読み込んで以下を取得する:
 
@@ -442,9 +442,9 @@ NEVER（次節）はこのゲートの違反を具体的に列挙している。
 
 | 状況 | 対応 |
 |------|------|
-| Story の受入基準が TBD | `/agile-refine-backlog` に戻して受入基準を確定してから Implementation Plan 作成 |
+| Story の受入基準が TBD | `/agile-refine-story` に戻して受入基準を確定してから Implementation Plan 作成 |
 | Story の Outcome Done が未定義 | 同上 (Implementation Plan の観測手段が定まらない) |
-| Task 想定が 10 個超 | Story が大きすぎる、`/agile-create-backlog` で Story 分割を提案 |
+| Task 想定が 10 個超 | Story が大きすぎる、`/agile-create-stories` で Story 分割を提案 |
 | 既存実装の探索で類似パターンが見つからない | 「新規実装」を Implementation Plan に明記、ADR 作成を提案 |
 | Dev 視点レビューで実装不可と判定 | Implementation Plan を作り直し、または Story Refinement に戻して受入基準を緩める |
 | Implementation Plan の規模が大きすぎる (5000 行超) | Story 分割か Implementation Plan 分割を検討 |

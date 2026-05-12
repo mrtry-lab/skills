@@ -113,7 +113,7 @@ flowchart TB
 
 | スキル | 判定タイミング | 役割 |
 |--------|---------------|------|
-| `agile-refine-backlog` Step 8 | Refinement の最後 | 次スキルを案内 (流れの中) |
+| `agile-refine-story` Step 8 | Refinement の最後 | 次スキルを案内 (流れの中) |
 | `agile-refine-implementation-plan` Step 1 | Implementation Plan スキル呼び出し直後 | 副チェック (過剰な Implementation Plan 作成を防ぐ) |
 | `agile-implementation-plan-to-task` Step 1 | Task 起票スキル呼び出し時 | 入力種別判定 (ロバスト分岐) |
 

@@ -8,8 +8,8 @@ agile-* スキル群は、成果物（Vision / Epic / Story / Task / Implementat
 |---|---|---:|---|
 | `agile-product-vision` | VISION.md（5 層完成版） | 8 | 7 / 8 |
 | `agile-epic` | Epic Issue 起票内容 | 7 | 6 / 7 |
-| `agile-create-backlog` | Story 提案（候補ごと） | 6 | 5 / 6 |
-| `agile-refine-backlog` | リファインメント完了判定 | 4 + 7 + 6（視点別） | 各視点で個別合格 |
+| `agile-create-stories` | Story 提案（候補ごと） | 6 | 5 / 6 |
+| `agile-refine-story` | リファインメント完了判定 | 4 + 7 + 6（視点別） | 各視点で個別合格 |
 | `agile-implementation-plan-to-task` | Task 分解結果 | 8 | 7 / 8 |
 | `agile-task-implementation` | Plan mode 計画 | 6 | 5 / 6 |
 
@@ -38,7 +38,7 @@ agile-* スキル群は、成果物（Vision / Epic / Story / Task / Implementat
 - **AI の自己採点が成立する**: 観点が客観的に判定可能なので、AI が自分で評価して人間に提示できる
 - **人間レビュアの負担軽減**: スコアと観点別判定を見れば、長文の出力を読まなくても要点が掴める
 
-## refine-backlog だけ「視点別合格」になっている理由
+## refine-story だけ「視点別合格」になっている理由
 
 リファインメント検査は Three Amigos の 3 視点（PdO / Dev / QA）が並列に走る。視点ごとに独立した観点リストを持つので、合計点数で合否を出すと「Dev 観点は合格だが PdO 観点が壊滅」のような偏りが平均に隠される。**視点ごとに独立合格判定** することで、視点間のバランスが崩れた成果物を見逃さない。
 

@@ -18,7 +18,7 @@ Task Issue → Plan mode 計画 → TDD 実装 → Draft PR + レビューコメ
 
 ## When NOT to Use
 
-- Story の詳細化（→ `/agile-refine-backlog`）
+- Story の詳細化（→ `/agile-refine-story`）
 - Implementation Plan の作成・詳細化（→ `/agile-refine-implementation-plan`）
 - Implementation Plan → Task 分解（→ `/agile-implementation-plan-to-task`）
 

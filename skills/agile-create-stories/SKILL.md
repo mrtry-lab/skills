@@ -1,5 +1,5 @@
 ---
-name: agile-create-backlog
+name: agile-create-stories
 description: "EpicをStory Mappingで分解し、Cynefinドメイン分類でnature:implementable/experimentalに仕分けてGitHub Issue（Issue Type: Story）を作成する。Use when EpicからStory分解、ストーリーマッピング、バックログ作成、リリーススライス定義。Triggers: バックログ作成, ストーリー分解, story mapping, ストーリーマッピング, backlog creation, epic分解, スライス, リリース計画, Cynefin, カネヴィン."
 ---
 
@@ -10,14 +10,14 @@ Epic Issue を Story Mapping で分解し、Cynefin ドメイン分類を経て 
 ## When to Use
 
 - Epic を Story に分解するとき
-- ストーリーマッピングでバックログを構築するとき
+- ストーリーマッピングで Story 群を構築するとき
 - リリーススライスを定義するとき
-- `/agile-create-backlog` で手動実行
+- `/agile-create-stories` で手動実行
 
 ## When NOT to Use
 
 - Epic 自体がまだない（→ `/agile-epic`）
-- 個別 Story の詳細化・受入基準作成（→ `/agile-refine-backlog`）
+- 個別 Story の詳細化・受入基準作成（→ `/agile-refine-story`）
 - プロダクトの方向性が未定義（→ `/agile-product-vision`）
 
 ## コーチングの原則
@@ -112,24 +112,24 @@ NG の Story がある場合は、具体的にどの Story がどの観点で不
 
 - 要件を正常パターン/異常パターンで記述できる
 - 既存の技術・パターンで実装できる見込みがある
-- → `/agile-refine-backlog` で仕様書レベルまで詳細化 → CodingAgent へ
+- → `/agile-refine-story` で仕様書レベルまで詳細化 → CodingAgent へ
 
 ### experimental の特徴
 
 - 「ユーザーがこう使うはず」が推測の域を出ない
 - 技術的にフィージブルかわからない
 - ビジネス的に成立するか検証が必要
-- → この段階（Step 6）で実験計画を作成 → 人間がスパイクを実施 → 結果をもとに `/agile-create-backlog` で新たな Story を作成
+- → この段階（Step 6）で実験計画を作成 → 人間がスパイクを実施 → 結果をもとに `/agile-create-stories` で新たな Story を作成
 
 ### chaotic の特徴
 
 - 因果関係を分析する時間的余裕がなく、即時対応が求められる
 - 例: 本番サービス停止、データ破損、セキュリティインシデント
-- → `/agile-refine-backlog` の **軽量フロー**（受入基準のみ）→ `/agile-task-implementation` で hotfix → 安定化後に postmortem を別 Issue で記録
+- → `/agile-refine-story` の **軽量フロー**（受入基準のみ）→ `/agile-task-implementation` で hotfix → 安定化後に postmortem を別 Issue で記録
 
 ### 分類の注意点
 
-- **全部 implementable は危険信号。** バックログに experimental が1つもないなら、検証されていない前提の上に実装を積み上げている可能性が高い
+- **全部 implementable は危険信号。** Story 群に experimental が1つもないなら、検証されていない前提の上に実装を積み上げている可能性が高い
 - 迷ったら experimental 寄りに分類する。過剰に仕様化するより、実験で学ぶほうが手戻りが少ない
 - **chaotic は安易に使わない**: 「なんとなく急ぎ」レベルでは chaotic ではない。事業継続が損なわれる切迫した状況のみ。普段の急ぎ案件は implementable で対応する
 - **MANDATORY** : `references/cynefin-guide.md` を読み込み、具体的な分類例を参照する
@@ -187,7 +187,7 @@ Story Issue を登録する **前に**、各 Story 候補について以下の 6
 **対話の流れ**（implementable / experimental 共通）:
 1. まず必須項目を聞く: ストーリー文・概要・受入基準（粗い観点）
 2. 必須項目を埋めた後に「画面遷移やデザインリンクなど、今の段階で埋められるものはありますか?」とオプショナルに聞く
-3. テンプレートのTBDセクションは無理に埋めない。 `/agile-refine-backlog` で詳細化する
+3. テンプレートのTBDセクションは無理に埋めない。 `/agile-refine-story` で詳細化する
 
 ---
 
@@ -216,7 +216,7 @@ NEVER（次節）はこのゲートの違反を具体的に列挙している。
 ## NEVER — アンチパターン
 
 - **NEVER: 技術レイヤーで切るな** — 「フロントエンド Story」「バックエンド Story」は NG。ユーザーに価値が届く縦切りで常に分割する
-- **NEVER: 全ストーリーを implementable にするな** — experimental が0件のバックログは、未検証の前提の上に実装を積み上げている。最も危険な状態
+- **NEVER: 全ストーリーを implementable にするな** — experimental が0件の Story 群は、未検証の前提の上に実装を積み上げている。最も危険な状態
 - **NEVER: Story の下に Sub-issue（タスク）を作るな** — Issue 階層は Epic → Story の2層のみ。タスク分解は CodingAgent の責務。人間がタスク管理する粒度ではない
 - **NEVER: スコープを探索フェーズ（Step 3）で絞るな** — 探索は発散のフェーズ。収束はリリーススライス（Step 5）で行う。早すぎるスコープ削減はイノベーションを殺す
 - **NEVER: ストーリーマップの精密さにこだわるな** — マップは会話の道具であって、正式な仕様書ではない。完璧なマップより、チームの共有理解のほうが100倍価値がある
