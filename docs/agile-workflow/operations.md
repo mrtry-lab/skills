@@ -1,5 +1,27 @@
 # 運用ガイド
 
+## 用語マッピング
+
+agile-* スキル群は **Scrum のフルセットを採用しているわけではなく、Agile / XP / BDD / Cynefin など複数の伝統から実用的な概念を組み合わせた構成**。そのため Scrum 公式用語とは表記が違うが概念的に対応する箇所がある。Scrum 経験者向けの対応表:
+
+| 本スキル群の用語 | Scrum 公式 / 由来 | 補足 |
+|---|---|---|
+| Story (Issue Type) | Product Backlog Item (PBI) | ユーザー視点の機能単位。Story Mapping (Jeff Patton) / User Story (XP) の系譜で、Scrum の PBI に対応 |
+| Story の集合 | Product Backlog | 本スキル群では「Story 群」「Story 一覧」と呼ぶ |
+| Implementation Plan (Issue Type) | Sprint Backlog の "actionable plan for the Increment" | Scrum Expansion Pack v1.0 の表現を Issue Type 化したもの |
+| Task (Issue Type) | Sprint Backlog の Task | 1 PR 単位の実装作業 |
+| Epic (Issue Type) | (Scrum 標準にはない) | Agile/XP 由来、複数 Story にブレイクダウンされる大きな機能単位 |
+| 受入基準 (Acceptance Criteria) | (Scrum Guide 自体にはない) | scrum.org 等の補助概念。本スキル群では Story の Yes/No 判定可能な条件として使用 |
+| Outcome Done | Definition of Outcome Done | Scrum Guide Expansion Pack v1.0 由来。Output Done (実装完了) と Outcome Done (価値検証) を分離 |
+| Three Amigos (PdO / Dev / QA) | (Scrum 標準にはない) | Agile/BDD 由来 (George Dinwiddie)。Refinement の網羅性検査に並列サブエージェントとして組み込み |
+| Example Mapping | (Scrum 標準にはない) | BDD/Cucumber 由来 (Matt Wynne)。Story の受入基準を 4 色マップで抽出 |
+| Cynefin の nature ラベル | Complexity 拡張章 | Scrum Guide Expansion Pack 経由 (元は Dave Snowden の経営理論) |
+| Holistic Testing (Discover / Understand / Build / Deploy / **Observe**) | Holistic Testing 章 | Scrum Guide Expansion Pack 経由 (元は Lisa Crispin / Janet Gregory) |
+| Plan mode | (Scrum 用語ではない) | Claude Code の機能。`agile-task-implementation` で使用 |
+| Backlog (View 名) | (Scrum 用語ではない) | 本スキル群で導入した GitHub Projects のビュー名。Open な Epic 配下を俯瞰する用途 |
+
+Scrum 経験者は Story を PBI、Implementation Plan を Sprint Backlog の actionable plan、と読み替えればだいたい同じ。
+
 ## Issue 分類体系
 
 | カテゴリ | 分類方法 |
