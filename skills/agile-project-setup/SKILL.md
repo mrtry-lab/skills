@@ -249,20 +249,26 @@ GitHub Projects v2 の Workflow API は読み取り限定 (`deleteProjectV2Workf
 > Workflows 設定ページを開いてください:
 > https://github.com/orgs/<ORG>/projects/<NUMBER>/workflows
 >
-> 以下 3 つを **Edit → 保存 → Turn on** の手順で有効化:
+> **有効化する 2 つ** (Edit → 保存 → Turn on):
 >
-> 1. **Auto-add to project** — Issue/PR の自動追加。対象リポジトリを指定 (常時 ON 推奨)
->
-> 2. **Item closed** — Issue/PR がクローズされたら Status を Done に自動遷移
+> 1. **Item closed** — Issue/PR がクローズされたら Status を Done に自動遷移
 >    - Action: `Set Status = Done`
 >    - 効果: PR マージ → Issue close → Status が Done に。手動更新不要
 >
-> 3. **Auto-close issue / Auto-close parent** — Sub-issue all closed → Parent auto-close
+> 2. **Auto-close issue / Auto-close parent** — Sub-issue all closed → Parent auto-close
 >    - 名前は実装時期により「Auto-close issue」「Sub-issue closed」等の表記揺れあり
 >    - 効果: Epic 配下の全 Story が close → Epic も自動 close。Story 配下の全 Task が close → Story も自動 close
 >    - **これにより Backlog ビュー (Filter `is:open`) から Done Epic 配下が自動除外される**
+>
+> **無効化する 1 つ** (デフォルトで有効になっている場合は OFF にする):
+>
+> 3. **Auto-add to project** — Issue/PR を自動的に Project に追加する Workflow
+>    - 理由: agile-* スキル群は `agile-create-issue` で **明示的に Project に追加 + 適切な初期 Status を設定** する設計
+>    - Auto-add を有効化すると、skill 経由でない Issue (gh / Web UI 直作成) も流入し、初期 Status が未設定 / 親 Issue リンクなしで Backlog に乗ってノイズになる
+>    - 「skill 経由でしか起票しない」運用を徹底するなら **OFF が正解**
+>    - うっかり外で作った Issue は手動で Project に追加するか、skill 経由で再起票する
 
-3 つすべて有効化すると、Status 更新の手動オペが激減する。
+これにより Status 更新の手動オペが激減し、かつ skill 起票以外の Issue が混入しない状態を保てる。
 
 ### B 案: 手動運用
 
@@ -366,7 +372,7 @@ grep -n "<YOUR_\|<STATUS_OPTION" .claude/skills/references/github-projects.md
 ✓ ビュー:
   - Backlog: <ビュー URL>
   - Sprint: <ビュー URL>
-✓ Workflows: <A: Auto-add / Item closed / Sub-issue 連鎖 close を有効化済み | B: 手動運用>
+✓ Workflows: <A: Item closed / Sub-issue 連鎖 close を有効化 + Auto-add を無効化 | B: 手動運用>
 ✓ 配置ファイル: .claude/skills/references/github-projects.md
 ✓ Issue Type 確認: Epic / Story / Task が登録済み
 
