@@ -165,7 +165,7 @@ sed -i '' \
   .claude/skills/references/team-context.md
 ```
 
-> 7 番目の `3 個` は「Plan 作成パスの想定 Task 数閾値」、8 番目の `2 件以上` は「Plan 作成パスの横断的判断閾値」。標準プリセットならそれぞれ `2 個` / `1 件以上`、集中なら `1 個` / `1 件以上`。
+> 7 番目の `3 個` は「Implementation Plan 作成パスの想定 Task 数閾値」、8 番目の `2 件以上` は「Implementation Plan 作成パスの横断的判断閾値」。標準プリセットならそれぞれ `2 個` / `1 件以上`、集中なら `1 個` / `1 件以上`。
 >
 > タスク分割単位の 4 フィールドはプリセットではなくヒアリング結果から個別に決まるので、ユーザーの回答そのままを sed で渡す。
 
@@ -250,14 +250,14 @@ gh project field-create <NUMBER> --owner <ORG> \
 > - Layout: Table 推奨 (Board でも可)
 > - Group by: **Parent issue** (Epic を起点にした階層表示にする)
 > - Filter: `is:open status:"In Planning","In Plan Refinement","In Plan Review","Ready","In Coding Progress","Done"`
-> - 用途: Open な Epic 配下の Story / Plan / Task を Epic 別に俯瞰
+> - 用途: Open な Epic 配下の Story / Implementation Plan / Task を Epic 別に俯瞰
 > - 仕組み: Epic が Done になると Sub-issue all closed → Parent auto-close で連鎖 close され、`is:open` フィルタで自動的に Backlog から外れる
 >
 > **Sprint**
 > - Layout: Board 推奨
 > - Group by: **Parent issue** (Story を起点にした階層表示にする)
 > - Filter: `status:"Ready","In Coding Progress","In Code Review","Done"`
-> - 用途: 実装フェーズに入った Story 配下の Task / Plan を Story 別に追う
+> - 用途: 実装フェーズに入った Story 配下の Task / Implementation Plan を Story 別に追う
 
 両ビューに `Ready` / `In Coding Progress` が重複表示されるが、Backlog は Story 中心、Sprint は Task 中心という役割の違いで意味が違う。
 

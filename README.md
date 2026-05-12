@@ -26,9 +26,10 @@ gh skill install mrtry-lab/skills <skill-name> --agent claude-code --scope user
 | [agile-product-vision](skills/agile-product-vision/) | `docs/VISION.md` を対話で作成・更新 |
 | [agile-epic](skills/agile-epic/) | Opportunity Canvas で Epic Issue を作成 |
 | [agile-create-backlog](skills/agile-create-backlog/) | Epic を Story Mapping + Cynefin 分類で Story Issue 化 |
-| [agile-refine-backlog](skills/agile-refine-backlog/) | Story の要件を実装可能なレベルまで詳細化 |
-| [agile-story-to-task](skills/agile-story-to-task/) | リファインメント済み Story を Task Sub-issue に分解 |
-| [agile-task-implementation](skills/agile-task-implementation/) | Task Issue → Plan → TDD → Draft PR |
+| [agile-refine-backlog](skills/agile-refine-backlog/) | Story の要件を PdO/QA 視点で詳細化 (受入基準・Outcome・ビジネスルール) |
+| [agile-refine-implementation-plan](skills/agile-refine-implementation-plan/) | Story の sub-issue として Implementation Plan Issue を作成 (技術詳細・API 仕様・Task 分解) |
+| [agile-implementation-plan-to-task](skills/agile-implementation-plan-to-task/) | Implementation Plan or 軽量 Story から Task Sub-issue に分解 |
+| [agile-task-implementation](skills/agile-task-implementation/) | Task Issue → Plan mode → TDD → Draft PR |
 | [agile-create-issue](skills/agile-create-issue/) | agile-* から呼ばれる Issue 作成共通スキル |
 | [agile-create-pull-request](skills/agile-create-pull-request/) | agile-* から呼ばれる PR 作成共通スキル |
 | [agile-project-setup](skills/agile-project-setup/) | 初回セットアップ用。GitHub Project の作成・Status オプション登録・shared references 生成を対話で完了 |

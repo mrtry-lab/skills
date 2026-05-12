@@ -10,7 +10,7 @@ Holistic Testing は Janet Gregory / Lisa Crispin が提唱したフレームワ
 | Understand | 要件を深掘りする | `agile-refine-backlog`（シーケンス図 + Example Mapping） |
 | Build | コードが正しいか確かめる | `agile-task-implementation`（TDD） |
 | Deploy | リリースが安全かを確かめる | `agile-create-pull-request`（Draft PR / マージ） |
-| **Observe** | **価値が出たかを確かめる** | **`agile-story-to-task`（Telemetry Task）** |
+| **Observe** | **価値が出たかを確かめる** | **`agile-implementation-plan-to-task`（Telemetry Task）** |
 
 ## なぜ Observe を独立段階にするか
 
@@ -24,7 +24,7 @@ Holistic Testing は Janet Gregory / Lisa Crispin が提唱したフレームワ
 
 Definition of Outcome Done で Story に「観測指標 / 期待する変化 / 観測手段」を書くようにした。だがこれは**仮説**であって、実装が保証しない。Task 分解時に観測実装が漏れると、リリース後に「データが取れていません」となって学習機会を失う。
 
-`agile-story-to-task` の Step 5 品質スコアリング #8 と Step 6 カバレッジ検証 #7 で、**Outcome Done に観測指標がある Story は観測実装 Task が存在することを保証する**。これで Story 起票 → 実装 → リリース → 観測の流れが一気通貫で繋がる。
+`agile-implementation-plan-to-task` の Step 5 品質スコアリング #8 と Step 6 カバレッジ検証 #7 で、**Outcome Done に観測指標がある Story は観測実装 Task が存在することを保証する**。これで Story 起票 → 実装 → リリース → 観測の流れが一気通貫で繋がる。
 
 ## 「観測しない」Story は強制対象外
 

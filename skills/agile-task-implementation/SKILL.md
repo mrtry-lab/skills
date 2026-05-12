@@ -20,7 +20,7 @@ Task Issue → Plan mode 計画 → TDD 実装 → Draft PR + レビューコメ
 
 - Story の詳細化（→ `/agile-refine-backlog`）
 - Implementation Plan の作成・詳細化（→ `/agile-refine-implementation-plan`）
-- Plan → Task 分解（→ `/agile-implementation-plan-to-task`）
+- Implementation Plan → Task 分解（→ `/agile-implementation-plan-to-task`）
 
 ## Workflow
 
@@ -54,10 +54,10 @@ GitHub MCP の `issue_read` で Task Issue を読み込み、以下を確認:
 
 **関連 Implementation Plan の取得 (重要)**:
 
-親 Story の sub-issue 一覧から **Issue Type=Implementation Plan** を抽出し、存在すれば Plan Issue 本文も読み込む。Plan は実装戦略 / API 仕様詳細 / データモデル / 画面詳細 / ロギング実装 / テスト戦略 / 横断的判断 / 意図的に扱わないこと を含むので、Task 実装時の参照ドキュメントとなる。
+親 Story の sub-issue 一覧から **Issue Type=Implementation Plan** を抽出し、存在すれば Implementation Plan Issue 本文も読み込む。Implementation Plan は実装戦略 / API 仕様詳細 / データモデル / 画面詳細 / ロギング実装 / テスト戦略 / 横断的判断 / 意図的に扱わないこと を含むので、Task 実装時の参照ドキュメントとなる。
 
-- Plan が **ある** 場合: Plan 本文を context として読み込み、Task の実装方針を Plan の Strategy / 横断的判断と整合させる
-- Plan が **ない** 場合 (軽量パス): Task 本文と親 Story の情報だけで進める
+- Implementation Plan が **ある** 場合: Implementation Plan 本文を context として読み込み、Task の実装方針を Implementation Plan の Strategy / 横断的判断と整合させる
+- Implementation Plan が **ない** 場合 (軽量パス): Task 本文と親 Story の情報だけで進める
 
 **ステータス → "In Coding Progress"**: `.claude/skills/references/github-projects.md` のコマンドテンプレートに従い更新。fallback もそちらに記載。
 
@@ -145,7 +145,7 @@ NEVER（次節）はこのゲートの違反を具体的に列挙している。
 
 | 状況 | 対応 |
 |------|------|
-| Issue Type が Task でない | 「`/agile-story-to-task` で Task 分解してください」と案内 |
+| Issue Type が Task でない | 「`/agile-implementation-plan-to-task` で Task 分解してください」と案内 |
 | 依存が未解決 | ナビゲーターに判断を仰ぐ（先に依存を実装 or 依存なし範囲で進行） |
 | 技術メモが不足 | コードベース探索で補完 → ナビゲーターに確認 |
 | 実装中に受入基準の曖昧さ発見 | 実装を止めてナビゲーターに確認。勝手に解釈しない |

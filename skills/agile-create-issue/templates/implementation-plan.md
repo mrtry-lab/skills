@@ -6,7 +6,7 @@ labels: ''
 type: 'Implementation Plan'
 ---
 
-## {Plan タイトル} — for Story #{N}
+## {Implementation Plan タイトル} — for Story #{N}
 
 > 親 Story: #{N}
 > 最終更新: {YYYY-MM-DD}
@@ -164,7 +164,7 @@ flowchart LR
 
 ### 未解決の質問
 
-> TBD（Plan Refinement で発見、解決待ち）
+> TBD（Implementation Plan Refinement で発見、解決待ち）
 
 <!-- 解決できない論点は質問として記録 -->
 

@@ -120,8 +120,8 @@ GitHub MCP の `issue_write` で Issue を作成する:
 | Issue Type | 親 | リンク方法 |
 |------------|-----|----------|
 | Story | Epic | Story を Epic の sub-issue に |
-| Implementation Plan | Story | Plan を Story の sub-issue に (Task と並列で並ぶ) |
-| Task | Story | Task を Story の sub-issue に (Plan と並列で並ぶ) |
+| Implementation Plan | Story | Implementation Plan を Story の sub-issue に (Task と並列で並ぶ) |
+| Task | Story | Task を Story の sub-issue に (Implementation Plan と並列で並ぶ) |
 | Epic | なし | リンク不要 |
 
 ---

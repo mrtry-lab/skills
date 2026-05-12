@@ -88,8 +88,8 @@ sequenceDiagram
 
 ### 実装プラン
 
-<!-- Plan 作成パスの場合は、agile-refine-implementation-plan が完了した後に Plan Issue へのリンクを追記する -->
-<!-- 軽量パス (Plan 不要) の場合はこのセクションを削除してよい -->
+<!-- Implementation Plan 作成パスの場合は、agile-refine-implementation-plan が完了した後に Implementation Plan Issue へのリンクを追記する -->
+<!-- 軽量パス (Implementation Plan 不要) の場合はこのセクションを削除してよい -->
 
 > TBD（refine-backlog の Step 8 で判定。必要なら /agile-refine-implementation-plan で作成）
 
