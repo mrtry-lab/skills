@@ -82,7 +82,7 @@ Story の Done 条件:
 3. 全 Task が Done
 4. 受入確認完了
 
-GitHub Projects 標準 Workflow「Sub-issue all closed → Parent auto-close」を有効化すれば半自動化できる。
+GitHub Projects 標準 Workflow「Sub-issue all closed → Parent auto-close」を有効化すれば半自動化できる (`agile-project-setup` Step 6 で案内、Web UI のみ。GraphQL API では `createProjectV2Workflow` mutation が未提供のため自動化不可)。
 
 ## Implementation Plan 必要性判定
 

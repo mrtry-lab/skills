@@ -34,7 +34,7 @@ flowchart TB
   proj["3. Project 用意\n(新規 or 既存)"]
   status["4. Status オプション登録\n(7 つ)"]
   views["5. ビュー作成案内\n(Backlog / Sprint)"]
-  done["6. Done 遷移ポリシー"]
+  done["6. Workflows 設定\n(Done 遷移 + Sub-issue 連鎖 close)"]
   refs["7. shared references 生成"]
   summary["8. 完了サマリー"]
 
@@ -264,23 +264,37 @@ gh project field-create <NUMBER> --owner <ORG> \
 作成完了をユーザーに確認してから次へ。ビュー URL を控えると後の完了サマリーに使える。
 
 > ⚠️ Group by の "Parent issue" は GitHub Projects v2 のフィールド。Backlog では Epic を、Sprint では Story を **Parent issue として指定** することで階層的に表示される。GitHub Projects の Parent issue フィールドが Project に追加されていない場合は、Project Settings → New field → Parent issue を追加する。
+>
+> Board レイアウトを選んだ場合、Group by の値が **swimlane (横バンド)** として可視化される。Backlog は Epic ごとに 1 行、Sprint は Story ごとに 1 行という形で並ぶ。
+>
+> ℹ️ View の作成・Filter 設定・Group by 設定は GitHub Projects v2 GraphQL API では現在サポートされていない (2026 年 5 月時点で `createProjectV2View` / `updateProjectV2View` mutation は存在しない)。Web UI 操作が必須。
 
 ---
 
-## Step 6: Done 遷移ポリシー
+## Step 6: Workflows 設定
 
-PR がマージされたら Status を `Done` にしたい。これは agile-* スキル群では遷移処理を持っていないので、運用方針をユーザーに選んでもらう:
+PR マージ時の Status 遷移、Epic Done 時の sub-issue 連鎖 close など、GitHub Projects 標準 Workflow を有効化する。GitHub Projects v2 の Workflow API は読み取り限定 (`deleteProjectV2Workflow` のみ存在し、enable / update mutation は未提供) なので、**Web UI 操作のみ**。
 
-| 選択肢 | 内容 |
-|---|---|
-| **A. GitHub Projects の Auto-archive ワークフローを使う（推奨）** | Project ページの「Workflows」設定で「Item closed」→ `Set value: Status = Done` のルールを有効化する。Issue/PR がクローズされたら自動で Done に遷移 |
-| **B. 手動運用** | レビュー完了後にユーザーが手動で Status を Done にする |
+ユーザーに以下 3 つの Workflow の有効化を案内する:
 
-A を選ぶ場合の手順:
+> Project ページ → 右上の「⋯」→ 「Workflows」を開き、以下 3 つを **Edit → 保存 → Turn on** の手順で有効化:
+>
+> 1. **Auto-add to project** — Issue/PR の自動追加。対象リポジトリを指定 (常時 ON 推奨)
+>
+> 2. **Item closed** — Issue/PR がクローズされたら Status を Done に自動遷移
+>    - Action: `Set Status = Done`
+>    - 効果: PR マージ → Issue close → Status が Done に。手動更新不要
+>
+> 3. **Auto-close issue / Auto-close parent** — Sub-issue all closed → Parent auto-close
+>    - 名前は実装時期により「Auto-close issue」「Sub-issue closed」等の表記揺れあり
+>    - 効果: Epic 配下の全 Story が close → Epic も自動 close。Story 配下の全 Task が close → Story も自動 close
+>    - **これにより Backlog ビュー (Filter `is:open`) から Done Epic 配下が自動除外される**
 
-> Project ページ → 右上の「⋯」→ 「Workflows」→ 「Auto-add to project」と「Item closed」を有効化し、後者で `Status = Done` を設定
+3 つすべて有効化すると、Status 更新の手動オペが激減する。
 
-選択結果を後で完了サマリーに記載する。
+### B 案: 手動運用
+
+組織ポリシー等で Workflow を使えない場合、手動で Status 更新する運用も可。完了サマリーには「手動運用」と記載。
 
 ---
 
@@ -350,7 +364,7 @@ grep -n "<YOUR_\|<STATUS_OPTION" .claude/skills/references/github-projects.md
 ✓ ビュー:
   - Backlog: <ビュー URL>
   - Sprint: <ビュー URL>
-✓ Done 遷移ポリシー: <A: Auto-archive 有効化済み | B: 手動運用>
+✓ Workflows: <A: Auto-add / Item closed / Sub-issue 連鎖 close を有効化済み | B: 手動運用>
 ✓ 配置ファイル: .claude/skills/references/github-projects.md
 ✓ Issue Type 確認: Epic / Story / Task が登録済み
 
@@ -371,7 +385,7 @@ grep -n "<YOUR_\|<STATUS_OPTION" .claude/skills/references/github-projects.md
 - **Org 選択 / Issue Type 登録** — Web UI 操作のため完全に人間。AI は手順を案内するだけ
 - **Project 作成 vs 既存利用** — Step 3 の判断は人間。新規 Project URL を作るのは取り消しコストが高い操作
 - **Status オプション登録** — `gh project field-create` 実行前に人間承認
-- **Done 遷移ポリシー選択** — Step 6 の Auto-archive 利用 / 手動運用は人間判断
+- **Workflows 有効化判断** — Step 6 の Workflows (Item closed / Sub-issue 連鎖 close) を有効化するかは人間判断 (Web UI 操作必須、API 自動化不可)
 - **チームコンテキストとプリセット選択** — Step 2.5 の体制ヒアリングと「軽量 / 標準 / 集中」プリセット選択は人間判断。AI は提案するだけ
 
 NEVER（次節）はこのゲートの違反を具体的に列挙している。
