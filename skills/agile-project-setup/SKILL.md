@@ -36,7 +36,7 @@ flowchart TB
   done["5. Workflows 設定\n(Done 遷移 + Sub-issue 連鎖 close)"]
   views["6. ビュー作成案内\n(Backlog / Sprint)"]
   refs["7. shared references 生成"]
-  docs["7.5. agile-workflow\nドキュメント取得"]
+  docs["7.5. agile-update-skills\n委譲 (スキル + ドキュメント一括取得)"]
   summary["8. 完了サマリー"]
 
   pre --> it --> proj --> status --> done --> views --> refs --> docs --> summary
@@ -364,43 +364,17 @@ grep -n "<YOUR_\|<STATUS_OPTION" .claude/skills/references/github-projects.md
 
 ---
 
-## Step 7.5: agile-workflow ドキュメント取得
+## Step 7.5: agile-* スキルとドキュメントの一括取得
 
-各 agile-* スキルは `docs/agile-workflow/concepts/*.md` (判定基準・概念定義) や `docs/agile-workflow/operations.md` (用語マッピング・Status フロー) を Read tool で参照する設計。これらが対象プロジェクトに存在しないと、スキルは判定フローを読めずに止まる。
+各 agile-* スキル本体と `docs/agile-workflow/` (判定基準・概念定義・用語マッピング・Status フロー) は対象プロジェクトに揃っている必要がある。これらを **`/agile-update-skills` に委譲して一括取得** する。
 
-**ユーザーに配置先を聞く**:
+> 続けて `/agile-update-skills` を実行してください。このスキルは以下を一括で行います:
+> 1. 全 agile-* スキル (10 個 + agile-update-skills) を `gh skill install` で配置
+> 2. `docs/agile-workflow/` 配下 12 ファイル (README / setup / operations + concepts/ 9) を curl で取得 (配置先はユーザー指定、デフォルト `docs/agile-workflow/`)
 
-> agile-* スキルが参照する関連ドキュメントを fetch しておきたいです。配置先はどこにしますか?
-> （デフォルト: `docs/agile-workflow/` — プロジェクトルート直下）
+`/agile-update-skills` は単独でも呼べる: agile-* の最新版に追従したいとき / `docs/agile-workflow/` を更新したいときに定期実行できる。詳細は `agile-update-skills/SKILL.md` 参照。
 
-ユーザー判断:
-- **デフォルト (推奨)**: `docs/agile-workflow/` に配置。各 SKILL.md の参照パスと一致するため追加設定不要
-- **既存の docs 構成がある**: 例えば `docs/process/` 等、既に決まったドキュメント置き場があれば指定。ただし SKILL.md 内の参照パスとずれるため、各 SKILL.md がパスを解決できない問題が起きうる (要注意)
-
-ユーザーが配置先を確定したら、その相対パスを `DOCS_DIR` として以下を実行:
-
-```bash
-DOCS_DIR="docs/agile-workflow"  # ユーザー指定 (デフォルト)
-
-mkdir -p "$DOCS_DIR/concepts"
-
-BASE="https://raw.githubusercontent.com/mrtry-lab/skills/main/docs/agile-workflow"
-
-# トップレベル 3 ファイル
-for f in README.md setup.md operations.md; do
-  curl -fsSL "$BASE/$f" -o "$DOCS_DIR/$f"
-done
-
-# concepts/ 9 ファイル
-for f in ai-decision-boundary.md cynefin.md example-mapping.md holistic-testing.md \
-         implementation-plan.md outcome-done.md quality-scoring.md strategy.md three-amigos.md; do
-  curl -fsSL "$BASE/concepts/$f" -o "$DOCS_DIR/concepts/$f"
-done
-```
-
-配置完了をユーザーに確認し、git で管理するかも案内する (Project ID 等の機密は含まれないので公開リポジトリでも問題なし)。
-
-> ⚠️ デフォルト以外の配置先を選んだ場合、SKILL.md 内の `docs/agile-workflow/...` という相対参照パスがずれるので、AI がドキュメントを Read できないことがある。トラブルが起きたらデフォルトに戻すことを推奨。
+委譲後、配置完了をユーザーに確認して Step 8 へ。
 
 ---
 
@@ -438,7 +412,7 @@ done
 - **Project 作成 vs 既存利用** — Step 3 の判断は人間。新規 Project URL を作るのは取り消しコストが高い操作
 - **Status オプション登録** — `gh project field-create` 実行前に人間承認
 - **Workflows 有効化判断** — Step 5 の Workflows (Item closed / Sub-issue 連鎖 close) を有効化するかは人間判断 (Web UI 操作必須、API 自動化不可)
-- **agile-workflow ドキュメント配置先選択** — Step 7.5 の配置先 (デフォルト `docs/agile-workflow/` / カスタムパス) は人間判断
+- **agile-update-skills 実行確認** — Step 7.5 で `/agile-update-skills` に委譲する判断 (ドキュメント配置先選択は委譲先の人間承認ゲート) は人間判断
 - **チームコンテキストとプリセット選択** — Step 2.5 の体制ヒアリングと「軽量 / 標準 / 集中」プリセット選択は人間判断。AI は提案するだけ
 
 NEVER（次節）はこのゲートの違反を具体的に列挙している。
