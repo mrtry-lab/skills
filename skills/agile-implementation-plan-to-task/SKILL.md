@@ -97,13 +97,33 @@ Story Issue を読み込み、Plan なしで Task を起票する。
 - 横断的判断なし
 - アーキ選択肢が決まっている
 
-**親の受入基準を 1つずつ見て、どの Task でカバーするかをマッピングする。**
+### team-context.md の分割設定を読み込む
 
-| 分解の起点 | 切り方 |
-|-----------|--------|
-| 単純な実装 | コア実装 1 つ |
-| エッジケース対応必要 | コア実装 + エッジケース の 2分割 |
-| Outcome Done に観測指標がある | 上記に加えて [Telemetry] チェックリスト項目を追加 |
+`~/.claude/skills/references/team-context.md`（または利用先プロジェクトの `.claude/skills/references/team-context.md`）から以下を取得:
+
+- `機能実装の分割パターン`: `USE_CASE` / `LAYER` / `COMPONENT` / `VERTICAL_SLICE` / `CUSTOM`
+- `基盤・インフラ系改修の扱い`: `INLINE` / `SEPARATE_PR` / `N_A`
+- `Task 1 個 = 何か（人間語）`: 自由記述例
+
+未配置なら `USE_CASE` + `INLINE` をデフォルトとして仮定。
+
+**親の受入基準を 1つずつ見て、どの Task でカバーするかをマッピングする。** 切り方は分割パターンに従う:
+
+| 分割パターン | 軽量モードでの切り方 |
+|---|---|
+| `USE_CASE` | 受入基準を 1-3 ユースケースにグルーピング → 各ユースケース = 1 Task (BE+FE 統合) |
+| `LAYER` | BE 担当 Task / FE 担当 Task に分割。リポジトリごとに別 Task |
+| `COMPONENT` | 触るコンポーネント / サービスごとに 1 Task |
+| `VERTICAL_SLICE` | 受入基準のスライス（バリデーション、エラー処理、UI 状態など）ごとに 1 Task |
+| `CUSTOM` | team-context の自由記述例を踏襲 |
+
+### Infra 系改修の扱い
+
+team-context の `基盤・インフラ系改修の扱い` に従う:
+
+- `INLINE`: 機能 Task に統合
+- `SEPARATE_PR`: DB migration / Terraform / IAM の変更が必要なら独立 Task として切る (`[Migration]` / `[Infra]` prefix)
+- `N_A`: Infra 系の改修が出てきたら Story 自体を見直すサイン → 中断
 
 軽量モードで Task が 3 個超えそうなら、「これは Plan 作成パスにすべきです」と提案し中断、`/agile-refine-implementation-plan` を案内する。
 
@@ -119,9 +139,8 @@ Story Issue を読み込み、Plan なしで Task を起票する。
 | 分解の起点 | 切り方 |
 |-----------|--------|
 | Plan あり | Plan の Task 分解計画を踏襲 (Plan で確定済み) |
-| Plan なし軽量モード + スキーマ定義あり | Schema → BE/FE 並行 → Test (3-4 個目安) |
-| Plan なし軽量モード + 小さい Story | コア実装 + エッジケース の 2分割 |
-| Plan なし軽量モード + インフラ変更が前提 | Infra → ロジック → UI → Test → ただし複雑になりすぎなら Plan 作成パスに引き戻す |
+| Plan なし軽量モード | Step 2' で読み込んだ team-context の分割パターンに従う (USE_CASE / LAYER / COMPONENT / VERTICAL_SLICE) |
+| Plan なし軽量モード + Infra 変更必要 + `SEPARATE_PR` 設定 | [Migration] / [Infra] を独立 Task として切る。複雑になりすぎなら Plan 作成パスに引き戻す |
 | Outcome Done に観測指標がある | 上記に加えて [Telemetry] Task を分解末尾に追加（粒度は独立 Sub-issue / 既存 Task に統合のどちらでも可） |
 
 **Sub-issue にすべきかの判断:**
@@ -130,7 +149,7 @@ Story Issue を読み込み、Plan なしで Task を起票する。
 - ③ レビュー単位として意味があるか
 - 3つとも Yes なら Sub-issue。そうでなければチェックリストで十分
 
-**粒度:** 1 Task = 1 PR、半日〜2日。3〜6個が目安。10超えたら Story 自体を分割すべき。
+**粒度:** 1 Task = 1 PR、半日〜2日。team-context の分割パターンに応じた個数目安（USE_CASE: 3-6 / LAYER: 4-8 / COMPONENT: 3-7 / VERTICAL_SLICE: 5-10）。10超えたら Story 自体を分割すべき。
 
 分解軸が明確なら単案で提示。迷う場合は2-3パターンを提示する。
 

@@ -28,6 +28,35 @@
 | Plan 作成パスの想定 Task 数閾値（超え = Plan 必要） | 3 個 | 2 個 | 1 個 | `<VALUE>` |
 | Plan 作成パスの横断的判断閾値（あり = Plan 必要） | 2 件以上 | 1 件以上 | 1 件以上 | `<VALUE>` |
 
+## タスク分割単位
+
+`agile-refine-implementation-plan` / `agile-implementation-plan-to-task` が Task の粒度（1 PR の範囲）を判断するために参照する設定。リポジトリ構成と運用方針で決まる。
+
+| 項目 | 値 |
+|---|---|
+| リポジトリ構成 | `<MONOREPO / MULTI_REPO>` |
+| 機能実装の分割パターン | `<USE_CASE / LAYER / COMPONENT / VERTICAL_SLICE / CUSTOM>` |
+| 基盤・インフラ系改修の扱い | `<INLINE / SEPARATE_PR / N_A>` |
+| Task 1 個 = 何か（人間語） | `<例: 1 ユースケース分の BE+FE 統合 PR / BE か FE か Infra のいずれかのレイヤ 1 つ>` |
+
+### 機能実装の分割パターン
+
+| 値 | 意味 | 典型ケース |
+|---|---|---|
+| `USE_CASE` | 1 ユースケース = 1 PR (BE+FE 統合) | モノレポ、ユーザー体験単位で出す |
+| `LAYER` | レイヤ単位 (BE / FE / Mobile / Infra) で別 PR | マルチレポ、リポジトリ越境 PR 不可 |
+| `COMPONENT` | サービス / モジュール単位 (`UserService`, `OrderRepository` など) | DDD・モジュラモノリス・マイクロサービス |
+| `VERTICAL_SLICE` | 機能の一部 (バリデーションだけ等) を BE+FE 横断で | TDD で半日 1 PR を厳守、USE_CASE が大きすぎるとき |
+| `CUSTOM` | 独自運用 | 「Task 1 個 = 何か」欄に自由記述 |
+
+### 基盤・インフラ系改修の扱い
+
+| 値 | 意味 | 典型ケース |
+|---|---|---|
+| `INLINE` | 機能 PR に Infra 変更を含める | Infra をほぼ触らない MVP 期、マイグレーションが軽微 |
+| `SEPARATE_PR` | DB migration / Terraform / IAM 等は機能 PR と別に切る | 本番運用中、ロールバック単位を分けたい |
+| `N_A` | Infra 系の改修自体が発生しない | フロント onlyプロジェクト等 |
+
 ## チーム固有事情（あれば）
 
 - 時差: `<例: 国内のみ / EU と JP / 米国西海岸 中心>`
