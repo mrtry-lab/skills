@@ -20,7 +20,7 @@ Task Issue → Plan mode 計画 → TDD 実装 → Draft PR + レビューコメ
 
 - Story の詳細化（→ `/agile-refine-story`）
 - Implementation Plan の作成・詳細化（→ `/agile-refine-implementation-plan`）
-- Implementation Plan → Task 分解（→ `/agile-implementation-plan-to-task`）
+- Implementation Plan → Task 分解（→ `/agile-decompose-task-from-implementation-plan`）
 
 ## Workflow
 
@@ -48,7 +48,7 @@ flowchart TB
 
 GitHub MCP の `issue_read` で Task Issue を読み込み、以下を確認:
 
-- **Issue Type が Task であること** — Task でなければ「`/agile-implementation-plan-to-task` で Task 分解してください」と案内して中断
+- **Issue Type が Task であること** — Task でなければ「`/agile-decompose-task-from-implementation-plan` で Task 分解してください」と案内して中断
 - **依存** — `blocked by #XX` が未解決なら警告し、ナビゲーターに判断を仰ぐ
 - **振る舞い仕様・テスト設計・完了条件・技術メモ** を把握
 
@@ -145,7 +145,7 @@ NEVER（次節）はこのゲートの違反を具体的に列挙している。
 
 | 状況 | 対応 |
 |------|------|
-| Issue Type が Task でない | 「`/agile-implementation-plan-to-task` で Task 分解してください」と案内 |
+| Issue Type が Task でない | 「`/agile-decompose-task-from-implementation-plan` で Task 分解してください」と案内 |
 | 依存が未解決 | ナビゲーターに判断を仰ぐ（先に依存を実装 or 依存なし範囲で進行） |
 | 技術メモが不足 | コードベース探索で補完 → ナビゲーターに確認 |
 | 実装中に受入基準の曖昧さ発見 | 実装を止めてナビゲーターに確認。勝手に解釈しない |

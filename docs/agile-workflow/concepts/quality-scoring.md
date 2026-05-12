@@ -6,11 +6,11 @@ agile-* スキル群は、成果物（Vision / Epic / Story / Task / Implementat
 
 | skill | 対象成果物 | 点数 | 合格ライン |
 |---|---|---:|---|
-| `agile-product-vision` | VISION.md（5 層完成版） | 8 | 7 / 8 |
-| `agile-epic` | Epic Issue 起票内容 | 7 | 6 / 7 |
+| `agile-craft-vision` | VISION.md（5 層完成版） | 8 | 7 / 8 |
+| `agile-create-epic` | Epic Issue 起票内容 | 7 | 6 / 7 |
 | `agile-create-stories` | Story 提案（候補ごと） | 6 | 5 / 6 |
 | `agile-refine-story` | リファインメント完了判定 | 4 + 7 + 6（視点別） | 各視点で個別合格 |
-| `agile-implementation-plan-to-task` | Task 分解結果 | 8 | 7 / 8 |
+| `agile-decompose-task-from-implementation-plan` | Task 分解結果 | 8 | 7 / 8 |
 | `agile-task-implementation` | Plan mode 計画 | 6 | 5 / 6 |
 
 `agile-create-issue` / `agile-create-pull-request` / `agile-project-setup` には固有の品質スコアリングを置かない。これらは共通スキル / セットアップ skill で、artefact 品質より「呼ばれた時に正しく振る舞うこと」が責務。

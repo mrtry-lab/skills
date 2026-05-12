@@ -77,7 +77,7 @@ bash .claude/skills/agile-update-skills/scripts/update.sh \
 ```
 
 スクリプトは:
-1. 11 スキル (`agile-product-vision` 〜 `agile-update-skills` 自身) を順次インストール
+1. 11 スキル (`agile-craft-vision` 〜 `agile-update-skills` 自身) を順次インストール
 2. `docs/agile-workflow/` 配下 12 ファイル (3 ルート + 9 concepts) を curl 取得
 
 失敗があれば標準出力に `FAIL: <skill>` が出るので、ユーザーに見せて手動再実行を案内する。
@@ -88,9 +88,9 @@ bash .claude/skills/agile-update-skills/scripts/update.sh \
 
 ```
 ✓ スキル更新 (--scope <user|project>):
-  - agile-product-vision / agile-epic / agile-create-stories
+  - agile-craft-vision / agile-create-epic / agile-create-stories
   - agile-refine-story / agile-refine-implementation-plan
-  - agile-implementation-plan-to-task / agile-task-implementation
+  - agile-decompose-task-from-implementation-plan / agile-task-implementation
   - agile-create-issue / agile-create-pull-request
   - agile-project-setup / agile-update-skills (自己更新)
 
@@ -98,7 +98,7 @@ bash .claude/skills/agile-update-skills/scripts/update.sh \
 
 次のステップ:
 - 取得した <DOCS_DIR>/ を git で管理する場合は `git add` してコミット
-- agile-* スキルを使い始める: /agile-product-vision → /agile-epic → /agile-create-stories の順
+- agile-* スキルを使い始める: /agile-craft-vision → /agile-create-epic → /agile-create-stories の順
 - 不明点があれば <DOCS_DIR>/README.md を参照
 ```
 

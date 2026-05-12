@@ -16,9 +16,9 @@ Epic Issue を Story Mapping で分解し、Cynefin ドメイン分類を経て 
 
 ## When NOT to Use
 
-- Epic 自体がまだない（→ `/agile-epic`）
+- Epic 自体がまだない（→ `/agile-create-epic`）
 - 個別 Story の詳細化・受入基準作成（→ `/agile-refine-story`）
-- プロダクトの方向性が未定義（→ `/agile-product-vision`）
+- プロダクトの方向性が未定義（→ `/agile-craft-vision`）
 
 ## コーチングの原則
 
@@ -45,7 +45,7 @@ flowchart TB
 
 ## Step 1: Epic 読み込み + ビジョン確認
 
-**Epic の特定**: ユーザーが Epic 番号を指定していない場合、GitHub MCP の `list_issues` で Epic 一覧を取得し、ユーザーに提示して選択してもらう。該当する Epic がない場合は `/agile-epic` での作成を案内する。
+**Epic の特定**: ユーザーが Epic 番号を指定していない場合、GitHub MCP の `list_issues` で Epic 一覧を取得し、ユーザーに提示して選択してもらう。該当する Epic がない場合は `/agile-create-epic` での作成を案内する。
 
 対象 Epic Issue を GitHub MCP の `issue_read` で読み込み、Opportunity Canvas の内容を確認する:
 - ソリューションアイデア（何を作るか）
@@ -207,7 +207,7 @@ NEVER（次節）はこのゲートの違反を具体的に列挙している。
 
 | 状況 | 対応 |
 |------|------|
-| Epic の Opportunity Canvas が不十分 | 「Epic の Problem Space を先に埋めましょう」と `/agile-epic` に誘導 |
+| Epic の Opportunity Canvas が不十分 | 「Epic の Problem Space を先に埋めましょう」と `/agile-create-epic` に誘導 |
 | ストーリーが大きすぎる（1スプリントに収まらない） | INVEST の S（Small）を満たすまで縦切りで分割する |
 | ストーリーが小さすぎる（単独でユーザー価値がない） | 隣のストーリーと統合する。タスクレベルまで分解しない |
 | Cynefin 分類で意見が割れる | experimental 寄りに倒す。検証コストは実装の手戻りコストより常に安い |

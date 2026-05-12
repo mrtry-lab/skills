@@ -44,7 +44,7 @@ agile-* スキル群の閾値は `~/.claude/skills/references/team-context.json`
 2. **機能実装の分割パターン**: `USE_CASE` (モノレポ標準) / `LAYER` (マルチレポ標準) / `COMPONENT` (DDD・マイクロサービス) / `VERTICAL_SLICE` (TDD で半日 1 PR 厳守) / `CUSTOM`
 3. **基盤・インフラ系改修の扱い**: `INLINE` (機能 PR に含める) / `SEPARATE_PR` (DB migration 等は別 PR) / `N_A`
 
-`agile-refine-implementation-plan` の Task 分解計画と `agile-implementation-plan-to-task` の軽量モード分解はこの設定を参照する。詳細は [`shared/references/team-context.json.template`](../../shared/references/team-context.json.template) のテーブルを参照。
+`agile-refine-implementation-plan` の Task 分解計画と `agile-decompose-task-from-implementation-plan` の軽量モード分解はこの設定を参照する。詳細は [`shared/references/team-context.json.template`](../../shared/references/team-context.json.template) のテーブルを参照。
 
 ### 設定なしでも動く（軽量プリセットがデフォルト）
 
@@ -68,8 +68,8 @@ agile-* スキル群の閾値は `~/.claude/skills/references/team-context.json`
 ### 1. skill のインストール
 
 ```bash
-for skill in agile-product-vision agile-epic agile-create-stories \
-             agile-refine-story agile-refine-implementation-plan agile-implementation-plan-to-task \
+for skill in agile-craft-vision agile-create-epic agile-create-stories \
+             agile-refine-story agile-refine-implementation-plan agile-decompose-task-from-implementation-plan \
              agile-task-implementation agile-create-issue agile-create-pull-request \
              agile-project-setup agile-update-skills; do
   gh skill install mrtry-lab/skills $skill --agent claude-code --scope user
@@ -100,7 +100,7 @@ option ID 等は `gh project field-list <NUMBER> --owner <OWNER> --format json` 
 
 ### 3. validate-mermaid スクリプトの配置（Mermaid 検証を使う場合）
 
-`agile-epic` / `agile-refine-story` / `agile-refine-implementation-plan` / `agile-create-issue` は Mermaid 図のバリデーションに `validate-mermaid.mjs` を使う。`/agile-update-skills` が `.claude/scripts/validate-mermaid.mjs` に配置するので、通常は別途配置不要。
+`agile-create-epic` / `agile-refine-story` / `agile-refine-implementation-plan` / `agile-create-issue` は Mermaid 図のバリデーションに `validate-mermaid.mjs` を使う。`/agile-update-skills` が `.claude/scripts/validate-mermaid.mjs` に配置するので、通常は別途配置不要。
 
 依存パッケージのインストールは必要:
 

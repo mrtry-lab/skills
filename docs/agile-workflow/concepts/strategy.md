@@ -1,6 +1,6 @@
 # Strategy 性質と Vision 点検
 
-Scrum Expansion Pack の Strategy 拡張（**Strategy as Empirical Capability**、John Coleman）は、戦略を「経験主義で扱える能力」として再定義し、良い戦略が満たすべき **10 性質** を提示している。`agile-product-vision` の Step 4 では、このうち 4 性質を専用サブエージェントで点検する。
+Scrum Expansion Pack の Strategy 拡張（**Strategy as Empirical Capability**、John Coleman）は、戦略を「経験主義で扱える能力」として再定義し、良い戦略が満たすべき **10 性質** を提示している。`agile-craft-vision` の Step 4 では、このうち 4 性質を専用サブエージェントで点検する。
 
 ## Vision 点検が 2 並列サブエージェントになっている理由
 
@@ -26,7 +26,7 @@ Step 4 は性格の違う 2 種類の検査を扱う:
 
 | 性質 | 採用しない理由 |
 |---|---|
-| Differentiation（差別化） | `agile-epic` の Opportunity Canvas で十分扱える |
+| Differentiation（差別化） | `agile-create-epic` の Opportunity Canvas で十分扱える |
 | Hard-to-imitate（模倣困難性） | 初期段階では仮説でしかなく、議論コストが高い |
 | Resourcefulness（リソース活用） | 組織能力レベルの抽象論で、プロダクト戦略の Vision には粗すぎる |
 | Robustness（堅牢性） | Layer 5 リスクリストおよび 4 リスク評価で部分的にカバー済み |
@@ -37,7 +37,7 @@ Step 4 は性格の違う 2 種類の検査を扱う:
 
 ## 定期実行で機能する設計
 
-`agile-product-vision` は **四半期〜半年で定期実行** する想定。市場・チーム・技術環境の変化に追従するために Vision 自体を見直すたびに、Strategy 点検も自動的に毎回走る。別途 Strategy レビュー専用 skill を作らず Vision に統合した理由はこれで、定期実行のリズムが Strategy 検査のリズムと一致する。
+`agile-craft-vision` は **四半期〜半年で定期実行** する想定。市場・チーム・技術環境の変化に追従するために Vision 自体を見直すたびに、Strategy 点検も自動的に毎回走る。別途 Strategy レビュー専用 skill を作らず Vision に統合した理由はこれで、定期実行のリズムが Strategy 検査のリズムと一致する。
 
 ---
 

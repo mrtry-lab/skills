@@ -19,7 +19,7 @@ Story Refinement 完了後、Story の sub-issue として Implementation Plan I
 ## When NOT to Use
 
 - Story の受入基準・Outcome がまだ未確定（→ `/agile-refine-story` を先に実行）
-- 軽量パス (想定 Task 1-2 個 + 横断判断なし) → Implementation Plan は作らず `/agile-implementation-plan-to-task` で直接 Task 起票
+- 軽量パス (想定 Task 1-2 個 + 横断判断なし) → Implementation Plan は作らず `/agile-decompose-task-from-implementation-plan` で直接 Task 起票
 - `nature:chaotic` の hotfix → Implementation Plan も Task 分解も不要、`/agile-task-implementation` 直行
 - Implementation Plan の責務マップは `docs/agile-workflow/concepts/implementation-plan.md` を参照
 
@@ -69,7 +69,7 @@ Implementation Plan スキルが呼ばれた時点で、本当に Implementation
 **軽量パスの可能性が高い場合**:
 > 「この Story なら Implementation Plan を作らず直接 Task 起票で十分そうです。それでも Implementation Plan を作りますか?」
 
-ユーザーが「作る」と言えば続行、「不要」と言えば `/agile-implementation-plan-to-task` (Story 入力モード) を案内して終了。
+ユーザーが「作る」と言えば続行、「不要」と言えば `/agile-decompose-task-from-implementation-plan` (Story 入力モード) を案内して終了。
 
 ---
 
@@ -203,7 +203,7 @@ Story の Outcome Done テーブル「観測手段」欄と整合する形で、
 
 ## Step 9: Task 分解計画
 
-実装単位の PR (Task) に分解する。これは後段 `/agile-implementation-plan-to-task` の **入力になる重要な成果物**。
+実装単位の PR (Task) に分解する。これは後段 `/agile-decompose-task-from-implementation-plan` の **入力になる重要な成果物**。
 
 **粒度の基本ルール**（全パターン共通）:
 - 1 Task = 1 PR
@@ -416,11 +416,11 @@ Implementation Plan Issue 起票完了後、ユーザーに次スキルを案内
 ✓ 親 Story: #{Story Issue 番号} (Status: In Coding Progress に更新)
 
 次のステップ:
-- Implementation Plan のレビュー完了 → /agile-implementation-plan-to-task で Task 起票
+- Implementation Plan のレビュー完了 → /agile-decompose-task-from-implementation-plan で Task 起票
 - 必要なら Implementation Plan の内容を修正してから Task 起票に進む
 ```
 
-`/agile-implementation-plan-to-task` には Implementation Plan Issue 番号を渡す。Implementation Plan の Task 分解セクションを読んで Task Issue 群を起票する。
+`/agile-decompose-task-from-implementation-plan` には Implementation Plan Issue 番号を渡す。Implementation Plan の Task 分解セクションを読んで Task Issue 群を起票する。
 
 ---
 

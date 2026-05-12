@@ -21,12 +21,12 @@ SKIP_DOCS=0
 SKIP_SCRIPTS=0
 
 SKILLS=(
-  agile-product-vision
-  agile-epic
+  agile-craft-vision
+  agile-create-epic
   agile-create-stories
   agile-refine-story
   agile-refine-implementation-plan
-  agile-implementation-plan-to-task
+  agile-decompose-task-from-implementation-plan
   agile-task-implementation
   agile-create-issue
   agile-create-pull-request

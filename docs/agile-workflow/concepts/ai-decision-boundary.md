@@ -10,11 +10,11 @@ agile-* スキル群は CodingAgent（AI）主体のパイプラインだが、S
 
 | フェーズ | スキル | AI 自律 | 人間承認必須 | 人間主導 |
 |---|---|---|---|---|
-| ビジョン策定 | `agile-product-vision` | テンプレ整形・整合サブエージェント | 各 Layer の確定 | ミッション / Not-to-do / トレードオフ |
-| Epic 定義 | `agile-epic` | Opportunity Canvas 整形・既存 Issue 検索 | 4 リスク評価結果 / Epic 採否 | トリガー判断・予算感・Outcome 仮説 |
+| ビジョン策定 | `agile-craft-vision` | テンプレ整形・整合サブエージェント | 各 Layer の確定 | ミッション / Not-to-do / トレードオフ |
+| Epic 定義 | `agile-create-epic` | Opportunity Canvas 整形・既存 Issue 検索 | 4 リスク評価結果 / Epic 採否 | トリガー判断・予算感・Outcome 仮説 |
 | Story 分解 | `agile-create-stories` | Story Mapping 整形・候補列挙 | nature 分類 / Story 確定 | リリーススライス選択 |
 | リファインメント | `agile-refine-story` | シーケンス図作成・網羅性検査・Outcome テーブル整形 | リファインメント完了 / 受入基準確定 | Example Mapping のルール抽出 |
-| Task 分解 | `agile-implementation-plan-to-task` | Sub-issue 分割案・品質スコアリング | 分解粒度確定 | テスト戦略選択 |
+| Task 分解 | `agile-decompose-task-from-implementation-plan` | Sub-issue 分割案・品質スコアリング | 分解粒度確定 | テスト戦略選択 |
 | 実装 | `agile-task-implementation` | コーディング・TDD・コミット | Plan mode 計画承認 / Draft PR 提出 | エスカレーション判断 |
 | Issue 作成 | `agile-create-issue` | テンプレ適用・本文生成 | Issue 起票実行 | — |
 | PR 作成 | `agile-create-pull-request` | テンプレ適用・本文生成・Draft 作成 | Draft → Ready 切り替え | マージ |

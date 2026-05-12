@@ -122,7 +122,7 @@ interface ExampleType {
 
 ### Task 分解 (PR 計画)
 
-> TBD（後段 /agile-implementation-plan-to-task の入力になる）
+> TBD（後段 /agile-decompose-task-from-implementation-plan の入力になる）
 
 <!-- 1 Task = 1 PR、半日〜2日 -->
 <!-- 分割パターンと個数目安は team-context.json の「タスク分割単位」に従う -->
