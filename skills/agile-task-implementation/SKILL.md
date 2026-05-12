@@ -9,7 +9,7 @@ Task Issue → Plan mode 計画 → TDD 実装 → Draft PR + レビューコメ
 
 **役割**: ユーザー = ナビゲーター（戦略判断）、Claude = ドライバー（コード記述）
 
-**MANDATORY**: ステータス更新時は `.claude/skills/references/github-projects.md` を参照すること。
+**MANDATORY**: ステータス更新は `bash ~/.claude/skills/agile-update-skills/scripts/update-issue-status.sh <issue-number> <status-name>` を呼び出す。値の参照先は `.claude/skills/references/github-projects.json`。
 
 ## When to Use
 
@@ -44,7 +44,7 @@ flowchart TB
 
 ## Step 1: Task Issue 読み込み + 関連 Implementation Plan 確認
 
-**Task Issue の特定**: ユーザーが Issue 番号や URL を指定していない場合、`.claude/skills/references/github-projects.md` のコマンドテンプレートで **Status "Ready"** のアイテムを抽出し一覧提示。0 件なら「Ready のチケットがありません。Issue 番号を直接指定してください」と案内。
+**Task Issue の特定**: ユーザーが Issue 番号や URL を指定していない場合、`.claude/skills/references/github-projects.json` のコマンドテンプレートで **Status "Ready"** のアイテムを抽出し一覧提示。0 件なら「Ready のチケットがありません。Issue 番号を直接指定してください」と案内。
 
 GitHub MCP の `issue_read` で Task Issue を読み込み、以下を確認:
 
@@ -59,7 +59,7 @@ GitHub MCP の `issue_read` で Task Issue を読み込み、以下を確認:
 - Implementation Plan が **ある** 場合: Implementation Plan 本文を context として読み込み、Task の実装方針を Implementation Plan の Strategy / 横断的判断と整合させる
 - Implementation Plan が **ない** 場合 (軽量パス): Task 本文と親 Story の情報だけで進める
 
-**ステータス → "In Coding Progress"**: `.claude/skills/references/github-projects.md` のコマンドテンプレートに従い更新。fallback もそちらに記載。
+**ステータス → "In Coding Progress"**: `bash ~/.claude/skills/agile-update-skills/scripts/update-issue-status.sh <issue-number> "In Coding Progress"` を実行。失敗時は手動更新を案内して作業を続行。
 
 ---
 

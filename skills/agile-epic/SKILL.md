@@ -7,7 +7,7 @@ description: "Opportunity CanvasでGitHub Epic Issue（Issue Type: Epic）を対
 
 Opportunity Canvasで構造化したEpic Issue（Issue Type: `Epic`）を対話的に作成・更新する。
 
-> 閾値（同時アクティブ Epic 数の上限など）は `.claude/skills/references/team-context.md` を参照する。設定がなければ「軽量プリセット」（副業チーム想定 = アクティブ Epic 2-3 個）をデフォルトに動く。
+> 閾値（同時アクティブ Epic 数の上限など）は `.claude/skills/references/team-context.json` を参照する。設定がなければ「軽量プリセット」（副業チーム想定 = アクティブ Epic 2-3 個）をデフォルトに動く。
 
 ## When to Use
 
@@ -217,7 +217,7 @@ NEVER（次節）はこのゲートの違反を具体的に列挙している。
 | VISION.mdが存在しない | 「先にビジョンを策定しましょう」と `/agile-product-vision` に誘導 |
 | Problem Spaceがほぼ埋まらない（「ユーザーの課題」「ターゲットユーザー」の2項目が具体的に書けない） | リサーチフェーズが必要。Epicを作る前にユーザーインタビュー等を提案 |
 | Solution Spaceで意見が発散する | 複数案をそのまま記録し、「検証すべき仮説」として明示。1つに絞ることを強制しない |
-| アクティブ Epic が `team-context.md` の上限を超えそう | プリセット上限（軽量: 2-3 / 標準: 5-7 / 集中: 10+）を提示し、「優先順位をつけましょう」と促す。team-context.md がなければ軽量上限を適用 |
+| アクティブ Epic が `team-context.json` の上限を超えそう | プリセット上限（軽量: 2-3 / 標準: 5-7 / 集中: 10+）を提示し、「優先順位をつけましょう」と促す。team-context.json がなければ軽量上限を適用 |
 | 既存Epicと重複するトリガー | 「既存のEpic #{番号} と重複していませんか?」と確認。既存Epicの更新で済むなら新規作成しない |
 | Issue Type `Epic` が Organization に未設定 | Organization Settings → Planning → Issue types で `Epic` を作成するようユーザーに案内する |
 | VISION.mdのフォーマットが想定と異なる | Layer 3（What）相当の情報を対話で補完する。フォーマット修正は `/agile-product-vision` に委ねる |
@@ -226,7 +226,7 @@ NEVER（次節）はこのゲートの違反を具体的に列挙している。
 
 - **NEVER: Problem Spaceを飛ばしてSolution Spaceから書くな** — 課題の事実が不明なままソリューションを設計すると、「誰も困っていない問題」を解決する機能を作ってしまう。これがプロダクト開発の最大の無駄
 - **NEVER: 4リスクチェックを省略するな** — 「作ったけど誰も使わなかった」を防ぐ最後の砦。特に価値リスク（ユーザーが本当に使うか?）は最も見落とされやすい
-- **NEVER: アクティブな Epic を `team-context.md` の上限を超えて持つな** — 採用プリセットの上限（軽量: 2-3 / 標準: 5-7 / 集中: 10+）を超えると稼働が全方位に分散してどの Epic も完成しない。team-context.md がなければ軽量上限（2-3）をデフォルトに
+- **NEVER: アクティブな Epic を `team-context.json` の上限を超えて持つな** — 採用プリセットの上限（軽量: 2-3 / 標準: 5-7 / 集中: 10+）を超えると稼働が全方位に分散してどの Epic も完成しない。team-context.json がなければ軽量上限（2-3）をデフォルトに
 - **NEVER: ユーザー課題を推測で書くな** — 「〇〇に困っているはず」ではなく「〇〇に困っていると言っていた / データで確認した」と書く。推測はSolution Spaceの仮説として扱う
 - **NEVER: Canvas全項目の完璧な記入を強制するな** — 不明な箇所は `> TBD: {なぜ未定か}` で残す。特にSolution Spaceは仮説なので、最初から完璧である必要はない
 - **NEVER: Epic Issueにタスクレベルの詳細を書くな** — EpicはOpportunity Canvas粒度。具体的なStory/タスク分解は `/agile-create-stories` の責務

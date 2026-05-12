@@ -105,7 +105,7 @@ flowchart TB
 | 標準 (40-80h) | デフォルト基準を厳格適用 |
 | 集中 (100h+) | 想定 Task 2 個でも Implementation Plan 作成推奨 |
 
-実際の閾値は `~/.claude/skills/references/team-context.md` の「Implementation Plan 作成パスの想定 Task 数閾値」「横断的判断閾値」を参照する。
+実際の閾値は `~/.claude/skills/references/team-context.json` の「Implementation Plan 作成パスの想定 Task 数閾値」「横断的判断閾値」を参照する。
 
 ## 判定は 3 箇所で実施
 

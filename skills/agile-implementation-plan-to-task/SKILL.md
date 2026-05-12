@@ -63,7 +63,7 @@ flowchart TB
 
 ### Implementation Plan 必要性の判定 (Story Issue だけ指定の場合)
 
-`team-context.md` の閾値を参照:
+`team-context.json` の閾値を参照:
 
 - `nature:experimental` → Implementation Plan 必要
 - `nature:implementable` で「想定 Task が閾値超え or 横断的判断あり」→ Implementation Plan 必要
@@ -97,9 +97,9 @@ Story Issue を読み込み、Implementation Plan なしで Task を起票する
 - 横断的判断なし
 - アーキ選択肢が決まっている
 
-### team-context.md の分割設定を読み込む
+### team-context.json の分割設定を読み込む
 
-`~/.claude/skills/references/team-context.md`（または利用先プロジェクトの `.claude/skills/references/team-context.md`）から以下を取得:
+`~/.claude/skills/references/team-context.json`（または利用先プロジェクトの `.claude/skills/references/team-context.json`）から以下を取得:
 
 - `機能実装の分割パターン`: `USE_CASE` / `LAYER` / `COMPONENT` / `VERTICAL_SLICE` / `CUSTOM`
 - `基盤・インフラ系改修の扱い`: `INLINE` / `SEPARATE_PR` / `N_A`
@@ -210,7 +210,7 @@ team-context の `基盤・インフラ系改修の扱い` に従う:
 
 複数 Task をまとめて起票する場合も Status 更新コマンドは 1 回だけ実行する。一度 `Ready` → `In Coding Progress` に遷移したら以降の Task 起票では再度の更新は不要。
 
-更新コマンドは `.claude/skills/references/github-projects.md` のテンプレートに従う。失敗時はリトライ 1 回、それでも失敗すれば手動更新を案内して作業継続。
+更新コマンド: `bash ~/.claude/skills/agile-update-skills/scripts/update-issue-status.sh <story-issue-number> "In Coding Progress"` を実行。失敗時はリトライ 1 回、それでも失敗すれば手動更新を案内して作業継続。
 
 ## Step 6: カバレッジ検証（サブエージェント）
 

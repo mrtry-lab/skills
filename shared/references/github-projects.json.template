@@ -1,0 +1,21 @@
+{
+  "_comment": "agile-* スキル群が参照する GitHub Projects 固有値。'agile-project-setup' Step 7 の generate-github-projects-ref.sh が values を埋める。",
+  "project": {
+    "name": "<YOUR_PROJECT_NAME>",
+    "owner": "<YOUR_GITHUB_ORG>",
+    "number": "<YOUR_PROJECT_NUMBER>",
+    "id": "<YOUR_PROJECT_ID>"
+  },
+  "status_field": {
+    "id": "<YOUR_STATUS_FIELD_ID>",
+    "options": {
+      "In Planning": "<STATUS_OPTION_ID_IN_PLANNING>",
+      "In Plan Refinement": "<STATUS_OPTION_ID_IN_PLAN_REFINEMENT>",
+      "In Plan Review": "<STATUS_OPTION_ID_IN_PLAN_REVIEW>",
+      "Ready": "<STATUS_OPTION_ID_READY>",
+      "In Coding Progress": "<STATUS_OPTION_ID_IN_CODING_PROGRESS>",
+      "In Code Review": "<STATUS_OPTION_ID_IN_CODE_REVIEW>",
+      "Done": "<STATUS_OPTION_ID_DONE>"
+    }
+  }
+}

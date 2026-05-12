@@ -1,0 +1,34 @@
+{
+  "_comment": "agile-* スキル群が参照するチーム前提値。'agile-project-setup' Step 2.5 の generate-team-context.sh が values を埋める。",
+  "team": {
+    "type": "<FULL_TIME / SIDE_PROJECT / MIXED>",
+    "members": "<N>",
+    "weekly_hours": "<HOURS>",
+    "preset": "<light / standard / focused>"
+  },
+  "thresholds": {
+    "_comment": "preset (light/standard/focused) ごとに 8 個の値が埋まる。プリセット表は docs/agile-workflow/setup.md 参照。",
+    "max_active_epics": "<VALUE>",
+    "active_personas": "<VALUE>",
+    "vision_session_minutes": "<VALUE>",
+    "refinement_session_minutes": "<VALUE>",
+    "example_mapping_rule_limit": "<VALUE>",
+    "unresolved_question_limit": "<VALUE>",
+    "plan_path_task_count_threshold": "<VALUE>",
+    "plan_path_cross_cutting_threshold": "<VALUE>"
+  },
+  "task_split": {
+    "_comment": "Task 粒度 (1 PR の範囲) はリポジトリ構成と運用方針で決まる。preset とは独立。",
+    "repo_type": "<MONOREPO / MULTI_REPO>",
+    "pattern": "<USE_CASE / LAYER / COMPONENT / VERTICAL_SLICE / CUSTOM>",
+    "infra_handling": "<INLINE / SEPARATE_PR / N_A>",
+    "task_unit_description": "<例: 1 ユースケース分の BE+FE 統合 PR / BE か FE か Infra のいずれかのレイヤ 1 つ>"
+  },
+  "team_specifics": {
+    "_comment": "閾値に影響しそうな前提があれば記入。空でも OK。",
+    "timezone": "",
+    "location": "",
+    "skill_bias": "",
+    "notes": ""
+  }
+}

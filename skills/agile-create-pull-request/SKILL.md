@@ -7,7 +7,7 @@ description: "Task Issue の実装完了後に Draft PR を作成する agile-* 
 
 実装済みの変更から Draft PR を作成する。
 
-**MANDATORY**: ステータス更新時は `.claude/skills/references/github-projects.md` を参照すること。
+**MANDATORY**: ステータス更新は `bash ~/.claude/skills/agile-update-skills/scripts/update-issue-status.sh <issue-number> <status-name>` を呼び出す。値の参照先は `.claude/skills/references/github-projects.json`。
 
 ## When to Use
 
@@ -89,7 +89,7 @@ PR 本文のテンプレートを以下の順で探索する:
 
 ## Step 4: ステータス更新
 
-対応する Task Issue の Status を **"In Code Review"** に更新する。`.claude/skills/references/github-projects.md` のコマンドテンプレートに従い更新。
+対応する Task Issue の Status を **"In Code Review"** に更新する: `bash ~/.claude/skills/agile-update-skills/scripts/update-issue-status.sh <task-issue-number> "In Code Review"`
 
 ---
 

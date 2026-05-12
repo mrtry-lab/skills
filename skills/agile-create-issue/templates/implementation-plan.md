@@ -125,9 +125,9 @@ interface ExampleType {
 > TBD（後段 /agile-implementation-plan-to-task の入力になる）
 
 <!-- 1 Task = 1 PR、半日〜2日 -->
-<!-- 分割パターンと個数目安は team-context.md の「タスク分割単位」に従う -->
+<!-- 分割パターンと個数目安は team-context.json の「タスク分割単位」に従う -->
 <!--   USE_CASE: 3-6 個 / LAYER: 4-8 個 / COMPONENT: 3-7 個 / VERTICAL_SLICE: 5-10 個 -->
-<!-- Infra 改修は team-context.md の「基盤・インフラ系改修の扱い」で INLINE / SEPARATE_PR を判断 -->
+<!-- Infra 改修は team-context.json の「基盤・インフラ系改修の扱い」で INLINE / SEPARATE_PR を判断 -->
 <!-- 10 個超えたら Story 自体を分割すべき兆候 -->
 
 | # | Task タイトル | スコープ | 依存 | 想定 PR 数 |
