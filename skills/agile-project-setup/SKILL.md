@@ -242,42 +242,42 @@ gh project field-create <NUMBER> --owner <ORG> \
 
 ## Step 5: 推奨ビュー作成案内
 
-`gh` CLI ではビューの新規作成は対応が薄い（2026 時点）。Web UI で 2 つ作る案内をする:
+`gh` CLI / GraphQL API ともに View 作成・編集 mutation が未提供 (`createProjectV2View` 等が存在しない)。**Web UI 操作が必須**。Step 3 で取得した Owner と Project Number を使って URL を組み立て、ユーザーに直接ジャンプしてもらう:
 
-> Project ページ → 上部のビュータブの「+」→ 「New view」で以下 2 つを作成してください:
+> Project ページを開いてください:
+> https://github.com/orgs/<ORG>/projects/<NUMBER>
+>
+> 上部のビュータブの「+」→「New view」で以下 2 つを作成してください。**両方とも Layout は Board** にしてください (Group by の値が swimlane として可視化されるため):
 >
 > **Backlog**
-> - Layout: Table 推奨 (Board でも可)
-> - Group by: **Parent issue** (Epic を起点にした階層表示にする)
+> - Layout: **Board**
+> - Group by: **Parent issue** (Epic ごとに swimlane が並ぶ)
 > - Filter: `is:open status:"In Planning","In Plan Refinement","In Plan Review","Ready","In Coding Progress","Done"`
 > - 用途: Open な Epic 配下の Story / Implementation Plan / Task を Epic 別に俯瞰
-> - 仕組み: Epic が Done になると Sub-issue all closed → Parent auto-close で連鎖 close され、`is:open` フィルタで自動的に Backlog から外れる
+> - 仕組み: Epic が Done になると Sub-issue all closed → Parent auto-close で連鎖 close され、`is:open` フィルタで自動的に Backlog から外れる (Step 6 の Workflow 有効化が前提)
 >
 > **Sprint**
-> - Layout: Board 推奨
-> - Group by: **Parent issue** (Story を起点にした階層表示にする)
+> - Layout: **Board**
+> - Group by: **Parent issue** (Story ごとに swimlane が並ぶ)
 > - Filter: `status:"Ready","In Coding Progress","In Code Review","Done"`
 > - 用途: 実装フェーズに入った Story 配下の Task / Implementation Plan を Story 別に追う
 
 両ビューに `Ready` / `In Coding Progress` が重複表示されるが、Backlog は Story 中心、Sprint は Task 中心という役割の違いで意味が違う。
 
-作成完了をユーザーに確認してから次へ。ビュー URL を控えると後の完了サマリーに使える。
+作成完了をユーザーに確認してから次へ。ビュー URL (`https://github.com/orgs/<ORG>/projects/<NUMBER>/views/<VIEW_NUMBER>`) を控えると後の完了サマリーに使える。
 
-> ⚠️ Group by の "Parent issue" は GitHub Projects v2 のフィールド。Backlog では Epic を、Sprint では Story を **Parent issue として指定** することで階層的に表示される。GitHub Projects の Parent issue フィールドが Project に追加されていない場合は、Project Settings → New field → Parent issue を追加する。
->
-> Board レイアウトを選んだ場合、Group by の値が **swimlane (横バンド)** として可視化される。Backlog は Epic ごとに 1 行、Sprint は Story ごとに 1 行という形で並ぶ。
->
-> ℹ️ View の作成・Filter 設定・Group by 設定は GitHub Projects v2 GraphQL API では現在サポートされていない (2026 年 5 月時点で `createProjectV2View` / `updateProjectV2View` mutation は存在しない)。Web UI 操作が必須。
+> ⚠️ Group by の "Parent issue" は GitHub Projects v2 のフィールド。Backlog では Epic を、Sprint では Story を **Parent issue として指定** することで階層表示と swimlane が機能する。Parent issue フィールドが Project に追加されていない場合は、Project Settings (`https://github.com/orgs/<ORG>/projects/<NUMBER>/settings`) → New field → Parent issue を追加する。
 
 ---
 
 ## Step 6: Workflows 設定
 
-PR マージ時の Status 遷移、Epic Done 時の sub-issue 連鎖 close など、GitHub Projects 標準 Workflow を有効化する。GitHub Projects v2 の Workflow API は読み取り限定 (`deleteProjectV2Workflow` のみ存在し、enable / update mutation は未提供) なので、**Web UI 操作のみ**。
+PR マージ時の Status 遷移、Epic Done 時の sub-issue 連鎖 close など、GitHub Projects 標準 Workflow を有効化する。GitHub Projects v2 の Workflow API は読み取り限定 (`deleteProjectV2Workflow` のみ存在し、enable / update mutation は未提供) なので、**Web UI 操作のみ**。Step 3 で取得した Owner と Project Number を使って URL を組み立てる:
 
-ユーザーに以下 3 つの Workflow の有効化を案内する:
-
-> Project ページ → 右上の「⋯」→ 「Workflows」を開き、以下 3 つを **Edit → 保存 → Turn on** の手順で有効化:
+> Workflows 設定ページを開いてください:
+> https://github.com/orgs/<ORG>/projects/<NUMBER>/workflows
+>
+> 以下 3 つを **Edit → 保存 → Turn on** の手順で有効化:
 >
 > 1. **Auto-add to project** — Issue/PR の自動追加。対象リポジトリを指定 (常時 ON 推奨)
 >
