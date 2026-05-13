@@ -309,19 +309,21 @@ Step 3 で取得した Owner と Project Number を使って URL を組み立て
 > Project ページを開いてください:
 > https://github.com/orgs/<ORG>/projects/<NUMBER>
 >
-> 上部のビュータブの「+」→「New view」で以下 2 つを作成してください。**両方とも Layout は Board** にしてください (Group by の値が swimlane として可視化されるため):
+> まず、**デフォルトで作られている View (例: `View 1`, `Table` など) をすべて削除** してください (View タブで右クリック → Delete view)。最終的に Backlog / Sprint の 2 つだけが残る状態にします。
+>
+> 続いて、上部のビュータブの「+」→「New view」で以下 2 つを作成してください。**両方とも Layout は Board** にしてください (Group by の値が swimlane として可視化されるため):
 >
 > **Backlog**
 > - Layout: **Board**
 > - Group by: **Parent issue** (Epic ごとに swimlane が並ぶ)
-> - Filter: `is:open status:"In Planning","In Plan Refinement","In Plan Review","Ready","In Coding Progress","Done"`
+> - Filter: `is:open status:"In Planning","In Plan Refinement","In Plan Review","Ready","In Coding Progress","Done" type:"Epic","Story"`
 > - 用途: Open な Epic 配下の Story / Implementation Plan / Task を Epic 別に俯瞰
 > - 仕組み: Epic が Done になると Sub-issue all closed → Parent auto-close で連鎖 close され、`is:open` フィルタで自動的に Backlog から外れる (Step 5 の Workflow 有効化済み前提)
 >
 > **Sprint**
 > - Layout: **Board**
 > - Group by: **Parent issue** (Story ごとに swimlane が並ぶ)
-> - Filter: `status:"Ready","In Coding Progress","In Code Review","Done"`
+> - Filter: `status:"Ready","In Coding Progress","In Code Review","Done" type:"Story","Implementation Plan","Task"`
 > - 用途: 実装フェーズに入った Story 配下の Task / Implementation Plan を Story 別に追う
 
 両ビューに `Ready` / `In Coding Progress` が重複表示されるが、Backlog は Story 中心、Sprint は Task 中心という役割の違いで意味が違う。
