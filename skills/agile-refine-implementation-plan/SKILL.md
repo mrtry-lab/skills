@@ -38,7 +38,8 @@ Story Refinement 完了後、Story の sub-issue として Implementation Plan I
 
 ```mermaid
 flowchart TB
-  check["1. 副チェック\n(Implementation Plan 必要性再判定)"]
+  gate["1.0. 親 Story Status\nHard gate"]
+  check["1.1. 副チェック\n(Implementation Plan 必要性再判定)"]
   read["2. Story 読み込み\n+ 既存実装探索"]
   seq["3. 技術詳細\nシーケンス図"]
   api["4. API 仕様詳細"]
@@ -54,14 +55,37 @@ flowchart TB
   create["14. Implementation Plan Issue 起票\n/agile-create-issue 委譲"]
   next["15. 次スキル案内"]
 
-  check --> read --> seq --> api --> model --> ui --> log --> test --> task --> cross --> exclude --> score --> review --> create --> next
+  gate --> check --> read --> seq --> api --> model --> ui --> log --> test --> task --> cross --> exclude --> score --> review --> create --> next
 ```
 
 ---
 
-## Step 1: 副チェック (Implementation Plan 必要性再判定)
+## Step 1.0: 親 Story Status の Hard gate
 
-Implementation Plan スキルが呼ばれた時点で、本当に Implementation Plan が必要かを再判定する。`docs/agile-workflow/concepts/implementation-plan.md` の判定フローを適用する。
+Implementation Plan の起票は **親 Story が Refinement 完了 (`Ready` 以降) であることが前提**。Refinement 未完了の Story から Plan を作ると、Sprint View に「親 Story 不在 / Refinement 未完の swimlane」が並ぶことになる。これを起票の入口で防ぐ。
+
+`issue_read` で対象 Story の現在 Project Status を取得し、判定:
+
+| 親 Story Status | 動作 |
+|---|---|
+| `Ready` / `In Coding Progress` / `In Code Review` / `Done` | Step 1.1 へ進む |
+| `In Planning` / `In Plan Refinement` / `In Plan Review` | **中断**。`AskUserQuestion` でユーザーに次の動きを確認 (下記) |
+| Project に未追加 / Status 未設定 | エラーを案内して中断 (Project への手動追加 or `agile-setup-project` 再実行を促す) |
+
+中断時の `AskUserQuestion`:
+
+| 選択肢 | 動作 |
+|---|---|
+| Story Refinement を完了させる (Recommended) | `/agile-refine-story` を案内して終了。Refinement 完了後に本スキルを再実行 |
+| それでも Plan を作成 | 緊急対応の例外。「Sprint Board に親 Story 不在の Plan が並ぶリスクがある」を明示してから Step 1.1 へ続行 |
+
+> Story の現在 Status は `bash ~/.claude/skills/agile-update-skills/scripts/update-issue-status.sh` を呼ぶための前段として、`gh project item-list <NUMBER> --owner <ORG> --format json | jq` で取得する。複数アプリ運用時は `[app-name]` で対象 JSON を切り替える。
+
+---
+
+## Step 1.1: 副チェック (Implementation Plan 必要性再判定)
+
+Step 1.0 を通過した (Story が `Ready` 以降) 前提で、本当に Implementation Plan が必要かを再判定する。`docs/agile-workflow/concepts/implementation-plan.md` の判定フローを適用する。
 
 **判定基準** (team-context.json preset 補正適用):
 

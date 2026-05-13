@@ -85,9 +85,19 @@ In Planning → In Plan Refinement → In Plan Review → Ready → In Coding Pr
 
 `agile-refine-implementation-plan` Step 14 は **Refinement 完了済みの内容で Implementation Plan Issue を起票** するフローなので、起票時の Status は `In Code Review` (レビュー待ち) になる。再 Refinement が必要なら `In Coding Progress` に戻して編集 → `In Code Review` に戻す。
 
+### Plan / Task 起票の前提条件 (Story Status Hard gate)
+
+Implementation Plan / Task の起票は **親 Story が `Ready` 以降であることが前提**。`Ready` 未満 (`In Planning` / `In Plan Refinement` / `In Plan Review`) の Story から Plan / Task を起票すると、Sprint View に「親 Story 不在の Plan/Task」が並ぶ不整合が起きるため、起票スキル側で **Hard gate** を設けて拒否する設計:
+
+- `agile-refine-implementation-plan` **Step 1.0** — Plan 起票前に親 Story Status を確認。`Ready` 未満なら中断、`/agile-refine-story` を案内
+- `agile-decompose-task-from-implementation-plan` **Step 1.5** — 軽量モード (Story → Task 直接) で Hard gate。Plan ベースモードは Soft gate (警告のみ、Plan 存在自体が過去 Ready の証拠なので)
+- `agile-create-issue` **Step 3.5** — 上流をバイパスされたときのセーフティネット
+
+これにより Sprint には常に「`Ready` 以降の Story」と「その配下の Plan/Task」しか並ばない。
+
 ### Story の `Ready` → `In Coding Progress` 自動遷移
 
-Story は最初の Implementation Plan or Task が起票されたタイミングで `Ready` → `In Coding Progress` に遷移する。これにより Story 単体で「Refinement 完了済み・未着手」(Ready) と「実装フェーズ入り」(In Coding Progress) が判別できる。Backlog ビューでは Open Epic 配下の Story がライフサイクル全体にわたって見える。
+Hard gate を通過した起票では、Story は最初の Implementation Plan or Task が起票されたタイミングで `Ready` → `In Coding Progress` に遷移する。これにより Story 単体で「Refinement 完了済み・未着手」(Ready) と「実装フェーズ入り」(In Coding Progress) が判別できる。Backlog ビューでは Open Epic 配下の Story がライフサイクル全体にわたって見える。
 
 遷移を発火するスキル:
 - `agile-refine-implementation-plan` Step 14 後 — Implementation Plan Issue 起票完了時に親 Story が `Ready` なら遷移

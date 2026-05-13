@@ -52,7 +52,7 @@ flowchart TB
 
 ---
 
-## Step 1: 入力種別判定 + Implementation Plan 必要性判定
+## Step 1: 入力種別判定 + 親 Story Status Gate + Implementation Plan 必要性判定
 
 入力に応じて分岐する。判定基準は `docs/agile-workflow/concepts/implementation-plan.md` を参照。
 
@@ -60,10 +60,32 @@ flowchart TB
 
 | 入力 | 判定 | 動作 |
 |------|------|------|
-| **Implementation Plan Issue 番号指定** | Implementation Plan ベースモード | Step 2 へ進む (Implementation Plan の Task 分解計画を踏襲) |
+| **Implementation Plan Issue 番号指定** | Implementation Plan ベースモード | Step 1.5 (親 Story Status の Soft gate) → Step 2 |
 | **Story Issue だけ指定 + nature:chaotic** | 中断 | 「Task 分解不要。`/agile-implement-task` 直行を案内」 |
 | **Story Issue だけ指定 + Implementation Plan 必要パス** | 中断 | 「先に `/agile-refine-implementation-plan` を呼んでください」 |
-| **Story Issue だけ指定 + 軽量パス** | 軽量モード | Step 2' へ進む (Story から直接 Task 起票) |
+| **Story Issue だけ指定 + 軽量パス** | 軽量モード | Step 1.5 (Story Status の Hard gate) → Step 2' |
+
+### Step 1.5: 親 Story Status Gate
+
+Task 起票は **親 Story が Refinement 完了 (`Ready` 以降) であることが前提**。Refinement 未完了の Story から Task を作ると、Sprint View に「親 Story 不在の Task」が並ぶ。`gh project item-list <NUMBER> --owner <ORG> --format json | jq` で対象 Story の Project Status を取得して判定する。
+
+**軽量モード (Story から直接起票)** — **Hard gate**:
+
+| 親 Story Status | 動作 |
+|---|---|
+| `Ready` / `In Coding Progress` / `In Code Review` / `Done` | Step 2' へ進む |
+| `In Planning` / `In Plan Refinement` / `In Plan Review` | **中断**。`/agile-refine-story` を案内 |
+| Project に未追加 | エラーを案内して中断 |
+
+**Implementation Plan ベースモード** — **Soft gate**:
+
+Plan が既に起票されている = 過去のある時点で Story が `Ready` 以降だった証拠なので、原則続行する。ただし戻し操作などで Story Status が `Ready` 未満に戻されているケースは異常なので警告する。
+
+| 親 Story Status | 動作 |
+|---|---|
+| `In Coding Progress` 以降 | Step 2 へ進む (正常) |
+| `Ready` | Step 2 へ進む (Plan 起票直後で Status 自動遷移前のケース、正常) |
+| `Ready` 未満 | 警告ログを出し、`AskUserQuestion` で「Story Status を `Ready` 以上に戻してから続行 / それでも起票」をユーザー判断 |
 
 ### Implementation Plan 必要性の判定 (Story Issue だけ指定の場合)
 

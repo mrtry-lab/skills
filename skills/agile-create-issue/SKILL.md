@@ -30,12 +30,13 @@ flowchart TB
   type["1. Issue Type 決定"]
   template["2. テンプレート読み込み・本文作成"]
   mermaid["3. Mermaid 検証"]
+  parent["3.5. 親 Issue Status\nセーフティネット (Plan/Task のみ)"]
   create["4. Issue 作成"]
   status["5. ステータス設定"]
   link["6. 親子リンク"]
 
   type --> template --> mermaid
-  mermaid -- "OK" --> create --> status --> link
+  mermaid -- "OK" --> parent --> create --> status --> link
   mermaid -- "エラー" --> template
 ```
 
@@ -90,6 +91,26 @@ cat /tmp/issue-body.md | node .claude/scripts/validate-mermaid.mjs
 エラーがあれば mermaid 図を修正して再検証。
 
 mermaid ブロックがない場合はスキップ。
+
+---
+
+## Step 3.5: 親 Issue Status のセーフティネットチェック (Plan / Task のみ)
+
+起票対象が **Implementation Plan** または **Task** で、呼び出し元から親 Issue 番号が渡されている場合、起票前に親 Story の現在 Status を確認する。これは上流の `agile-refine-implementation-plan` Step 1.0 / `agile-decompose-task-from-implementation-plan` Step 1.5 で Hard gate が効いている前提のセーフティネット (二重防御)。
+
+`gh project item-list <NUMBER> --owner <ORG> --format json | jq` で親 Story の Project Status を取得し、判定:
+
+| 親 Story Status | 動作 |
+|---|---|
+| `Ready` / `In Coding Progress` / `In Code Review` / `Done` | Step 4 へ進む |
+| `In Planning` / `In Plan Refinement` / `In Plan Review` | 警告ログを出し、`AskUserQuestion` でユーザーに「Story Refinement を完了させる / それでも起票」を確認 |
+
+対象外:
+- Epic 起票時 (親なし)
+- Story 起票時 (親が Epic、Epic は Status を持たない設計)
+- 単独利用で親 Issue が指定されていない場合
+
+上流スキルが正しく動いていればこのゲートは通常スルーされる。逆に上流をバイパスして本スキルを直接呼ぶ運用ではセーフティネットとして機能する。
 
 ---
 

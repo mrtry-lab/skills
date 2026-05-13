@@ -140,6 +140,8 @@ Implementation Plan は Task と同じ 4 Status を使う。これにより Spri
 
 `agile-refine-implementation-plan` は Step 1-13 で Refinement を進めて Step 14 で **Refinement 完了済み内容を Implementation Plan Issue として起票** する流れなので、起票時の Status は `In Code Review` (レビュー待ち) になる。再 Refinement が必要なら `In Coding Progress` に戻して編集 → `In Code Review` に戻す。
 
+**前提**: Plan の起票は親 Story が `Ready` 以降であることが前提 (`agile-refine-implementation-plan` Step 1.0 の Hard gate)。Refinement 未完了の Story から Plan を起票しようとすると拒否される。詳細は [operations.md](../operations.md) の「Plan / Task 起票の前提条件」参照。
+
 ## Done のカスケード
 
 Story の Done 条件:
