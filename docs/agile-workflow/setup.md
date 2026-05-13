@@ -17,7 +17,7 @@
 
 ## チームコンテキストとプリセット閾値
 
-agile-* スキル群の閾値は `~/.claude/skills/references/team-context.json`（または利用先プロジェクトの `.claude/skills/references/team-context.json`）に集約されている。`agile-setup-project` の Step 2.5 で対話的に生成し、各スキルが実行時に参照する。
+agile-* スキル群の閾値は `~/.claude/skills/references/team-context.json`（または利用先プロジェクトの `.claude/skills/references/team-context.json`）に集約されている。`agile-setup-project` の Step 3 で対話的に生成し、各スキルが実行時に参照する。
 
 ### なぜチームコンテキストが必要か
 
@@ -38,7 +38,7 @@ agile-* スキル群の閾値は `~/.claude/skills/references/team-context.json`
 
 ### タスク分割単位（プリセットとは独立）
 
-プリセットの 3 種（軽量 / 標準 / 集中）は **稼働時間** の話で、**Task 粒度（1 PR の範囲）** はリポジトリ構成と運用方針で別に決まる。`agile-setup-project` の Step 2.5 で 3 問ヒアリングし、`team-context.json` に保存する:
+プリセットの 3 種（軽量 / 標準 / 集中）は **稼働時間** の話で、**Task 粒度（1 PR の範囲）** はリポジトリ構成と運用方針で別に決まる。`agile-setup-project` の Step 3 で 3 問ヒアリングし、`team-context.json` に保存する:
 
 1. **リポジトリ構成**: `MONOREPO` / `MULTI_REPO`
 2. **機能実装の分割パターン**: `USE_CASE` (モノレポ標準) / `LAYER` (マルチレポ標準) / `COMPONENT` (DDD・マイクロサービス) / `VERTICAL_SLICE` (TDD で半日 1 PR 厳守) / `CUSTOM`

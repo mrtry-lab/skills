@@ -60,12 +60,12 @@ flowchart TB
 
 | 入力 | 判定 | 動作 |
 |------|------|------|
-| **Implementation Plan Issue 番号指定** | Implementation Plan ベースモード | Step 1.5 (親 Story Status の Soft gate) → Step 2 |
+| **Implementation Plan Issue 番号指定** | Implementation Plan ベースモード | 親 Story Status の Soft gate → Step 2 |
 | **Story Issue だけ指定 + nature:chaotic** | 中断 | 「Task 分解不要。`/agile-implement-task` 直行を案内」 |
 | **Story Issue だけ指定 + Implementation Plan 必要パス** | 中断 | 「先に `/agile-refine-implementation-plan` を呼んでください」 |
-| **Story Issue だけ指定 + 軽量パス** | 軽量モード | Step 1.5 (Story Status の Hard gate) → Step 2' |
+| **Story Issue だけ指定 + 軽量パス** | 軽量モード | 親 Story Status の Hard gate → Step 2' |
 
-### Step 1.5: 親 Story Status Gate
+### 親 Story Status Gate
 
 Task 起票は **親 Story が Refinement 完了 (`Ready` 以降) であることが前提**。Refinement 未完了の Story から Task を作ると、Sprint View に「親 Story 不在の Task」が並ぶ。`gh project item-list <NUMBER> --owner <ORG> --format json | jq` で対象 Story の Project Status を取得して判定する。
 
