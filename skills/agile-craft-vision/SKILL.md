@@ -5,6 +5,8 @@ description: "プロダクトビジョンドキュメント（docs/vision/README
 
 # Agile Product Vision
 
+> 🗣️ **ユーザーへの質問**: 選択肢が有限なら `AskUserQuestion` ツールを優先 (2-4 個の選択肢、推奨は先頭に `(Recommended)` を付ける)。自由記述が要る箇所はテキスト対話のまま。
+
 docs/vision/README.md を対話的に作成・更新し、チームの前提認知を揃える。
 
 ## When to Use

@@ -5,6 +5,8 @@ description: "agile-* スキル群と関連ドキュメント (docs/agile-workfl
 
 # Agile Update Skills
 
+> 🗣️ **ユーザーへの質問**: 選択肢が有限なら `AskUserQuestion` ツールを優先 (2-4 個の選択肢、推奨は先頭に `(Recommended)` を付ける)。自由記述が要る箇所はテキスト対話のまま。
+
 agile-* スキル群一式と関連ドキュメント (`docs/agile-workflow/`) を一括で最新化する。実体は同梱の `scripts/update.sh` で、`gh skill install` の上書きインストールと `docs/agile-workflow/` 配下 12 ファイルの curl フェッチを順次実行する。
 
 ## When to Use

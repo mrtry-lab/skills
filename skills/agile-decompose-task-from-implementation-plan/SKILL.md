@@ -5,6 +5,8 @@ description: "リファインメント済みの Implementation Plan Issue から
 
 # Agile Implementation Plan to Task
 
+> 🗣️ **ユーザーへの質問**: 選択肢が有限なら `AskUserQuestion` ツールを優先 (2-4 個の選択肢、推奨は先頭に `(Recommended)` を付ける)。自由記述が要る箇所はテキスト対話のまま。
+
 Refinement 完了済みの Implementation Plan Issue から Task Sub-issue を起票する。Implementation Plan の「Task 分解計画」セクションを踏襲して Task を作る。Implementation Plan 不要の軽量 Story では Story から直接 Task 起票する軽量モードも対応。
 
 ## When to Use

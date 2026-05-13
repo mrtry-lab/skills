@@ -5,6 +5,8 @@ description: "Story Refinement 完了後、Story の sub-issue として Impleme
 
 # Agile Refine Implementation Plan
 
+> 🗣️ **ユーザーへの質問**: 選択肢が有限なら `AskUserQuestion` ツールを優先 (2-4 個の選択肢、推奨は先頭に `(Recommended)` を付ける)。自由記述が要る箇所はテキスト対話のまま。
+
 Story Refinement 完了後、Story の sub-issue として Implementation Plan Issue を作成し、エンジニア視点の戦略を詳細化する。Story の「What/Why」と Task の「PR 単位の作業」の間に挟まる "How の戦略" 層を可視化する。
 
 > 閾値（リファインメントセッションのタイムボックス）は `.claude/skills/references/team-context.json` を参照する。設定がなければ「軽量プリセット」をデフォルトに動く。

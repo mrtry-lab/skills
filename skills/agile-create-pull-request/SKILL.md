@@ -5,6 +5,8 @@ description: "Task Issue の実装完了後に Draft PR を作成する agile-* 
 
 # Create Pull Request
 
+> 🗣️ **ユーザーへの質問**: 選択肢が有限なら `AskUserQuestion` ツールを優先 (2-4 個の選択肢、推奨は先頭に `(Recommended)` を付ける)。自由記述が要る箇所はテキスト対話のまま。
+
 実装済みの変更から Draft PR を作成する。
 
 **MANDATORY**: ステータス更新は `bash ~/.claude/skills/agile-update-skills/scripts/update-issue-status.sh <issue-number> <status-name>` を呼び出す。値の参照先は `.claude/skills/references/github-projects.json`。

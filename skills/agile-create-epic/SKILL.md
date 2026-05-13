@@ -5,6 +5,8 @@ description: "Opportunity CanvasでGitHub Epic Issue（Issue Type: Epic）を対
 
 # Agile Epic
 
+> 🗣️ **ユーザーへの質問**: 選択肢が有限なら `AskUserQuestion` ツールを優先 (2-4 個の選択肢、推奨は先頭に `(Recommended)` を付ける)。自由記述が要る箇所はテキスト対話のまま。
+
 Opportunity Canvasで構造化したEpic Issue（Issue Type: `Epic`）を対話的に作成・更新する。
 
 > 閾値（同時アクティブ Epic 数の上限など）は `.claude/skills/references/team-context.json` を参照する。設定がなければ「軽量プリセット」（副業チーム想定 = アクティブ Epic 2-3 個）をデフォルトに動く。

@@ -5,6 +5,8 @@ description: "EpicをStory Mappingで分解し、Cynefinドメイン分類でnat
 
 # Agile Create Backlog
 
+> 🗣️ **ユーザーへの質問**: 選択肢が有限なら `AskUserQuestion` ツールを優先 (2-4 個の選択肢、推奨は先頭に `(Recommended)` を付ける)。自由記述が要る箇所はテキスト対話のまま。
+
 Epic Issue を Story Mapping で分解し、Cynefin ドメイン分類を経て Story Issue を作成する。
 
 ## When to Use
