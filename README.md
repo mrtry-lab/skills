@@ -8,7 +8,7 @@ gh skill install mrtry-lab/skills <skill-name> --agent claude-code --scope user
 
 このリポジトリには **2 系統** の skill がある:
 
-- **`agile-*`** — アジャイル運用ワークフロー専用。Epic→Story→Task→PR の階層、GitHub Projects のステータス管理、テンプレ強制構造を伴う。詳細・前提条件・セットアップは **[docs/agile-workflow/](docs/agile-workflow/)** を参照
+- **`agile-*`** — **GitHub Project (v2) をベースにしたプロダクト開発ワークフロー** 専用。Epic → Story → Implementation Plan / Task → PR の 4 層 Issue 階層、GitHub Projects のステータス管理 / Backlog・Sprint・Overview ビュー / Workflows 連動、テンプレ強制構造、Issue Type による分類など、Project 機能をフル活用した運用を担う。詳細・前提条件・セットアップは **[docs/agile-workflow/](docs/agile-workflow/)** を参照
 - **`create-*`（軽量版）** — 普通の GitHub プロジェクト向け。「`.github/` にテンプレあったら使う」程度のシンプルさ。プレースホルダ置換も追加スクリプトも不要
 
 両者は名前空間で分離されており、それぞれ独立してインストールできる。

@@ -1,6 +1,6 @@
 # Agile 開発ワークフローガイド
 
-`agile-*` スキル群を使ったプロダクト開発ワークフロー。アジャイル / XP の知見を取り入れつつ、**チームの稼働状況に応じて緩急をつけられる軽量な構成**にしている。閾値（タイムボックス、Epic 同時数、ペルソナ数等）は `agile-setup-project` で生成する `team-context.json` に集約されており、フルタイム / 混合 / 副業 のいずれの体制にも合わせられる。
+`agile-*` スキル群は **GitHub Project (v2) をベースにしたプロダクト開発ワークフロー**。Epic → Story → Implementation Plan / Task → PR の 4 層 Issue 階層を GitHub の Issue Type / Status / Sub-issue / Workflows / Views (Backlog / Sprint / Overview) に直接マッピングし、Project 機能をフル活用してチケット駆動の開発を回す。アジャイル / XP の知見を取り入れつつ、**チームの稼働状況に応じて緩急をつけられる軽量な構成**にしてあり、閾値（タイムボックス、Epic 同時数、ペルソナ数等）は `agile-setup-project` で生成する `team-context.json` に集約されており、フルタイム / 混合 / 副業 のいずれの体制にも合わせられる。
 
 ---
 
