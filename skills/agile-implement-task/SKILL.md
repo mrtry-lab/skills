@@ -13,7 +13,7 @@ Task Issue → Plan mode 計画 → TDD 実装 → Draft PR + レビューコメ
 
 **役割**: ユーザー = ナビゲーター（戦略判断）、Claude = ドライバー（コード記述）
 
-**MANDATORY**: ステータス更新は `bash ~/.claude/skills/agile-update-skills/scripts/update-issue-status.sh <issue-number> <status-name>` を呼び出す。値の参照先は `.claude/skills/references/github-projects.json`。
+**MANDATORY**: ステータス更新は `bash ~/.claude/skills/agile-update-skills/scripts/update-issue-status.sh <issue-number> <status-name> [app-name]` を呼び出す。値の参照先は `.claude/skills/references/github-projects.json`。
 
 ## When to Use
 
@@ -63,7 +63,7 @@ GitHub MCP の `issue_read` で Task Issue を読み込み、以下を確認:
 - Implementation Plan が **ある** 場合: Implementation Plan 本文を context として読み込み、Task の実装方針を Implementation Plan の Strategy / 横断的判断と整合させる
 - Implementation Plan が **ない** 場合 (軽量パス): Task 本文と親 Story の情報だけで進める
 
-**ステータス → "In Coding Progress"**: `bash ~/.claude/skills/agile-update-skills/scripts/update-issue-status.sh <issue-number> "In Coding Progress"` を実行。失敗時は手動更新を案内して作業を続行。
+**ステータス → "In Coding Progress"**: `bash ~/.claude/skills/agile-update-skills/scripts/update-issue-status.sh <issue-number> "In Coding Progress" [app-name]` を実行。失敗時は手動更新を案内して作業を続行。
 
 ---
 

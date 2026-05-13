@@ -11,9 +11,11 @@
 #     --infra <INLINE|SEPARATE_PR|N_A> \
 #     --task-unit-desc <text> \
 #     [--timezone <text>] [--location <text>] [--skill-bias <text>] [--notes <text>] \
-#     [--output <path>]
+#     [--app <app-name>] [--output <path>]
 #
-# Default output: .claude/skills/references/team-context.json
+# Default output:
+#   .claude/skills/references/team-context.json
+#   .claude/skills/references/team-context.<app>.json  (--app 指定時)
 
 set -euo pipefail
 
@@ -29,7 +31,8 @@ TIMEZONE=""
 LOCATION=""
 SKILL_BIAS=""
 NOTES=""
-OUTPUT=".claude/skills/references/team-context.json"
+APP_NAME=""
+OUTPUT=""
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -45,11 +48,21 @@ while [[ $# -gt 0 ]]; do
     --location) LOCATION="$2"; shift 2 ;;
     --skill-bias) SKILL_BIAS="$2"; shift 2 ;;
     --notes) NOTES="$2"; shift 2 ;;
+    --app) APP_NAME="$2"; shift 2 ;;
     --output) OUTPUT="$2"; shift 2 ;;
-    -h|--help) sed -n '2,18p' "$0" | sed 's/^# //;s/^#$//'; exit 0 ;;
+    -h|--help) sed -n '2,20p' "$0" | sed 's/^# //;s/^#$//'; exit 0 ;;
     *) echo "unknown arg: $1" >&2; exit 1 ;;
   esac
 done
+
+# Resolve OUTPUT path. --output > --app-derived > single-app default.
+if [[ -z "$OUTPUT" ]]; then
+  if [[ -n "$APP_NAME" ]]; then
+    OUTPUT=".claude/skills/references/team-context.${APP_NAME}.json"
+  else
+    OUTPUT=".claude/skills/references/team-context.json"
+  fi
+fi
 
 for var in PRESET TEAM_TYPE MEMBERS HOURS TASK_UNIT_DESC; do
   if [[ -z "${!var}" ]]; then

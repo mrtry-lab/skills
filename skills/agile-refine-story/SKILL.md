@@ -64,7 +64,7 @@ flowchart TB
 
 **Story の特定**: ユーザーが Issue 番号や URL を指定していない場合、`.claude/skills/references/github-projects.json` のコマンドテンプレートで **Status "In Plan Refinement"** のアイテムを抽出し、チケット名の一覧をユーザーに提示して選択してもらう。0 件の場合は **Status "In Planning"** で再検索し、「In Plan Refinement のチケットが 0 件ですが、In Planning のものを Refinement しますか？」とチケット名の一覧を提示。In Planning も 0 件の場合は「対象のチケットがありません。Issue 番号を直接指定してください」と案内する。
 
-対象の Story Issue のステータスが "In Plan Refinement" でない場合、`bash ~/.claude/skills/agile-update-skills/scripts/update-issue-status.sh <story-issue-number> "In Plan Refinement"` を実行する。
+対象の Story Issue のステータスが "In Plan Refinement" でない場合、`bash ~/.claude/skills/agile-update-skills/scripts/update-issue-status.sh <story-issue-number> "In Plan Refinement" [app-name]` を実行する。
 
 対象の Story Issue を GitHub MCP の `issue_read` で読み込み、以下を確認する:
 - `nature` ラベル (implementable / experimental / chaotic)

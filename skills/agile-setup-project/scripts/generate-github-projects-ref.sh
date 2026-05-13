@@ -16,11 +16,20 @@
 #   OPT_DONE                Done option ID
 #
 # 任意:
-#   OUTPUT            出力先パス (default: .claude/skills/references/github-projects.json)
+#   APP_NAME          複数アプリ運用時のアプリ識別子 (例: "fieldnote")
+#                     → 出力先が .claude/skills/references/github-projects.<APP_NAME>.json に切り替わる
+#   OUTPUT            出力先パスを明示する (指定した場合 APP_NAME より優先)
+#                     default: .claude/skills/references/github-projects.json
 
 set -euo pipefail
 
-OUTPUT="${OUTPUT:-.claude/skills/references/github-projects.json}"
+if [[ -z "${OUTPUT:-}" ]]; then
+  if [[ -n "${APP_NAME:-}" ]]; then
+    OUTPUT=".claude/skills/references/github-projects.${APP_NAME}.json"
+  else
+    OUTPUT=".claude/skills/references/github-projects.json"
+  fi
+fi
 
 required=(PROJECT_NAME OWNER NUMBER PROJECT_ID STATUS_FIELD_ID \
           OPT_PLANNING OPT_PLAN_REFINEMENT OPT_PLAN_REVIEW OPT_READY \

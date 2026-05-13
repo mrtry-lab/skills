@@ -2,15 +2,18 @@
 # agile-* 共通: Issue の GitHub Projects Status を更新する
 #
 # Usage:
-#   update-issue-status.sh <issue-number> <status-name>
+#   update-issue-status.sh <issue-number> <status-name> [app-name]
 #
 #   <issue-number>  対象 Issue の番号 (Project に追加済みであること)
 #   <status-name>   Status オプション名 (例: "In Coding Progress")
 #                   有効値: In Planning | In Plan Refinement | In Plan Review
 #                          | Ready | In Coding Progress | In Code Review | Done
+#   [app-name]      複数アプリ運用時のアプリ識別子 (省略時は単一アプリ前提)
+#                   例: "fieldnote" → github-projects.fieldnote.json を参照
 #
 # 必要な前提:
-#   - .claude/skills/references/github-projects.json (または ~/.claude/.../github-projects.json) が配置済み
+#   - .claude/skills/references/github-projects.json
+#       (複数アプリの場合: github-projects.<app>.json) が配置済み
 #   - gh CLI に 'project' スコープ
 #   - jq インストール済み
 #
@@ -26,15 +29,23 @@ set -euo pipefail
 
 ISSUE="${1:-}"
 STATUS_NAME="${2:-}"
+APP_NAME="${3:-}"
 
 if [[ -z "$ISSUE" || -z "$STATUS_NAME" ]]; then
-  echo "Usage: $0 <issue-number> <status-name>" >&2
+  echo "Usage: $0 <issue-number> <status-name> [app-name]" >&2
   exit 1
+fi
+
+# Resolve JSON filename based on app-name
+if [[ -n "$APP_NAME" ]]; then
+  JSON_NAME="github-projects.${APP_NAME}.json"
+else
+  JSON_NAME="github-projects.json"
 fi
 
 # Resolve github-projects.json (project scope first, then user scope)
 GP_REF=""
-for candidate in ".claude/skills/references/github-projects.json" "$HOME/.claude/skills/references/github-projects.json"; do
+for candidate in ".claude/skills/references/$JSON_NAME" "$HOME/.claude/skills/references/$JSON_NAME"; do
   if [[ -f "$candidate" ]]; then
     GP_REF="$candidate"
     break
@@ -42,8 +53,12 @@ for candidate in ".claude/skills/references/github-projects.json" "$HOME/.claude
 done
 
 if [[ -z "$GP_REF" ]]; then
-  echo "ERROR: github-projects.json not found at .claude/skills/references/ (project or user scope)" >&2
-  echo "       Run /agile-setup-project or /agile-update-skills first." >&2
+  echo "ERROR: $JSON_NAME not found at .claude/skills/references/ (project or user scope)" >&2
+  if [[ -n "$APP_NAME" ]]; then
+    echo "       Run /agile-setup-project with --app $APP_NAME or check the app identifier." >&2
+  else
+    echo "       Run /agile-setup-project or /agile-update-skills first." >&2
+  fi
   exit 2
 fi
 

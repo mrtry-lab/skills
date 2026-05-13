@@ -79,6 +79,35 @@ shared/
 
 ---
 
+## 同一リポジトリで複数 application を扱う場合
+
+モノレポ 1 つに複数プロダクト (例: `fieldnote` と `studio` の 2 アプリ) を載せて agile-* を運用するケース。それぞれ別の GitHub Project / 別のチーム前提を持つ可能性があるので、設定ファイルを **アプリ別に分割** する。
+
+### 命名規約
+
+| 単一アプリ (default) | 複数アプリ |
+|---|---|
+| `.claude/skills/references/github-projects.json` | `.claude/skills/references/github-projects.<app>.json` |
+| `.claude/skills/references/team-context.json` | `.claude/skills/references/team-context.<app>.json` |
+
+`<app>` 部分はリポジトリで一意なアプリ識別子。kebab-case 推奨 (例: `github-projects.fieldnote.json`, `team-context.studio.json`)。
+
+### Skill 実行時の解決ロジック
+
+各 skill は `.claude/skills/references/` を読む前に、**ユーザーとの会話の文脈から対象アプリを特定する**:
+
+1. ユーザーの発言や直前の状況に明示的なアプリ名 (例: 「fieldnote の Story を refine して」) があれば、それを採用 → `github-projects.fieldnote.json` を読む
+2. 不明な場合は `ls .claude/skills/references/` で候補を列挙し、`AskUserQuestion` で「どのアプリの設定で動かしますか?」と選択させる
+3. 単一アプリ (`github-projects.json` だけ存在) なら追加の確認は不要、そのまま使う
+
+スクリプト (`update-issue-status.sh`, `generate-team-context.sh`, `generate-github-projects-ref.sh`) はアプリ名を引数 or env で受け取れるようになっている。SKILL の指示でも、アプリが特定できたらスクリプトに `<app>` を渡す。
+
+### docs/vision/ の扱い
+
+複数アプリの場合、Vision も `docs/vision/<app>/README.md` のようにアプリ別に分ける (例: `docs/vision/fieldnote/README.md`, `docs/vision/studio/README.md`)。`/agile-craft-vision` 実行時はどのアプリの Vision か質問してから書き込み先を決める。
+
+---
+
 ## agile-* スキル群について
 
 agile 運用ワークフロー専用の 11 個の skill が `skills/agile-*` に配置されている。ワークフロー全体像・運用ガイド・前提条件は **[docs/agile-workflow/](docs/agile-workflow/)** を参照。

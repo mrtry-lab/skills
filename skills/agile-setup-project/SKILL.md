@@ -147,11 +147,16 @@ bash <skill-dir>/scripts/generate-team-context.sh \
   --task-split USE_CASE \
   --infra SEPARATE_PR \
   --task-unit-desc "1 ユースケース分の BE+FE 統合 PR、DB migration は別 PR"
+
+# 同一リポジトリで複数アプリ運用する場合は --app を付ける
+bash <skill-dir>/scripts/generate-team-context.sh ... --app fieldnote
+# → .claude/skills/references/team-context.fieldnote.json に出力
 ```
 
 - `--preset` (`light` / `standard` / `focused`) でチーム稼働時間に応じた 8 閾値が自動で埋まる
 - `--repo-type` / `--task-split` / `--infra` / `--task-unit-desc` はヒアリング結果をそのまま渡す
-- 出力先デフォルト: `.claude/skills/references/team-context.json`
+- 単一アプリのときは出力先デフォルト `.claude/skills/references/team-context.json`、`--app <name>` 指定時は `team-context.<name>.json`
+- 同一リポジトリで複数アプリを扱う場合は、Step 1 でアプリ識別子を確認しておき、ここで `--app` に渡す (詳細はリポジトリルートの `CLAUDE.md` 参照)
 
 スクリプトは GNU sed / BSD sed を自動判別し、最後にプレースホルダ未置換が残っていないかチェックする。
 
@@ -323,6 +328,10 @@ OPT_CODING="xxx" \
 OPT_CODE_REVIEW="xxx" \
 OPT_DONE="xxx" \
   bash <skill-dir>/scripts/generate-github-projects-ref.sh
+
+# 複数アプリ運用なら APP_NAME も付ける
+APP_NAME="fieldnote" PROJECT_NAME=... bash <skill-dir>/scripts/generate-github-projects-ref.sh
+# → .claude/skills/references/github-projects.fieldnote.json に出力
 ```
 
 各値の取得元:

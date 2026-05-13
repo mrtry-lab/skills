@@ -11,7 +11,7 @@ description: "Epic / Story / Implementation Plan / Task の Issue Type 付きで
 
 GitHub Issue を作成する。Issue Type に応じたテンプレート適用、Mermaid 検証、ステータス設定、親子リンクを実行する。
 
-**MANDATORY**: ステータス更新は `bash ~/.claude/skills/agile-update-skills/scripts/update-issue-status.sh <issue-number> <status-name>` を呼び出す。値の参照先は `.claude/skills/references/github-projects.json`。
+**MANDATORY**: ステータス更新は `bash ~/.claude/skills/agile-update-skills/scripts/update-issue-status.sh <issue-number> <status-name> [app-name]` を呼び出す。値の参照先は `.claude/skills/references/github-projects.json`。
 
 ## When to Use
 
@@ -106,7 +106,7 @@ GitHub MCP の `issue_write` で Issue を作成する:
 
 ## Step 5: ステータス設定
 
-作成後の Status を Issue Type に応じて `bash ~/.claude/skills/agile-update-skills/scripts/update-issue-status.sh <issue-number> <status-name>` で設定する。失敗時は手動更新を案内して続行。
+作成後の Status を Issue Type に応じて `bash ~/.claude/skills/agile-update-skills/scripts/update-issue-status.sh <issue-number> <status-name> [app-name]` で設定する。失敗時は手動更新を案内して続行。
 
 | Issue Type | 初期 Status |
 |------------|------------|

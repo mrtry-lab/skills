@@ -214,7 +214,7 @@ team-context の `基盤・インフラ系改修の扱い` に従う:
 
 複数 Task をまとめて起票する場合も Status 更新コマンドは 1 回だけ実行する。一度 `Ready` → `In Coding Progress` に遷移したら以降の Task 起票では再度の更新は不要。
 
-更新コマンド: `bash ~/.claude/skills/agile-update-skills/scripts/update-issue-status.sh <story-issue-number> "In Coding Progress"` を実行。失敗時はリトライ 1 回、それでも失敗すれば手動更新を案内して作業継続。
+更新コマンド: `bash ~/.claude/skills/agile-update-skills/scripts/update-issue-status.sh <story-issue-number> "In Coding Progress" [app-name]` を実行。失敗時はリトライ 1 回、それでも失敗すれば手動更新を案内して作業継続。
 
 ## Step 6: カバレッジ検証（サブエージェント）
 
