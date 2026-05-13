@@ -1,6 +1,8 @@
 {
-  "_comment": "agile-* スキル群が参照するチーム前提値。'agile-setup-project' Step 2.5 の generate-team-context.sh が values を埋める。",
+  "_comment": "agile-* スキル群が参照するチーム前提値。'agile-setup-project' Step 3 の generate-team-context.sh が values を埋める。",
   "team": {
+    "_comment_type": "FULL_TIME = 全員フルタイム / SIDE_PROJECT = 全員副業・隙間時間 / MIXED = フルタイムと副業の混合",
+    "_comment_preset": "light = 週 20h 以下 / standard = 週 40-80h / focused = 週 100h 以上。Q1+Q3 から自動判定するが、ユーザーが手動上書きしてもよい",
     "type": "<FULL_TIME / SIDE_PROJECT / MIXED>",
     "members": "<N>",
     "weekly_hours": "<HOURS>",
@@ -18,7 +20,10 @@
     "plan_path_cross_cutting_threshold": "<VALUE>"
   },
   "task_split": {
-    "_comment": "Task 粒度 (1 PR の範囲) はリポジトリ構成と運用方針で決まる。preset とは独立。",
+    "_comment": "1 PR の単位を決める設定。Story を Implementation Plan / Task に分解するときのデフォルト粒度を決める。",
+    "_comment_repo_type": "MONOREPO = フロント・バックエンドなどが 1 つのリポジトリ / MULTI_REPO = web と api など複数リポジトリに分かれる",
+    "_comment_pattern": "USE_CASE = 1 ユースケース (BE+FE 統合) を 1 PR / LAYER = BE/FE/Mobile/Infra のレイヤ単位で 1 PR / COMPONENT = 1 サービス・モジュール単位で 1 PR (DDD・マイクロサービス向き) / VERTICAL_SLICE = 機能の薄い縦切り (バリデーションだけ等) を BE+FE 横断で 1 PR (TDD で半日サイズ厳守) / CUSTOM = 独自運用、task_unit_description で具体化",
+    "_comment_infra": "INLINE = 機能 PR に Infra 変更を含める (MVP 期) / SEPARATE_PR = DB migration / Terraform / IAM は別 PR にする (本番運用) / N_A = Infra 改修が発生しない",
     "repo_type": "<MONOREPO / MULTI_REPO>",
     "pattern": "<USE_CASE / LAYER / COMPONENT / VERTICAL_SLICE / CUSTOM>",
     "infra_handling": "<INLINE / SEPARATE_PR / N_A>",
