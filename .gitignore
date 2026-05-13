@@ -9,3 +9,6 @@ skills/*-workspace/
 
 # Static review notes (中間生成物)
 static-review-*.md
+
+# Local Claude Code state (skills installed via gh skill install, fetched docs/scripts)
+.claude/
