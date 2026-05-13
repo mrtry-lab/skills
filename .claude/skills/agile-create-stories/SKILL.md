@@ -1,8 +1,12 @@
 ---
+description: 'EpicをStory Mappingで分解し、Cynefinドメイン分類でnature:implementable/experimentalに仕分けてGitHub Issue（Issue Type: Story）を作成する。Use when EpicからStory分解、ストーリーマッピング、バックログ作成、リリーススライス定義。Triggers: バックログ作成, ストーリー分解, story mapping, ストーリーマッピング, backlog creation, epic分解, スライス, リリース計画, Cynefin, カネヴィン.'
+metadata:
+    github-path: skills/agile-create-stories
+    github-ref: refs/heads/main
+    github-repo: https://github.com/mrtry-lab/skills
+    github-tree-sha: e975c228522e5d7d7e9d9cfda4ceeaafc96e3c07
 name: agile-create-stories
-description: "EpicをStory Mappingで分解し、Cynefinドメイン分類でnature:implementable/experimentalに仕分けてGitHub Issue（Issue Type: Story）を作成する。Use when EpicからStory分解、ストーリーマッピング、バックログ作成、リリーススライス定義。Triggers: バックログ作成, ストーリー分解, story mapping, ストーリーマッピング, backlog creation, epic分解, スライス, リリース計画, Cynefin, カネヴィン."
 ---
-
 # Agile Create Backlog
 
 Epic Issue を Story Mapping で分解し、Cynefin ドメイン分類を経て Story Issue を作成する。
@@ -56,7 +60,7 @@ Story Issue 登録後（Step 6 の後）、 **サブエージェントを起動*
 
 **サブエージェントへの指示**:
 ```
-以下の Story Issue 一覧と docs/vision/README.md を読み込み、整合性を検査してください。
+以下の Story Issue 一覧と docs/VISION.md を読み込み、整合性を検査してください。
 
 検査観点:
 1. 各 Story はビジョンのミッションに貢献するか

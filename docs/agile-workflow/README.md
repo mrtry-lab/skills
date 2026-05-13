@@ -31,7 +31,7 @@
 flowchart TB
   subgraph vision["① ビジョン策定"]
     v1["/agile-craft-vision"]
-    v2["docs/VISION.md"]
+    v2["docs/vision/README.md"]
     v1 --> v2
   end
 
@@ -111,7 +111,16 @@ Implementation Plan 必要性の判定基準は [concepts/implementation-plan.md
 
 ### 1. `/agile-craft-vision` — ビジョン策定
 
-チームの前提認知を揃えるための `docs/VISION.md` を対話的に作成・更新する。
+チームの前提認知を揃えるための `docs/vision/README.md` を対話的に作成・更新する。
+
+**配置**: 本体は `docs/vision/README.md`。他のスキル (`/agile-create-epic` 等) が読むのもこのファイルだけ。`docs/vision/` 配下に参考資料 (PDF、インタビューメモ、調査ノート等) を自由に置いてよいが、これは **人間があとから見返すための保管場所** で、AI が自動 ingestion はしない:
+
+```
+docs/vision/
+├── README.md          # 本体。他 skill が参照するのはここだけ
+├── references/        # 参考資料 (任意、自由構成)
+└── research/          # 調査メモ (任意)
+```
 
 **5 層構造**:
 1. **Why**: ミッション、エレベーターピッチ、ビジョンステートメント
@@ -127,7 +136,7 @@ Implementation Plan 必要性の判定基準は [concepts/implementation-plan.md
 Opportunity Canvas を用いて Epic Issue を作成・更新する。
 
 **2 つのモード**:
-- **0→1**: VISION.md から Epic Issue 候補を導出
+- **0→1**: docs/vision/README.md から Epic Issue 候補を導出
 - **1→N**: 新しいトリガー（ユーザーの声、データ等）から Epic Issue を追加
 
 **4 リスクチェック**: 価値 / ユーザビリティ / 実現可能性 / 事業継続性

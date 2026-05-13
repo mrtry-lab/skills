@@ -6,7 +6,7 @@ agile-* スキル群は、成果物（Vision / Epic / Story / Task / Implementat
 
 | skill | 対象成果物 | 点数 | 合格ライン |
 |---|---|---:|---|
-| `agile-craft-vision` | VISION.md（5 層完成版） | 8 | 7 / 8 |
+| `agile-craft-vision` | docs/vision/README.md（5 層完成版） | 8 | 7 / 8 |
 | `agile-create-epic` | Epic Issue 起票内容 | 7 | 6 / 7 |
 | `agile-create-stories` | Story 提案（候補ごと） | 6 | 5 / 6 |
 | `agile-refine-story` | リファインメント完了判定 | 4 + 7 + 6（視点別） | 各視点で個別合格 |
@@ -44,7 +44,7 @@ agile-* スキル群は、成果物（Vision / Epic / Story / Task / Implementat
 
 ## 既存成果物への遡及適用なし
 
-スコアリング導入後に既存の VISION.md / Epic / Story / Task / 計画を遡って採点しなおす運用はしない。新規作成からのみ適用する（Definition of Outcome Done と同じ移行方針）。
+スコアリング導入後に既存の docs/vision/README.md / Epic / Story / Task / 計画を遡って採点しなおす運用はしない。新規作成からのみ適用する（Definition of Outcome Done と同じ移行方針）。
 
 ---
 

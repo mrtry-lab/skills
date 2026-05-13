@@ -23,7 +23,7 @@ gh skill install mrtry-lab/skills <skill-name> --agent claude-code --scope user
 
 | skill | 役割 |
 |---|---|
-| [agile-craft-vision](skills/agile-craft-vision/) | `docs/VISION.md` を対話で作成・更新 |
+| [agile-craft-vision](skills/agile-craft-vision/) | `docs/vision/README.md` を対話で作成・更新 |
 | [agile-create-epic](skills/agile-create-epic/) | Opportunity Canvas で Epic Issue を作成 |
 | [agile-create-stories](skills/agile-create-stories/) | Epic を Story Mapping + Cynefin 分類で Story Issue 化 |
 | [agile-refine-story](skills/agile-refine-story/) | Story の要件を PdO/QA 視点で詳細化 (受入基準・Outcome・ビジネスルール) |

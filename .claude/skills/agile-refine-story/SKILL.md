@@ -1,8 +1,12 @@
 ---
+description: 'Story Issue を PdO/QA 視点で詳細化する。ユーザー体験フロー (概念)・Outcome Done・ビジネスルール・受入基準を確定させる。技術詳細 (API 仕様・データモデル・テスト戦略・Task 分解) は Implementation Plan に委ねる。Story Refinement 完了後に Implementation Plan 必要性を判定し、次スキルを案内する。Use when Story 詳細化、リファインメント、受入基準作成、Outcome 仮説確定、ビジネスルール抽出。Triggers: バックログ詳細化, ストーリー詳細化, リファインメント, 受入基準作成, acceptance criteria, refine story, Outcome 仮説, ビジネスルール抽出.'
+metadata:
+    github-path: skills/agile-refine-story
+    github-ref: refs/heads/main
+    github-repo: https://github.com/mrtry-lab/skills
+    github-tree-sha: 0e7ace64adb88f71ad8c8befca583fbd69295365
 name: agile-refine-story
-description: "Story Issue を PdO/QA 視点で詳細化する。ユーザー体験フロー (概念)・Outcome Done・ビジネスルール・受入基準を確定させる。技術詳細 (API 仕様・データモデル・テスト戦略・Task 分解) は Implementation Plan に委ねる。Story Refinement 完了後に Implementation Plan 必要性を判定し、次スキルを案内する。Use when Story 詳細化、リファインメント、受入基準作成、Outcome 仮説確定、ビジネスルール抽出。Triggers: バックログ詳細化, ストーリー詳細化, リファインメント, 受入基準作成, acceptance criteria, refine story, Outcome 仮説, ビジネスルール抽出."
 ---
-
 # Agile Refine Backlog
 
 Story Issue を **PdO/QA 視点 (What/Why)** で詳細化する。受入基準・Outcome 仮説・ビジネスルールを確定させ、Story を Ready 状態に持っていく。エンジニア視点の詳細 (API 仕様・データモデル・Task 分解等) は **Implementation Plan** に分離する。
@@ -116,7 +120,7 @@ Story が `nature:chaotic` ラベルを持つ場合、通常の Step 2 〜 Step 
 技術的実現性やテスト手順には踏み込まず、ユーザー価値・ビジョン整合・Not-to-do
 との衝突だけを見てください。
 
-以下の Story Issue と docs/vision/README.md を読み込み、整合性を検査してください。
+以下の Story Issue と docs/VISION.md を読み込み、整合性を検査してください。
 
 検査観点:
 1. 価値の単一性: この Story が提供するユーザー価値は1つに絞られているか
@@ -283,7 +287,7 @@ Step 3 のユーザー体験フローと **Step 5 のルール / 具体例** か
 さい。Step 2 で同じ視点の事前判定を実施済みなので、本検査では「リファイン過程
 で価値仮説からズレていないか」を中心に確認します。
 
-以下の Story Issue 本文と docs/vision/README.md を読み込み、検査してください。
+以下の Story Issue 本文と docs/VISION.md を読み込み、検査してください。
 
 検査観点:
 1. ビジョン整合（事後）: Step 2 のレビュー以降に追加された記述が、依然として
