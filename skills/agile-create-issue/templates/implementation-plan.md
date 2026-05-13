@@ -9,7 +9,6 @@ type: 'Implementation Plan'
 ## {Implementation Plan タイトル} — for Story #{N}
 
 > 親 Story: #{N}
-> 最終更新: {YYYY-MM-DD}
 
 <!-- Story と並列の sub-issue として起票する。Status は Task と同じ 4 Status (Ready / In Coding Progress / In Code Review / Done) を使い、起票時は In Code Review (Refinement 完了済みのため) -->
 

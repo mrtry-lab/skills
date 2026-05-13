@@ -8,8 +8,6 @@ type: 'Epic'
 
 ## {Epic名}
 
-> 最終更新: {YYYY-MM-DD}
-
 ---
 
 ### Problem Space（事実）
