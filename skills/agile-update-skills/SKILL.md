@@ -6,6 +6,8 @@ description: "agile-* スキル群と関連ドキュメント (docs/agile-workfl
 # Agile Update Skills
 
 > 🗣️ **ユーザーへの質問**: 選択肢が有限なら `AskUserQuestion` ツールを優先 (2-4 個の選択肢、推奨は先頭に `(Recommended)` を付ける)。自由記述が要る箇所はテキスト対話のまま。
+> 📋 **進捗管理**: Workflow が 5 つ以上の Step を持つ場合、各 Step を `TaskCreate` で起こし、着手時に `TaskUpdate` で `in_progress`、完了時に `completed` に遷移させる。途中中断時の再開ポイントが示せ、並列サブエージェント (Three Amigos 等) の進捗も可視化できる。
+> 📐 **不可逆操作の承認**: Issue 起票 / PR 作成 / Project Status 遷移 / Workflow 設定変更など外部状態を変える操作の前に、`ExitPlanMode` で計画を提示し人間の承認を取る (Plan mode 経由)。
 
 agile-* スキル群一式と関連ドキュメント (`docs/agile-workflow/`) を一括で最新化する。実体は同梱の `scripts/update.sh` で、`gh skill install` の上書きインストールと `docs/agile-workflow/` 配下 12 ファイルの curl フェッチを順次実行する。
 
@@ -109,6 +111,8 @@ bash .claude/skills/agile-update-skills/scripts/update.sh \
 ## 決定境界
 
 全体マップは `docs/agile-workflow/concepts/ai-decision-boundary.md`を参照。本スキル固有の人間承認ゲート:
+
+**Plan mode の活用**: 下記の人間承認ゲートのうち、Issue / PR / Project Status / Workflow など外部状態を変える操作の直前は `ExitPlanMode` 経由でユーザー承認を取る (Plan mode で計画提示 → ユーザーが承認/修正指示)。読み取り系・対話系のゲートは通常のテキスト確認で十分。
 
 - **インストールスコープ選択** — Step 1 の `--scope` 選択は人間判断 (user / project)
 - **ドキュメント配置先選択** — Step 1 の `--docs-dir` 選択は人間判断 (デフォルト推奨)

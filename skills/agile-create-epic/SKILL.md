@@ -6,6 +6,8 @@ description: "Opportunity CanvasでGitHub Epic Issue（Issue Type: Epic）を対
 # Agile Epic
 
 > 🗣️ **ユーザーへの質問**: 選択肢が有限なら `AskUserQuestion` ツールを優先 (2-4 個の選択肢、推奨は先頭に `(Recommended)` を付ける)。自由記述が要る箇所はテキスト対話のまま。
+> 📋 **進捗管理**: Workflow が 5 つ以上の Step を持つ場合、各 Step を `TaskCreate` で起こし、着手時に `TaskUpdate` で `in_progress`、完了時に `completed` に遷移させる。途中中断時の再開ポイントが示せ、並列サブエージェント (Three Amigos 等) の進捗も可視化できる。
+> 📐 **不可逆操作の承認**: Issue 起票 / PR 作成 / Project Status 遷移 / Workflow 設定変更など外部状態を変える操作の前に、`ExitPlanMode` で計画を提示し人間の承認を取る (Plan mode 経由)。
 
 Opportunity Canvasで構造化したEpic Issue（Issue Type: `Epic`）を対話的に作成・更新する。
 
@@ -202,6 +204,8 @@ Epic Issue作成後、以下を案内する:
 ## 決定境界
 
 全体マップは `docs/agile-workflow/concepts/ai-decision-boundary.md`を参照。本スキル固有の人間承認ゲート:
+
+**Plan mode の活用**: 下記の人間承認ゲートのうち、Issue / PR / Project Status / Workflow など外部状態を変える操作の直前は `ExitPlanMode` 経由でユーザー承認を取る (Plan mode で計画提示 → ユーザーが承認/修正指示)。読み取り系・対話系のゲートは通常のテキスト確認で十分。
 
 - **Problem Space の事実確定** — ユーザーの課題・現在の解決策・ビジネス上の課題は事実。AI は推測せず、人間が知識を提供する
 - **4 リスク評価結果の採否** — サブエージェントが各リスクを判定するが、リスク許容と Epic 進行の判断は人間

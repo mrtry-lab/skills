@@ -6,6 +6,8 @@ description: "リファインメント済みの Implementation Plan Issue から
 # Agile Implementation Plan to Task
 
 > 🗣️ **ユーザーへの質問**: 選択肢が有限なら `AskUserQuestion` ツールを優先 (2-4 個の選択肢、推奨は先頭に `(Recommended)` を付ける)。自由記述が要る箇所はテキスト対話のまま。
+> 📋 **進捗管理**: Workflow が 5 つ以上の Step を持つ場合、各 Step を `TaskCreate` で起こし、着手時に `TaskUpdate` で `in_progress`、完了時に `completed` に遷移させる。途中中断時の再開ポイントが示せ、並列サブエージェント (Three Amigos 等) の進捗も可視化できる。
+> 📐 **不可逆操作の承認**: Issue 起票 / PR 作成 / Project Status 遷移 / Workflow 設定変更など外部状態を変える操作の前に、`ExitPlanMode` で計画を提示し人間の承認を取る (Plan mode 経由)。
 
 Refinement 完了済みの Implementation Plan Issue から Task Sub-issue を起票する。Implementation Plan の「Task 分解計画」セクションを踏襲して Task を作る。Implementation Plan 不要の軽量 Story では Story から直接 Task 起票する軽量モードも対応。
 
@@ -258,6 +260,8 @@ team-context の `基盤・インフラ系改修の扱い` に従う:
 ## 決定境界
 
 全体マップは `docs/agile-workflow/concepts/ai-decision-boundary.md`を参照。本スキル固有の人間承認ゲート:
+
+**Plan mode の活用**: 下記の人間承認ゲートのうち、Issue / PR / Project Status / Workflow など外部状態を変える操作の直前は `ExitPlanMode` 経由でユーザー承認を取る (Plan mode で計画提示 → ユーザーが承認/修正指示)。読み取り系・対話系のゲートは通常のテキスト確認で十分。
 
 - **分解粒度の確定** — Step 5 の 7 点品質スコアリング後、各 Task の採否は人間
 - **テスト戦略選択** — ユニット / 統合 / E2E の配分は人間判断（テストピラミッドの解釈）
