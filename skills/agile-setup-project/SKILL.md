@@ -66,14 +66,27 @@ bash <skill-dir>/scripts/check-prereqs.sh
 
 ## Step 2: Issue Type 確認
 
-`Epic` / `Story` / `Implementation Plan` / `Task` の 4 つの Issue Type が Organization に登録されている必要がある。**これは Web UI でしか設定できない**ので、案内のみ。
+`Epic` / `Story` / `Implementation Plan` / `Task` の 4 つの Issue Type が Organization に登録されている必要がある。**GraphQL API / gh CLI とも未対応**で、Web UI 操作が必須。
 
-確認手順:
+### 手動 vs 自動化の選択
+
+`AskUserQuestion` で確認:
+
+| 選択肢 | 内容 |
+|---|---|
+| 手動で確認・登録する (Recommended) | URL を案内し、ユーザーがブラウザで実行 |
+| Chrome 拡張で自動化する | Claude for Chrome 等が有効なら、`references/browser-issue-types.md` の指示書で Claude がブラウザ操作 |
+
+#### 手動の場合の案内
 
 > Organization Settings → Planning → Issue types に移動し、`Epic` / `Story` / `Implementation Plan` / `Task` が登録されているか確認してください。
 > URL: `https://github.com/organizations/<ORG>/settings/issue-types`
 
 未登録ならその場で作成してもらう。色やアイコンの選択肢は自由。
+
+#### 自動化を選んだ場合
+
+`Read` で `<skill-dir>/references/browser-issue-types.md` を読み込み、その指示書に従って Chrome 拡張経由でブラウザ操作を実行する。`<ORG>` を Step 1 で取得した値に置換した上で実行する。完了後、画面 screenshot をユーザーに提示して確認を取る。失敗したら手動案内に切り替え。
 
 | Issue Type | 主責務 |
 |------------|--------|
@@ -231,7 +244,21 @@ bash <skill-dir>/scripts/setup-status-field.sh \
 
 PR マージ時の Status 遷移、Epic Done 時の sub-issue 連鎖 close など、GitHub Projects 標準 Workflow を有効化する。**ビュー作成 (Step 6) より先に実行する**: Backlog ビューの `is:open` フィルタが Sub-issue 連鎖 close に依存しているため。
 
-GitHub Projects v2 の Workflow API は読み取り限定 (`deleteProjectV2Workflow` のみ存在し、enable / update mutation は未提供) なので、**Web UI 操作のみ**。Step 3 で取得した Owner と Project Number を使って URL を組み立てる:
+GitHub Projects v2 の Workflow API は読み取り限定 (`deleteProjectV2Workflow` のみ存在し、enable / update mutation は未提供) なので、**Web UI 操作が必須**。
+
+### 手動 vs 自動化の選択
+
+`AskUserQuestion` で確認:
+
+| 選択肢 | 内容 |
+|---|---|
+| 手動で設定する (Recommended) | URL を案内し、ユーザーがブラウザで 3 つの Workflow を操作 |
+| Chrome 拡張で自動化する | `references/browser-workflows.md` の指示書で Claude がブラウザ操作 |
+| 手動運用に切り替え (Workflow は使わない) | Status 更新は手動で行う運用に。完了サマリーに「手動運用」と記載 |
+
+#### 手動の場合の案内
+
+Step 3 で取得した Owner と Project Number を使って URL を組み立てる:
 
 > Workflows 設定ページを開いてください:
 > https://github.com/orgs/<ORG>/projects/<NUMBER>/workflows
@@ -253,19 +280,31 @@ GitHub Projects v2 の Workflow API は読み取り限定 (`deleteProjectV2Workf
 >    - 理由: agile-* スキル群は `agile-create-issue` で **明示的に Project に追加 + 適切な初期 Status を設定** する設計
 >    - Auto-add を有効化すると、skill 経由でない Issue (gh / Web UI 直作成) も流入し、初期 Status が未設定 / 親 Issue リンクなしで Backlog に乗ってノイズになる
 >    - 「skill 経由でしか起票しない」運用を徹底するなら **OFF が正解**
->    - うっかり外で作った Issue は手動で Project に追加するか、skill 経由で再起票する
 
 これにより Status 更新の手動オペが激減し、かつ skill 起票以外の Issue が混入しない状態を保てる。
 
-### B 案: 手動運用
+#### 自動化を選んだ場合
 
-組織ポリシー等で Workflow を使えない場合、手動で Status 更新する運用も可。完了サマリーには「手動運用」と記載。
+`Read` で `<skill-dir>/references/browser-workflows.md` を読み込み、`<ORG>` / `<NUMBER>` を実値に置換して Chrome 拡張経由でブラウザ操作を実行。完了後 screenshot で結果確認。失敗したら手動案内に fallback。
 
 ---
 
 ## Step 6: 推奨ビュー作成案内
 
-`gh` CLI / GraphQL API ともに View 作成・編集 mutation が未提供 (`createProjectV2View` 等が存在しない)。**Web UI 操作が必須**。Step 3 で取得した Owner と Project Number を使って URL を組み立て、ユーザーに直接ジャンプしてもらう:
+`gh` CLI / GraphQL API ともに View 作成・編集 mutation が未提供 (`createProjectV2View` 等が存在しない)。**Web UI 操作が必須**。
+
+### 手動 vs 自動化の選択
+
+`AskUserQuestion` で確認:
+
+| 選択肢 | 内容 |
+|---|---|
+| 手動で作成する (Recommended) | URL を案内し、ユーザーがブラウザで Backlog / Sprint の 2 View を作成 |
+| Chrome 拡張で自動化する | `references/browser-views.md` の指示書で Claude がブラウザ操作 (Parent issue フィールドの追加もカバー) |
+
+#### 手動の場合の案内
+
+Step 3 で取得した Owner と Project Number を使って URL を組み立て、ユーザーに直接ジャンプしてもらう:
 
 > Project ページを開いてください:
 > https://github.com/orgs/<ORG>/projects/<NUMBER>
@@ -290,6 +329,10 @@ GitHub Projects v2 の Workflow API は読み取り限定 (`deleteProjectV2Workf
 作成完了をユーザーに確認してから次へ。ビュー URL (`https://github.com/orgs/<ORG>/projects/<NUMBER>/views/<VIEW_NUMBER>`) を控えると後の完了サマリーに使える。
 
 > ⚠️ Group by の "Parent issue" は GitHub Projects v2 のフィールド。Backlog では Epic を、Sprint では Story を **Parent issue として指定** することで階層表示と swimlane が機能する。Parent issue フィールドが Project に追加されていない場合は、Project Settings (`https://github.com/orgs/<ORG>/projects/<NUMBER>/settings`) → New field → Parent issue を追加する。
+
+#### 自動化を選んだ場合
+
+`Read` で `<skill-dir>/references/browser-views.md` を読み込み、`<ORG>` / `<NUMBER>` を実値に置換して Chrome 拡張経由でブラウザ操作を実行。指示書には Parent issue フィールド存在チェックも含まれる。完了後、Backlog / Sprint の View URL を skill 呼び出し元に返す。失敗したら手動案内に fallback。
 
 ---
 
