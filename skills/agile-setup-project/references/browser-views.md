@@ -56,7 +56,7 @@ URL: `https://github.com/orgs/<ORG>/projects/<NUMBER>`
 | Name | `Backlog` |
 | Layout | **Board** |
 | Group by | **Parent issue** |
-| Filter | `is:open status:"In Planning","In Plan Refinement","In Plan Review","Ready","In Coding Progress","Done" type:"Story"` |
+| Filter | `is:open status:"In Planning","In Plan Refinement","In Plan Review","Ready","In Coding Progress","Awaiting sprint review","Done" type:"Story"` |
 
 4. 「Save changes」をクリック
 5. 作成された View の URL を控える: `https://github.com/orgs/<ORG>/projects/<NUMBER>/views/<VIEW_NUMBER>`
@@ -70,15 +70,18 @@ URL: `https://github.com/orgs/<ORG>/projects/<NUMBER>`
 |---|---|
 | Name | `Sprint` |
 | Layout | **Board** |
-| Group by | **Parent issue** |
-| Filter | `status:"Ready","In Coding Progress","In Code Review","Done" type:"Implementation Plan","Task"` |
+| Column by | **Status** (デフォルト) |
+| Swimlanes | **Parent issue** (Story ごとに横帯が並ぶ) |
+| Filter | `iteration:@current status:"Ready","In Coding Progress","In Code Review","Done" type:"Implementation Plan","Task"` |
 
 3. 「Save changes」をクリック
 4. View URL を控える
 
+> 補足: Board layout の `Column by` は SingleSelect 型のフィールド限定なので Status を使う。「Story 別に横帯」は `Swimlanes` で実現する点に注意 (Group by は Table/Roadmap 限定)。Filter は `iteration:@current` で current iteration スコープにするのが要点 — これで PR merge により closed になった Done Task も current iteration の間は Sprint Done 列に残る。前 iteration の subtree (shipped 済み Story 配下) は next iteration に進めば自動で消える。
+
 ### Step 4. Overview View 作成
 
-階層付き Table で全 Issue を Type 別に俯瞰するビュー。Backlog (Open Epic 配下の Story) / Sprint (実装中 Story 配下の Plan/Task) と並ぶ、**全体俯瞰** の役割。
+階層付き Table で全 Issue を Type 別に俯瞰するビュー。Backlog (Open Epic 配下の Story) / Sprint (current iteration の Plan/Task) と並ぶ、**全体俯瞰** の役割。closed や Done なものも含めて全件見える状態にする。
 
 1. もう一度 View タブの「+」 → 「New view」
 2. 設定:
@@ -88,14 +91,14 @@ URL: `https://github.com/orgs/<ORG>/projects/<NUMBER>`
 | Name | `Overview` |
 | Layout | **Table** |
 | Group by | **Type** (Issue Type フィールド) |
-| Filter | `is:open` |
+| Filter | (空。`is:open` 等は付けない) |
 | Show hierarchy | **On** |
 | 表示フィールド | Title / Type / Status / Sub-issues progress |
 
 3. 「Save changes」をクリック
 4. View URL を控える
 
-> 補足: Group by で **Type** を選ぶと Epic / Story / Implementation Plan / Task ごとにグループ化される。`Show hierarchy` を On にすると親子関係も併せて見える。`Sub-issues progress` フィールドを列に出すと完了率 (例: `1/3 33%`) が表示される。
+> 補足: Group by で **Type** を選ぶと Epic / Story / Implementation Plan / Task ごとにグループ化される。`Show hierarchy` を On にすると親子関係も併せて見える。`Sub-issues progress` フィールドを列に出すと完了率 (例: `1/3 33%`) が表示される。Filter を空にする理由: Overview は履歴含む全件俯瞰の役割なので、`is:open` を付けると closed / Done な Story / Plan / Task が見えなくなり Backlog / Sprint との役割分担が崩れる。
 
 ### Step 5. 確認
 

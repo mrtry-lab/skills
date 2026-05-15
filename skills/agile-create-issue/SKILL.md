@@ -11,7 +11,10 @@ description: "Epic / Story / Implementation Plan / Task の Issue Type 付きで
 
 GitHub Issue を作成する。Issue Type に応じたテンプレート適用、Mermaid 検証、ステータス設定、親子リンクを実行する。
 
-**MANDATORY**: ステータス更新は `bash ~/.claude/skills/agile-update-skills/scripts/update-issue-status.sh <issue-number> <status-name> [app-name]` を呼び出す。値の参照先は `.claude/skills/references/github-projects.json`。
+**MANDATORY**:
+- ステータス更新は `bash ~/.claude/skills/agile-update-skills/scripts/update-issue-status.sh <issue-number> <status-name> [app-name]` を呼び出す
+- Implementation Plan / Task の場合は続けて `bash ~/.claude/skills/agile-update-skills/scripts/set-issue-iteration.sh <issue-number> [app-name]` で current iteration をセット
+- 値の参照先は `.claude/skills/references/github-projects.json`
 
 ## When to Use
 
@@ -102,8 +105,10 @@ mermaid ブロックがない場合はスキップ。
 
 | 親 Story Status | 動作 |
 |---|---|
-| `Ready` / `In Coding Progress` / `In Code Review` / `Done` | Step 5 へ進む |
+| `Ready` / `In Coding Progress` / `In Code Review` | Step 5 へ進む |
 | `In Planning` / `In Plan Refinement` / `In Plan Review` | 警告ログを出し、`AskUserQuestion` でユーザーに「Story Refinement を完了させる / それでも起票」を確認 |
+| `Awaiting sprint review` | **起票拒否**。受け入れ確認中の Story に新 Plan/Task を加えるのは設計上 NG。「先に `/agile-sprint-review` を実行して Story を Done または In Coding Progress に確定してから再度起票してください」と案内して中断 |
+| `Done` | **起票拒否**。Done = 確定済みの Story に追加実装が必要なら別 Story を立てる。「`Done` の Story には新規 Plan/Task を起票できません。別 Story を起こすか、Story を再 open して In Coding Progress に戻してください」と案内して中断 |
 
 対象外:
 - Epic 起票時 (親なし)
@@ -125,7 +130,9 @@ GitHub MCP の `issue_write` で Issue を作成する:
 
 ---
 
-## Step 6: ステータス設定
+## Step 6: ステータス + イテレーション設定
+
+### ステータス設定
 
 作成後の Status を Issue Type に応じて `bash ~/.claude/skills/agile-update-skills/scripts/update-issue-status.sh <issue-number> <status-name> [app-name]` で設定する。失敗時は手動更新を案内して続行。
 
@@ -135,6 +142,20 @@ GitHub MCP の `issue_write` で Issue を作成する:
 | Implementation Plan Issue | **In Code Review** (Refinement 完了済み内容で起票するためレビュー待ち) |
 | Task Issue | **Ready** |
 | Epic Issue | 設定不要 |
+
+### イテレーション設定 (Implementation Plan / Task のみ)
+
+起票対象が **Implementation Plan / Task** の場合、続けて current iteration を自動でセットする:
+
+```bash
+bash ~/.claude/skills/agile-update-skills/scripts/set-issue-iteration.sh <issue-number> [app-name]
+```
+
+- スクリプトが `.claude/skills/references/github-projects.json` の `iteration_field.current_iteration_id` を参照して issue にセットする
+- 失敗 (`iteration_field` 未設定 / iteration が未作成等) しても起票自体は完了済みなので、警告を出してユーザーに手動セットを案内するだけで続行
+- Epic / Story には iteration をセットしない (Sprint View は Plan/Task しか出さない設計、Epic/Story は iteration 概念に乗らない)
+
+これにより Implementation Plan / Task は起票直後から Sprint View の current iteration に並ぶ。
 
 ---
 

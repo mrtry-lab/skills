@@ -37,7 +37,7 @@ flowchart TB
   it["2. Issue Type 確認"]
   ctx["3. チームコンテキスト\nヒアリング"]
   proj["4. Project 用意\n(新規 or 既存)"]
-  status["5. Status オプション登録\n(7 つ)"]
+  status["5. Status オプション登録 (8 つ)\n+ Iteration field 作成 (180 日固定)"]
   done["6. Workflows 設定\n(Done 遷移 + Sub-issue 連鎖 close)"]
   views["7. ビュー作成案内\n(Backlog / Sprint / Overview)"]
   refs["8. shared references 生成"]
@@ -266,11 +266,14 @@ gh project field-list <NUMBER> --owner <ORG> --format json
 
 ## Step 5: Status オプション登録
 
-agile-* スキルは以下の 7 オプションを Status フィールドの値として参照する:
+agile-* スキルは以下の 8 オプションを Status フィールドの値として参照する:
 
 ```
-In Planning → In Plan Refinement → In Plan Review → Ready → In Coding Progress → In Code Review → Done
+In Planning → In Plan Refinement → In Plan Review → Ready → In Coding Progress
+  → In Code Review → Awaiting sprint review → Done
 ```
+
+`Awaiting sprint review` は子 Plan/Task が全 Done になった Story が受け入れ確認待ちで一時的に滞留する Status。`/agile-sprint-review` が verify して Done に進める。
 
 ### Status フィールド作成 / 既存チェック
 
@@ -282,12 +285,71 @@ bash <skill-dir>/scripts/setup-status-field.sh \
 ```
 
 挙動:
-- Status フィールドが未作成 → `gh project field-create` で 7 オプション一括登録
-- Status フィールドが既存 → スキップ。期待される 7 オプション一覧を出力するので、不足があれば Web UI で追加 (gh CLI は既存フィールドへの option 追加未対応)
+- Status フィールドが未作成 → `gh project field-create` で 8 オプション一括登録
+- Status フィールドが既存 → スキップ。期待される 8 オプション一覧を出力するので、不足があれば Web UI または GraphQL `updateProjectV2Field` で追加。既存 field に option を追加する場合、既存 option の id を引数に含めて全 option を渡し直す (id を渡さないと再生成される)
 
 ### Option ID の取得
 
 オプション登録後にもう一度 `gh project field-list <NUMBER> --owner <ORG> --format json` を実行し、各オプションの `id` を控える。Step 8 でプレースホルダ置換に使う。
+
+### Iteration フィールド作成 (Sprint View 用)
+
+Sprint View は `iteration:@current` でスコープする設計なので、Project に Iteration field を 1 つ追加する。**期間 (duration) は 180 日 (約半年) 固定**。日付ベースの auto-advance を実質起こさないためで、preset 選択は行わない。
+
+#### Iteration field 作成
+
+GraphQL `createProjectV2Field` + `updateProjectV2Field` で Iteration field を作り、初回 iteration を生成する。**Web UI でも作れる** が、duration / iterations を一発で埋めるなら GraphQL が早い:
+
+```bash
+START_DATE=$(date -u +%Y-%m-%d)  # 今日を起点
+DURATION_DAYS=180                 # 固定 (半年)
+
+# 1. Iteration field 作成 (iterations は空で OK)
+FIELD_RESPONSE=$(gh api graphql -f query='
+  mutation($p: ID!, $start: Date!, $dur: Int!) {
+    createProjectV2Field(input: {
+      projectId: $p
+      dataType: ITERATION
+      name: "Iteration"
+      iterationConfiguration: {
+        startDate: $start
+        duration: $dur
+        iterations: []
+      }
+    }) {
+      projectV2Field { ... on ProjectV2IterationField { id } }
+    }
+  }' -f p="$PROJECT_ID" -f start="$START_DATE" -F dur="$DURATION_DAYS")
+
+ITERATION_FIELD_ID=$(echo "$FIELD_RESPONSE" | jq -r '.data.createProjectV2Field.projectV2Field.id')
+
+# 2. 初回 iteration "Iteration 1" を生成 (1 つだけ。future iteration は pre-create しない)
+ITERATION_RESPONSE=$(gh api graphql -f query='
+  mutation($f: ID!, $start: Date!, $dur: Int!) {
+    updateProjectV2Field(input: {
+      fieldId: $f
+      iterationConfiguration: {
+        startDate: $start
+        duration: $dur
+        iterations: [{ startDate: $start, duration: $dur, title: "Iteration 1" }]
+      }
+    }) {
+      projectV2Field {
+        ... on ProjectV2IterationField {
+          configuration { iterations { id title startDate } }
+        }
+      }
+    }
+  }' -f f="$ITERATION_FIELD_ID" -f start="$START_DATE" -F dur="$DURATION_DAYS")
+
+CURRENT_ITERATION_ID=$(echo "$ITERATION_RESPONSE" | jq -r '.data.updateProjectV2Field.projectV2Field.configuration.iterations[0].id')
+```
+
+`ITERATION_FIELD_ID` と `CURRENT_ITERATION_ID` を控える。Step 8 でプレースホルダ置換に使う。
+
+**future iteration は pre-create しない**: 180 日経って current iteration の期限が切れた時、`@current` は空になる (= Sprint Board 空)。次 iteration が必要になったら手動で作成する運用。これで「ユーザー操作以外で Story が動かない」設計が成立する。
+
+> 補足: Web UI での作成は `browser-iteration-field.md` を参照。browser MCP がある環境では skill が代行できる。手動 fallback は `https://github.com/orgs/<ORG>/projects/<NUMBER>/settings` → New field → Iteration → duration を 180 に指定。
 
 ---
 
@@ -363,13 +425,17 @@ Step 4 で取得した Owner と Project Number を使って URL を組み立て
 >
 > **Sprint** (Layout: Board)
 > - Group by: **Parent issue** (Story ごとに swimlane が並ぶ)
-> - Filter: `status:"Ready","In Coding Progress","In Code Review","Done" type:"Implementation Plan","Task"`
+> - Filter: `iteration:@current status:"Ready","In Coding Progress","In Code Review","Done" type:"Implementation Plan","Task"`
+>
+> Sprint は **current iteration スコープ**。Plan/Task の open/closed には依存しないので、PR merge で Task が closed になっても current iteration の間は Sprint Done 列に残り続ける。次 iteration に入った瞬間に前 iteration の subtree は Sprint から自動で消える。closed Story の swimlane が居残る問題はこの設計で発生しなくなる。
 >
 > **Overview** (Layout: Table)
 > - Group by: **Type**
-> - Filter: `is:open`
+> - Filter: (空 = 全件、is:open は付けない)
 > - Show hierarchy: **On**
 > - 表示フィールド: Title / Type / Status / Sub-issues progress
+>
+> Overview は **全件俯瞰** が役割。closed / Done / archived 以外の全 Issue を Type 別の階層 Table で見せるので、Filter は意図的に空にする。
 >
 > ⚠️ Parent issue フィールドが Project に追加されていない場合は、Project Settings (`https://github.com/orgs/<ORG>/projects/<NUMBER>/settings`) → New field → Parent issue を追加する。
 
@@ -391,6 +457,9 @@ Step 4 で取得した Owner と Project Number を使って URL を組み立て
 | `<YOUR_PROJECT_ID>` | Step 4-4 の `field-list` 出力 |
 | `<YOUR_STATUS_FIELD_ID>` | 同上 |
 | `<STATUS_OPTION_ID_IN_PLANNING>` 〜 `<STATUS_OPTION_ID_DONE>` | Step 5 終了後の `field-list` 出力 |
+| `<STATUS_OPTION_ID_AWAITING_REVIEW>` | Step 5 終了後の `field-list` 出力 (Awaiting sprint review の option id) |
+| `<YOUR_ITERATION_FIELD_ID>` | Step 5 の Iteration field 作成で控えた `ITERATION_FIELD_ID` |
+| `<CURRENT_ITERATION_ID>` | Step 5 の Iteration 生成で控えた `CURRENT_ITERATION_ID` (8 桁 hex) |
 
 ### 置換と書き出し
 
@@ -408,7 +477,10 @@ OPT_PLAN_REVIEW="xxx" \
 OPT_READY="xxx" \
 OPT_CODING="xxx" \
 OPT_CODE_REVIEW="xxx" \
+OPT_AWAITING_REVIEW="xxx" \
 OPT_DONE="xxx" \
+ITERATION_FIELD_ID="PVTIF_xxx" \
+CURRENT_ITERATION_ID="xxxxxxxx" \
   bash <skill-dir>/scripts/generate-github-projects-ref.sh
 
 # 複数アプリ運用なら APP_NAME も付ける

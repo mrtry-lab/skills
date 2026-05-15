@@ -30,6 +30,7 @@ SKILLS=(
   agile-implement-task
   agile-create-issue
   agile-create-pull-request
+  agile-sprint-review
   agile-setup-project
   agile-update-skills
 )

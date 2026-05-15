@@ -1,5 +1,5 @@
 {
-  "_comment": "agile-* スキル群が参照する GitHub Projects 固有値。'agile-setup-project' Step 7 の generate-github-projects-ref.sh が values を埋める。",
+  "_comment": "agile-* スキル群が参照する GitHub Projects 固有値。'agile-setup-project' Step 8 の generate-github-projects-ref.sh が values を埋める。",
   "project": {
     "name": "<YOUR_PROJECT_NAME>",
     "owner": "<YOUR_GITHUB_ORG>",
@@ -15,7 +15,15 @@
       "Ready": "<STATUS_OPTION_ID_READY>",
       "In Coding Progress": "<STATUS_OPTION_ID_IN_CODING_PROGRESS>",
       "In Code Review": "<STATUS_OPTION_ID_IN_CODE_REVIEW>",
+      "Awaiting sprint review": "<STATUS_OPTION_ID_AWAITING_REVIEW>",
       "Done": "<STATUS_OPTION_ID_DONE>"
     }
+  },
+  "iteration_field": {
+    "_comment": "Sprint View の `iteration:@current` で参照される。Implementation Plan / Task は起票時に current iteration が自動でセットされる。",
+    "_comment_duration": "duration_days は 180 (約半年) 固定。日付ベースの auto-advance を実質起こさないため、長め固定にして「ユーザー操作以外で Story が動かない」運用にする。期限が来たら手動で次 iteration を作る。future iteration の pre-create はしない。",
+    "id": "<YOUR_ITERATION_FIELD_ID>",
+    "duration_days": 180,
+    "current_iteration_id": "<CURRENT_ITERATION_ID>"
   }
 }
