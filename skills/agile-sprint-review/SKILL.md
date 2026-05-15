@@ -1,21 +1,24 @@
 ---
 name: agile-sprint-review
-description: "Story の受け入れ確認 (acceptance verification) を一括処理するスキル。子 Plan/Task が全 Done になった Story を検出してユーザー承認を得て `Awaiting sprint review` に promote、各 Story の AC を子 Task の linked PR と突き合わせて checklist にチェック + evidence 追記、Awaiting sprint review にある Story 群のサマリーを表示。Story を Done に進めるかどうかは AC verify 結果を見たユーザーが個別に判定する (AC に現れない追加確認の余地を残すため)。Scrum セレモニーではなく「溜まった受け入れ確認を捌くツール」。Triggers: sprint review, acceptance verification, AC verify, ストーリー受け入れ確認, スプリントレビュー, Story Done 判定."
+description: "Story の受け入れ確認 (acceptance verification) を一括処理するスキル。子 Plan/Task が全 Done になった Story を検出してユーザー承認を得て `Awaiting sprint review` に移動、各 Story の AC を子 Task の linked PR と突き合わせて checklist にチェック + evidence 追記、Awaiting sprint review にある Story 群のサマリーを表示。Story を Done に進めるかどうかは AC verify 結果を見たユーザーが個別に判定する (AC に現れない追加確認の余地を残すため)。Story を Done にしても issue は close せず Backlog View に残し、配下 Epic の全 Story が完了したタイミングで Epic close 可否をユーザーに確認、yes なら Epic + 配下 Story を cascade close する。Scrum セレモニーではなく「溜まった受け入れ確認を捌くツール」。Triggers: sprint review, acceptance verification, AC verify, ストーリー受け入れ確認, スプリントレビュー, Story Done 判定."
 ---
 
 # Agile Sprint Review
 
-> 🗣️ **ユーザーへの質問**: 不可逆操作 (Step 1 の promote, Step 5 の Done 化) の前だけ `AskUserQuestion` を使う。AC verify とサマリー表示の途中で対話的判定 (OK/Reject ループ) は投げない。
+> 🗣️ **ユーザーへの質問**: 不可逆操作 (Step 1 の Awaiting sprint review への移動, Step 5 の Done 化, Step 6 の Epic close) の前だけ `AskUserQuestion` を使う。AC verify とサマリー表示の途中で対話的判定は投げない。
 > 📋 **進捗管理**: 対象 Story 件数が複数のときは `TaskCreate` で 1 件 1 task として進捗を可視化する。1-2 件なら省略可。
-> 📐 **不可逆操作の承認**: Step 1 の promote / Step 5 の Done 化はそれぞれ `AskUserQuestion` で承認を取る (Status 変更は不可逆)。
+> 📐 **不可逆操作の承認**: Step 1 / Step 5 / Step 6 はそれぞれ `AskUserQuestion` で承認を取る (Status / close 変更は不可逆)。
 
-子 Plan/Task が全 Done になった Story を `Awaiting sprint review` Status に promote し、AC を子 Task の linked PR と突き合わせて checklist に evidence 付きでチェックを入れる。Awaiting sprint review にある Story 群のサマリー (概要 + AC 状況) をチャットに表示し、ユーザーが「これを Done にしていいか」を Story 単位で判断する。AC に現れない追加確認 (デザイン的な好み、運用面の懸念など) の余地を残すため、Done への遷移は必ず人間判断を経由する。
+子 Plan/Task が全 Done になった Story を `Awaiting sprint review` Status に移動し、AC を子 Task の linked PR と突き合わせて checklist に evidence 付きでチェックを入れる。Awaiting sprint review にある Story 群のサマリー (概要 + AC 状況) をチャットに表示し、ユーザーが「これを Done にしていいか」を Story 単位で判断する。AC に現れない追加確認 (デザイン的な好み、運用面の懸念など) の余地を残すため、Done への遷移は必ず人間判断を経由する。
+
+**Story Done でも Backlog View に残る設計**: Story を Done に進めても issue は close しない (Backlog の `is:open` filter に残る)。Epic 配下の全 Story が完了したタイミングで Epic 自体を close するかどうかをユーザーに確認し、承認されたら Epic + 配下 Story を cascade close することで Backlog から一気に外す。これにより「Story Done = まだ open、Epic close = 完全に履歴送り」の 2 段運用ができる。
 
 ## When to Use
 
 - 「そろそろ受け入れ確認しよう」と思ったタイミング。iteration 終わり目でも、Awaiting が溜まってきたタイミングでも都度回せる
 - 子 Plan/Task が全 Done になっているのに親 Story の Status が `In Coding Progress` のまま放置されている (lazy scan で拾える)
 - 過去 iteration から取り残された `Awaiting sprint review` をまとめて捌きたいとき
+- Epic 配下の全 Story が Done になり、Epic を完了させたいとき
 
 ## When NOT to Use
 
@@ -29,10 +32,10 @@ description: "Story の受け入れ確認 (acceptance verification) を一括処
 
 ```mermaid
 flowchart TB
-  detect["1. promote 候補列挙\nIn Coding Progress の Story を detect-only で scan"]
+  detect["1. 移動候補列挙\nIn Coding Progress の Story を detect-only で scan"]
   empty1{"候補 0?"}
-  ask1["1.5 AskUserQuestion\nこれらを Awaiting に promote していい?"]
-  promote["1.6 承認分を実際に promote"]
+  ask1["1.5 AskUserQuestion\nAwaiting sprint review に移動していい?"]
+  move["1.6 承認分を Awaiting sprint review に移動"]
   list["2. Awaiting sprint review の Story を取得"]
   empty2{"件数 0?"}
   loop["3. 各 Story を AC verify (ループ)"]
@@ -41,22 +44,25 @@ flowchart TB
   update["3.3 Issue body の AC checklist を更新\n(check + evidence 追記)"]
   summary["4. サマリー出力\n(Story 概要 + AC 状況)"]
   ask2["5. 各 Story について Done 化を確認\n(AskUserQuestion)"]
-  done["5.1 Done 化承認分: Status=Done + 子 iteration クリア"]
+  doneStory["5.1 Done 化承認分: Status=Done + 子 iteration クリア\n(Story は close せず open のまま)"]
+  epicCheck["6. Epic 完了確認\n配下 Story が全 Done になった Epic を抽出"]
+  ask3["6.1 AskUserQuestion\nEpic close する?"]
+  cascadeClose["6.2 承認分: Epic + 配下 Story を cascade close"]
 
   detect --> empty1
   empty1 -- yes --> list
-  empty1 -- no --> ask1 --> promote --> list
+  empty1 -- no --> ask1 --> move --> list
   list --> empty2
   empty2 -- yes --> end_node["対象なしで終了"]
   empty2 -- no --> loop --> parse --> match --> update --> loop
-  loop --> summary --> ask2 --> done
+  loop --> summary --> ask2 --> doneStory --> epicCheck --> ask3 --> cascadeClose
 ```
 
 ---
 
-## Step 1: promote 候補列挙 (lazy scan, detect-only)
+## Step 1: Awaiting sprint review に移動する候補を列挙 (lazy scan, detect-only)
 
-Story Status を Done に変える経路が複数あり、特に PR merge → Auto-close issue Workflow → Task Done のルートは skill から検知できない。本 skill 起動時に **In Coding Progress の Story を全件 scan** して、子が全 Done のものを Awaiting sprint review に promote 候補として列挙する。Status 変更は **ユーザー承認後** に行う。
+Story Status を Done に変える経路が複数あり、特に PR merge → Auto-close issue Workflow → Task Done のルートは skill から検知できない。本 skill 起動時に **In Coding Progress の Story を全件 scan** して、子が全 Done のものを Awaiting sprint review に移動する候補として列挙する。Status 変更は **ユーザー承認後** に行う。
 
 ### 手順
 
@@ -93,23 +99,23 @@ stdout に `READY_TO_PROMOTE #N <title>` が出れば候補。子未完 / 子な
 4. 候補をユーザーに列挙して提示。**1 件もなければ Step 2 へスキップ** (ユーザー確認不要)。
 
 ```
-以下の Story は子 Plan/Task が全部 Done なので Awaiting sprint review に promote 可能です:
+以下の Story は子 Plan/Task が全部 Done になっています:
 
 - #N1 [title 1]
 - #N2 [title 2]
 
-これらを Awaiting sprint review に promote していいですか?
+これらを Awaiting sprint review に移動しますか?
 ```
 
 5. `AskUserQuestion` で 3 択:
 
 | label | description |
 |---|---|
-| はい、全部 promote する (Recommended) | 候補全件を Awaiting sprint review に遷移、Step 2 へ |
-| いや、promote せずに skip | 何もせず Step 2 (Awaiting の Story だけ処理) |
+| はい、Awaiting sprint review に移動する (Recommended) | 候補全件を Awaiting sprint review に遷移、Step 2 へ |
+| 移動せず Step 2 に進む | 何もせず Step 2 (Awaiting の Story だけ処理) |
 | キャンセル | skill を終了 |
 
-6. 「はい」なら各候補 Story に対して `check-story-completion.sh <number> [app-name]` を `--detect-only` 無しで呼んで実 promote:
+6. 「はい」なら各候補 Story に対して `check-story-completion.sh <number> [app-name]` を `--detect-only` 無しで呼んで移動を実行:
 
 ```bash
 for n in $candidates; do
@@ -117,7 +123,7 @@ for n in $candidates; do
 done
 ```
 
-何件 promote したかをユーザーに報告。
+何件移動したかをユーザーに報告。
 
 ---
 
@@ -137,6 +143,7 @@ gh api graphql -f query='
               number title
               repository { nameWithOwner }
               issueType { name }
+              parent { number }
             }
           }
           fieldValueByName(name: "Status") { ... on ProjectV2ItemFieldSingleSelectValue { name } }
@@ -146,11 +153,11 @@ gh api graphql -f query='
   }
 }' | jq -r '.data.organization.projectV2.items.nodes[]
   | select(.content.issueType.name == "Story" and .fieldValueByName.name == "Awaiting sprint review")
-  | "\(.content.number)|\(.content.repository.nameWithOwner)|\(.content.title)"'
+  | "\(.content.number)|\(.content.repository.nameWithOwner)|\(.content.parent.number // "-")|\(.content.title)"'
 ```
 
 - 件数 0 → 「受け入れ確認対象の Story はありません」と案内して終了
-- 件数 ≥ 1 → 全件をユーザーに一覧表示 (番号 + タイトル) してから Step 3 のループへ
+- 件数 ≥ 1 → 全件をユーザーに一覧表示 (番号 + タイトル) してから Step 3 のループへ。`parent.number` (Epic 番号) を控えておく (Step 6 で使う)
 
 3 件以上ある場合は `TaskCreate` で進捗を可視化する。
 
@@ -158,7 +165,7 @@ gh api graphql -f query='
 
 ## Step 3: 各 Story の AC verify + checklist 自動更新 (ループ)
 
-候補 Story を 1 件ずつ処理する。**AskUserQuestion は使わない**。Skill が機械的に AC と PR を突き合わせて checklist を更新し、結果をチャットに表示する。
+候補 Story を 1 件ずつ処理する。**AskUserQuestion は使わない**。Skill が機械的に AC と PR を突き合わせて checklist を更新する。
 
 ### Step 3.1: Story / 関連 Implementation Plan の AC を抽出
 
@@ -191,7 +198,8 @@ gh issue view <child-number> --repo <owner/repo> --json title,closedByPullReques
 判定は LLM (skill 内の Claude) が行う:
 - AC 項目 1 件ずつに対して「どの PR (or どの子 Issue) が満たしている可能性が高いか」を考える
 - 明確に対応が取れた AC は evidence 付きで verified 扱い
-- 対応が曖昧 / 不明 / 該当 PR なし → unverified のまま残す
+- linked PR が無いが対応する子 Task が Done なら、Task 番号を evidence として使う fallback も可
+- 対応が曖昧 / 不明 / 該当 PR / Task なし → unverified のまま残す
 
 ### Step 3.3: Issue body の AC checklist を更新
 
@@ -208,7 +216,7 @@ verified な AC は markdown を以下のように書き換える:
 ```
 
 - チェック `[ ]` → `[x]` に変更
-- 末尾に `(#<PR番号>で対応済み)` を追加 (複数 PR が evidence なら `(#1192, #1195 で対応済み)`)
+- 末尾に `(#<PR or Task 番号>で対応済み)` を追加 (複数 evidence なら `(#1192, #1195 で対応済み)`)
 
 unverified な AC は変更しない (`- [ ]` のまま、evidence なし)。
 
@@ -224,9 +232,9 @@ gh issue view <story-number> --repo <owner/repo> --json body --jq '.body' > /tmp
 gh issue edit <story-number> --repo <owner/repo> --body-file /tmp/body.md
 ```
 
-Implementation Plan の AC も同様に Plan 本体の body を更新する (`gh issue edit <plan-number> ...`)。
+Implementation Plan の AC も同様に Plan 本体の body を更新する。
 
-ループは Step 3.3 まで。Step 3.4 で **Story 単位の Status 変更はしない** (= Done への自動遷移はしない)。AC が全 verified だったとしても、AC に現れない追加確認 (UX 的な好み、運用面の懸念) があるかもしれないので、Done 化は Step 5 でユーザー確認を経由する。
+ループは Step 3.3 まで。Step 3.4 で **Story 単位の Status 変更はしない** (= Done への自動遷移はしない)。
 
 ---
 
@@ -267,7 +275,7 @@ Story #N をどうしますか?
 
 | label | description |
 |---|---|
-| Done に進める (Recommended for 全 AC verified) | Story Status=Done に遷移、配下 Plan/Task の iteration をクリア (Sprint Board から外れる) |
+| Done に進める (Recommended for 全 AC verified) | Story Status=Done に遷移、配下 Plan/Task の iteration をクリア (Sprint Board から外れる)。**Story 自身は close しない** (Backlog View に残る、Epic close 時に cascade close される予定) |
 | Awaiting のままにする | Status は変えない。追加対応が必要、または後で再判定する場合 |
 | In Coding Progress に戻す | 差し戻し。追加 Task 起票が必要なケース。`/agile-decompose-task-from-implementation-plan` を案内 |
 
@@ -279,7 +287,7 @@ Recommended ラベルは AC 状況に応じて切り替える:
 
 ```bash
 bash ~/.claude/skills/agile-update-skills/scripts/update-issue-status.sh <story-number> "Done" [app-name]
-# → Auto-close issue Workflow で Story が closed に
+# Story の Status を Done に。Auto-close issue Workflow は OFF にしておく前提なので、issue 自体は open のまま (Backlog に残る)
 
 # Story の子全部から iteration field をクリア
 CHILD_NUMS=$(gh issue view <story-number> --repo <owner/repo> --json subIssues --jq '.subIssues[].number')
@@ -287,6 +295,8 @@ for child in $CHILD_NUMS; do
   bash ~/.claude/skills/agile-update-skills/scripts/clear-issue-iteration.sh "$child" [app-name]
 done
 ```
+
+**前提**: 本 skill 群の運用では `Auto-close issue` Workflow を **OFF** にしておく (Story の Status=Done で issue が自動 close されないように)。`agile-setup-project` Step 6 でこの設定を案内する。Auto-close を ON のままだと Story Done で即 issue close → Backlog から消えて Epic 全 Story 完了の確認ができなくなる。
 
 ### Step 5.2: In Coding Progress 差し戻し処理
 
@@ -300,18 +310,75 @@ bash ~/.claude/skills/agile-update-skills/scripts/update-issue-status.sh <story-
 
 何もしない (Status は Awaiting sprint review のまま)。次回 sprint-review 起動時にまた候補に並ぶ。
 
-### 完了サマリー
+---
 
-全 Story 処理後、最終結果を提示:
+## Step 6: Epic 完了確認 + Epic close (cascade close)
+
+Step 5 で Done に進めた Story (or 既存の Done な Story を含む) について、**配下 Story が全 Done になった Epic** が無いかをチェックする。
+
+### Step 6.1: 候補 Epic の抽出
+
+Step 2 で控えた parent Epic 番号 (重複排除) について、それぞれの Epic 配下の Story の Status を確認する:
+
+```bash
+gh issue view <epic-number> --repo <owner/repo> --json subIssues
+```
+
+各 sub-issue (Story) について Project の Status を取得 (`gh api graphql ... ProjectV2ItemFieldSingleSelectValue`)。
+
+判定:
+- Epic が open かつ Type=Epic である
+- 配下 Story (sub-issues) が **全部 Status=Done** である
+- 1 件でも Status が Done でない / unset の Story があれば候補から外す
+
+候補 Epic が 0 件なら Step 6 全体をスキップして完了サマリーへ。
+
+### Step 6.2: Epic close 確認 (AskUserQuestion)
+
+候補 Epic 1 件ずつに対して `AskUserQuestion` で確認:
+
+```
+Epic #E [title] の配下 Story (#X, #Y, #Z) はすべて Done になりました。
+Epic を close しますか?
+(close すると配下 Story も cascade で close され、Backlog View から外れます)
+```
+
+| label | description |
+|---|---|
+| はい、Epic を close する (Recommended) | Epic + 配下 Story を cascade で close。Backlog View から消える |
+| いいえ、Epic は open のままにする | 何もしない (まだ追加 Story を起こす予定がある場合など) |
+
+### Step 6.3: cascade close 処理
+
+「はい」を選んだ Epic に対して:
+
+```bash
+# 1. 配下の Story を順に close
+CHILD_STORIES=$(gh issue view <epic-number> --repo <owner/repo> --json subIssues --jq '.subIssues[].number')
+for s in $CHILD_STORIES; do
+  gh issue close "$s" --repo <owner/repo> --reason completed
+done
+
+# 2. Epic 本体を close
+gh issue close <epic-number> --repo <owner/repo> --reason completed
+```
+
+完了後、ユーザーに何件 close したか報告。
+
+---
+
+## Step 7: 完了サマリー
+
+全 Story / Epic 処理後、最終結果を提示:
 
 ```
 ─────────────────────────────────────
 Sprint Review 完了
 ─────────────────────────────────────
 
-📊 Step 1 (promote): 候補 N 件 / 承認 M 件 / promote 実行 M 件
+📊 Step 1 (Awaiting sprint review に移動): 候補 N 件 / 承認 M 件 / 移動 M 件
 
-✅ Done に進めた: A 件
+✅ Done に進めた: A 件 (issue は open のまま、Backlog に残る)
   - #X, #Y, #Z
 
 ⏸️ Awaiting のまま保留: B 件
@@ -319,6 +386,9 @@ Sprint Review 完了
 
 ⏪ In Coding Progress に差し戻し: C 件
   - #R
+
+🏁 Epic close 実行: D 件 (配下 Story も cascade close)
+  - #E1 (配下 Story 3 件と一緒に close)
 ```
 
 ---
@@ -327,9 +397,10 @@ Sprint Review 完了
 
 全体マップは `docs/agile-workflow/concepts/ai-decision-boundary.md` を参照。本スキル固有の人間承認ゲート:
 
-- **Step 1 の promote 実行** — `AskUserQuestion` で「これらを Awaiting に promote していい?」を必ず聞く (Status 変更は不可逆)
+- **Step 1 の Awaiting sprint review への移動** — `AskUserQuestion` で承認を取る (Status 変更は不可逆)
 - **Step 3.3 の AC checklist 更新** — Story / Plan の body を書き換える操作。LLM 判定で機械的に行う (= 後で気付けば手動で revert 可能、また AC verify の結果を視覚化するのが目的なので permissive)
 - **Step 5 の Done 化** — 全 Story について `AskUserQuestion` で 3 択を聞く。全 AC verified でも自動 Done にしない (AC に現れない追加確認の余地を残すため)
+- **Step 6 の Epic close** — 配下 Story 全 Done の Epic 1 件ずつに対して `AskUserQuestion` で確認。cascade close は不可逆 (再 open は手動で全部やり直し) なので、AskUserQuestion を必ず通す
 
 NEVER (次節) はこのゲートの違反を具体的に列挙している。
 
@@ -339,13 +410,15 @@ NEVER (次節) はこのゲートの違反を具体的に列挙している。
 
 | 状況 | 対応 |
 |---|---|
-| Story body に AC セクションが無い | AC verify をスキップ、Step 3.5 で「AC セクションなし、手動判定してください」と表示。Status は変えない |
+| Story body に AC セクションが無い | AC verify をスキップ、サマリーで「AC セクションなし、手動判定してください」と表示。Status は変えない |
 | AC の文言と PR の対応関係が判定不能 | unverified として残す (チェックを入れない)。ユーザーが結果を見て判断 |
 | Implementation Plan が無い | Plan AC の処理はスキップ、Story AC だけ verify |
-| 子 Task に linked PR が無い | evidence が引けないので、その AC は unverified のまま |
+| 子 Task に linked PR が無い | linked PR が無くても子 Task が closed/Done なら Task 番号を evidence に使う fallback。それも無ければ unverified のまま |
 | AC checklist の markdown 形式が崩れている | parse 不能の場合は warnings を出して当該 Story を skip、Status は触らない |
 | Step 1 候補が 0 件 | AskUserQuestion を飛ばして Step 2 へ直行 |
-| Step 2 候補が 0 件 | 「対象なし」を案内して終了 (エラー扱いしない) |
+| Step 2 候補が 0 件 | 「対象なし」を案内、ただし Step 6 (Epic close 確認) はそれでも回す (既存 Done な Story から Epic close 可能なケース) |
+| Story の parent (Epic) が取得できない | Step 6 の候補から外す。Story が単独で存在するケース (Epic 無しで起票) で発生 |
+| Auto-close issue Workflow が ON のままで Story Done で issue close されてしまった | 本来は OFF にしておくべき。Backlog から先に消えてしまうので Step 6 の Epic 候補抽出から漏れる可能性あり。setup-project で OFF を案内する |
 
 ---
 
@@ -353,8 +426,10 @@ NEVER (次節) はこのゲートの違反を具体的に列挙している。
 
 - **絶対に** AC 内容 (文言) を skill 起動中に書き換えない (= checklist のチェック / evidence 追記以外の本文編集はしない)。AC 文言の見直しは `/agile-refine-story` の責務
 - **絶対に** Story を AskUserQuestion なしで Done に自動遷移させない (AC 全 verified であっても)。AC に現れない追加確認の余地をユーザーに残すため、Step 5 で必ず判定を仰ぐ
+- **絶対に** Story を Done にしたタイミングで issue を close しない (= 本 skill は Status=Done のみ、close は Step 6 の Epic close から cascade で行う)
+- **絶対に** Epic を AskUserQuestion なしで close しない (= cascade close は配下 Story にも波及する不可逆操作)
 - **絶対に** PR との対応関係を雑に判定して evidence を間違って付けない (= 確証が無ければ unverified のまま残す)
-- **絶対に** Step 1 の promote を AskUserQuestion なしで実行しない (= status 変更は要承認)
+- **絶対に** Step 1 の移動を AskUserQuestion なしで実行しない (= status 変更は要承認)
 - **絶対に** Step 4 のサマリーに不要情報を入れない (= Story 概要 + AC 状況のみ。関連 PR 一覧やリンク等は省略する。チェックリストの evidence (`#1192`) からたどれる)
 - **絶対に** 本スキルを「Scrum セレモニーとして強制」しない — 起動頻度は決め打ちせず、ユーザー裁量で都度実行
 

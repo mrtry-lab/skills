@@ -355,13 +355,13 @@ CURRENT_ITERATION_ID=$(echo "$ITERATION_RESPONSE" | jq -r '.data.updateProjectV2
 
 ## Step 6: Workflows 設定
 
-PR マージ時の Status 遷移、Epic Done 時の sub-issue 連鎖 close など、GitHub Projects 標準 Workflow を有効化する。**ビュー作成 (Step 7) より先に実行する**: Backlog ビューの `is:open` フィルタが Sub-issue 連鎖 close に依存しているため。
+GitHub Projects 標準 Workflow を設定する。**ビュー作成 (Step 7) より先に実行する**: ビューの filter 設計が Workflow 挙動と整合している必要があるため。
 
 GitHub Projects v2 の Workflow API は読み取り限定 (`deleteProjectV2Workflow` のみ存在し、enable / update mutation は未提供) なので、**Web UI 操作が必須**。
 
 ### 実行方法 (browser 操作が主、手動が fallback)
 
-**Claude が browser で操作する** のが既定。実行前に `AskUserQuestion` でユーザーに「これから browser で Workflows 設定 (Item closed / Auto-close issue を有効化、Auto-add to project を無効化) を実行します。よろしいですか?」を確認してから着手する。
+**Claude が browser で操作する** のが既定。実行前に `AskUserQuestion` でユーザーに「これから browser で Workflows 設定 (Item closed を有効化、Auto-add to project / Auto-close issue を無効化) を実行します。よろしいですか?」を確認してから着手する。
 
 `Read` で `<skill-dir>/references/browser-workflows.md` を読み込み、`<ORG>` / `<NUMBER>` を実値に置換して browser を操作。完了後、各 Workflow の有効/無効状態を screenshot で確認。
 
@@ -378,23 +378,22 @@ Step 3 で取得した Owner と Project Number を使って URL を組み立て
 > Workflows 設定ページを開いてください:
 > https://github.com/orgs/<ORG>/projects/<NUMBER>/workflows
 >
-> **有効化する 2 つ** (Edit → 保存 → Turn on):
+> **有効化する 1 つ** (Edit → 保存 → Turn on):
 >
 > 1. **Item closed** — Issue/PR がクローズされたら Status を Done に自動遷移
 >    - Action: `Set Status = Done`
->    - 効果: PR マージ → Issue close → Status が Done に。手動更新不要
+>    - 効果: PR マージ → Issue close → Status が Done に同期 (片方向)
 >
-> 2. **Auto-close issue / Auto-close parent** — Sub-issue all closed → Parent auto-close
->    - 名前は実装時期により「Auto-close issue」「Sub-issue closed」等の表記揺れあり
->    - 効果: Epic 配下の全 Story が close → Epic も自動 close。Story 配下の全 Task が close → Story も自動 close
->    - **これにより Backlog ビュー (Filter `is:open`) から Done Epic 配下が自動除外される**
+> **無効化する 2 つ** (デフォルトで有効なら OFF にする):
 >
-> **無効化する 1 つ** (デフォルトで有効になっている場合は OFF にする):
->
-> 3. **Auto-add to project** — Issue/PR を自動的に Project に追加する Workflow
+> 2. **Auto-add to project** — Issue/PR を自動的に Project に追加する Workflow
 >    - 理由: agile-* スキル群は `agile-create-issue` で **明示的に Project に追加 + 適切な初期 Status を設定** する設計
 >    - Auto-add を有効化すると、skill 経由でない Issue (gh / Web UI 直作成) も流入し、初期 Status が未設定 / 親 Issue リンクなしで Backlog に乗ってノイズになる
->    - 「skill 経由でしか起票しない」運用を徹底するなら **OFF が正解**
+>
+> 3. **Auto-close issue** — Status=Done で issue を auto-close する Workflow
+>    - 理由: Story を Done にしても Backlog View に残しておきたい (Epic close 時に cascade close する設計)
+>    - これが ON だと Story Done で即 issue close → Backlog から消える → `/agile-sprint-review` の Step 6 (Epic close 確認) が動かなくなる
+>    - Plan/Task の close は PR merge の「Closes #N」リンクで GitHub 標準機能として行われるので、この Workflow を OFF にしても影響なし
 
 ---
 
