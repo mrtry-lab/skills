@@ -1,15 +1,15 @@
 ---
 name: agile-sprint-review
-description: "Story の受け入れ確認 (acceptance verification) を一括処理するスキル。子 Plan/Task が全 Done になった Story を検出してユーザー承認を得て `Awaiting sprint review` に promote し、各 Story の AC を子 Task の linked PR と突き合わせて自動で checklist チェック + evidence 追記、結果をチャットに表示するだけ (yes/no question は投げない)。AC 全項目に evidence が揃った Story は Done に進めて子 Plan/Task の iteration をクリアし Sprint Board から落とす。残りは Awaiting のまま、ユーザーが結果を見て判断する。Scrum セレモニーではなく「溜まった受け入れ確認を捌くツール」。Triggers: sprint review, acceptance verification, AC verify, ストーリー受け入れ確認, スプリントレビュー, Story Done 判定."
+description: "Story の受け入れ確認 (acceptance verification) を一括処理するスキル。子 Plan/Task が全 Done になった Story を検出してユーザー承認を得て `Awaiting sprint review` に promote、各 Story の AC を子 Task の linked PR と突き合わせて checklist にチェック + evidence 追記、Awaiting sprint review にある Story 群のサマリーを表示。Story を Done に進めるかどうかは AC verify 結果を見たユーザーが個別に判定する (AC に現れない追加確認の余地を残すため)。Scrum セレモニーではなく「溜まった受け入れ確認を捌くツール」。Triggers: sprint review, acceptance verification, AC verify, ストーリー受け入れ確認, スプリントレビュー, Story Done 判定."
 ---
 
 # Agile Sprint Review
 
-> 🗣️ **ユーザーへの質問**: Step 1 の promote 承認だけ `AskUserQuestion` を使う (= status 変更は不可逆操作)。各 Story の受け入れ確認結果は **AskUserQuestion を投げず、ただチャットに表示するだけ**。判定はユーザーが視覚的に確認するに留める。
+> 🗣️ **ユーザーへの質問**: 不可逆操作 (Step 1 の promote, Step 5 の Done 化) の前だけ `AskUserQuestion` を使う。AC verify とサマリー表示の途中で対話的判定 (OK/Reject ループ) は投げない。
 > 📋 **進捗管理**: 対象 Story 件数が複数のときは `TaskCreate` で 1 件 1 task として進捗を可視化する。1-2 件なら省略可。
-> 📐 **不可逆操作の承認**: Step 1 の promote 実行前は `AskUserQuestion` で承認、Step 3 で全 AC verified の Story を Done に進める処理は AskUserQuestion 不要 (= AC verify そのものが承認の代わり)。
+> 📐 **不可逆操作の承認**: Step 1 の promote / Step 5 の Done 化はそれぞれ `AskUserQuestion` で承認を取る (Status 変更は不可逆)。
 
-子 Plan/Task が全 Done になった Story を `Awaiting sprint review` Status に promote し、AC を子 Task の linked PR と突き合わせて checklist に evidence 付きでチェックを入れる。AC が全部 evidence で埋まった Story は Done に進めて子 Plan/Task の iteration をクリア、Sprint Board から落とす。AC verify が完全でなかった Story は Awaiting のまま残し、結果をチャットに表示するだけ。ユーザーは表示を見て手動で追加対応する。
+子 Plan/Task が全 Done になった Story を `Awaiting sprint review` Status に promote し、AC を子 Task の linked PR と突き合わせて checklist に evidence 付きでチェックを入れる。Awaiting sprint review にある Story 群のサマリー (概要 + AC 状況) をチャットに表示し、ユーザーが「これを Done にしていいか」を Story 単位で判断する。AC に現れない追加確認 (デザイン的な好み、運用面の懸念など) の余地を残すため、Done への遷移は必ず人間判断を経由する。
 
 ## When to Use
 
@@ -31,25 +31,25 @@ description: "Story の受け入れ確認 (acceptance verification) を一括処
 flowchart TB
   detect["1. promote 候補列挙\nIn Coding Progress の Story を detect-only で scan"]
   empty1{"候補 0?"}
-  ask["1.5 AskUserQuestion\nこれらを Awaiting に promote していい?"]
+  ask1["1.5 AskUserQuestion\nこれらを Awaiting に promote していい?"]
   promote["1.6 承認分を実際に promote"]
   list["2. Awaiting sprint review の Story を取得"]
   empty2{"件数 0?"}
   loop["3. 各 Story を AC verify (ループ)"]
   parse["3.1 Story / Plan の AC を抽出"]
   match["3.2 子 Task の linked PR と AC を突き合わせ"]
-  update["3.3 Issue body の AC checklist を更新\n(chectk + evidence 追記)"]
-  done["3.4 全 AC verified なら Story → Done + 子 iteration クリア"]
-  show["3.5 結果をチャットに表示"]
-  summary["4. 完了サマリー"]
+  update["3.3 Issue body の AC checklist を更新\n(check + evidence 追記)"]
+  summary["4. サマリー出力\n(Story 概要 + AC 状況)"]
+  ask2["5. 各 Story について Done 化を確認\n(AskUserQuestion)"]
+  done["5.1 Done 化承認分: Status=Done + 子 iteration クリア"]
 
   detect --> empty1
   empty1 -- yes --> list
-  empty1 -- no --> ask --> promote --> list
+  empty1 -- no --> ask1 --> promote --> list
   list --> empty2
-  empty2 -- yes --> summary
-  empty2 -- no --> loop --> parse --> match --> update --> done --> show --> loop
-  loop --> summary
+  empty2 -- yes --> end_node["対象なしで終了"]
+  empty2 -- no --> loop --> parse --> match --> update --> loop
+  loop --> summary --> ask2 --> done
 ```
 
 ---
@@ -226,9 +226,56 @@ gh issue edit <story-number> --repo <owner/repo> --body-file /tmp/body.md
 
 Implementation Plan の AC も同様に Plan 本体の body を更新する (`gh issue edit <plan-number> ...`)。
 
-### Step 3.4: 全 AC verified なら Story → Done + 子 iteration クリア
+ループは Step 3.3 まで。Step 3.4 で **Story 単位の Status 変更はしない** (= Done への自動遷移はしない)。AC が全 verified だったとしても、AC に現れない追加確認 (UX 的な好み、運用面の懸念) があるかもしれないので、Done 化は Step 5 でユーザー確認を経由する。
 
-Story の全 AC が verified (全 `- [x]` になった) なら、自動で Done に進める。**AskUserQuestion は投げない**:
+---
+
+## Step 4: サマリー出力
+
+ループ完了後、Awaiting sprint review にある全 Story について **Story 概要 + AC 状況** をチャットに出力する。1 件ずつ以下のフォーマット:
+
+```
+─────────────────────────────────────
+Story #N: [title]
+─────────────────────────────────────
+
+[Story body の冒頭 (概要部分) を 1-3 行で抜粋]
+
+【受入基準】
+- [x] AC 1 (#1192で対応済み)
+- [x] AC 2 (#1195で対応済み)
+- [ ] AC 3 (evidence なし)
+
+【Implementation Plan #M の受入基準】 ← Plan があり AC を持つとき
+- [x] Plan AC 1 (#1200で対応済み)
+- [ ] Plan AC 2 (evidence なし)
+```
+
+冗長な情報 (関連 PR 一覧、リンク等) は載せない — チェックリストの evidence (`#1192`) からたどれる。サマリーは「**この Story を Done に進めていいか**」を判断するための最小情報に絞る。
+
+全 Story を出力したら Step 5 へ。
+
+---
+
+## Step 5: 各 Story について Done 化を確認 (AskUserQuestion)
+
+サマリーを見せた後、Story 1 件ずつ `AskUserQuestion` で Done 化可否を聞く。**AC 全 verified でも自動 Done にはしない** — AC に現れない追加確認 (デザイン的な好み、運用面の懸念) があるかもしれないため。
+
+```
+Story #N をどうしますか?
+```
+
+| label | description |
+|---|---|
+| Done に進める (Recommended for 全 AC verified) | Story Status=Done に遷移、配下 Plan/Task の iteration をクリア (Sprint Board から外れる) |
+| Awaiting のままにする | Status は変えない。追加対応が必要、または後で再判定する場合 |
+| In Coding Progress に戻す | 差し戻し。追加 Task 起票が必要なケース。`/agile-decompose-task-from-implementation-plan` を案内 |
+
+Recommended ラベルは AC 状況に応じて切り替える:
+- 全 AC verified の Story → "Done に進める" に `(Recommended)` を付ける
+- 一部 unverified の Story → "Awaiting のままにする" に `(Recommended)` を付ける
+
+### Step 5.1: Done 化処理 (ユーザーが選択した分のみ)
 
 ```bash
 bash ~/.claude/skills/agile-update-skills/scripts/update-issue-status.sh <story-number> "Done" [app-name]
@@ -241,51 +288,21 @@ for child in $CHILD_NUMS; do
 done
 ```
 
-一部の AC が unverified で残った場合は **Status を変えない** (Awaiting のまま)。ユーザーが結果を見て:
-- 追加 Task を起こして実装するか
-- 手動で Story を Done にするか
-- AC 自体を書き換えるか (`/agile-refine-story`)
+### Step 5.2: In Coding Progress 差し戻し処理
 
-を判断する。
-
-### Step 3.5: 結果表示 (チャットのみ、AskUserQuestion なし)
-
-各 Story の処理結果を以下のフォーマットでチャットに表示する:
-
-```
-─────────────────────────────────────
-Story #N: [title]
-─────────────────────────────────────
-
-【判定】 全 AC verified → Done (自動遷移、子 iteration クリア)
-   または
-【判定】 部分 verified → Awaiting sprint review のまま (ユーザー判断要)
-
-【受入基準 (更新後)】
-- [x] AC 1 (#1192で対応済み)
-- [x] AC 2 (#1195で対応済み)
-- [ ] AC 3 (evidence なし、要手動対応)
-
-【Implementation Plan #M の AC (更新後)】 ← Plan があるとき
-- [x] Plan AC 1 (#1200で対応済み)
-- [ ] Plan AC 2 (evidence なし)
-
-【関連 PR】
-- #1192 [title] — 対応 AC: Story AC 1
-- #1195 [title] — 対応 AC: Story AC 2
-- #1200 [title] — 対応 AC: Plan AC 1
-
-【リンク】
-Story URL: https://github.com/<owner>/<repo>/issues/N
+```bash
+bash ~/.claude/skills/agile-update-skills/scripts/update-issue-status.sh <story-number> "In Coding Progress" [app-name]
 ```
 
-ループ中はこれを次々表示するだけ。判定の Q&A は無し。ユーザーは表示を読んで、自分で次のアクションを取る (or 取らない)。
+子 Plan/Task の iteration はクリアしない (= 引き続き Sprint Board に残り、追加作業の動線が見える)。「追加 Task が必要なら `/agile-decompose-task-from-implementation-plan <story-number>` で起票してください」と案内。
 
----
+### Step 5.3: Awaiting のまま
 
-## Step 4: 完了サマリー
+何もしない (Status は Awaiting sprint review のまま)。次回 sprint-review 起動時にまた候補に並ぶ。
 
-全 Story の処理を終えたら、ユーザーに統計を提示:
+### 完了サマリー
+
+全 Story 処理後、最終結果を提示:
 
 ```
 ─────────────────────────────────────
@@ -294,18 +311,14 @@ Sprint Review 完了
 
 📊 Step 1 (promote): 候補 N 件 / 承認 M 件 / promote 実行 M 件
 
-✅ 全 AC verified で Done に進めた: A 件
+✅ Done に進めた: A 件
   - #X, #Y, #Z
 
-⏸️ AC 一部 unverified で Awaiting のまま: B 件
-  - #P (Story AC 3 件中 1 件未対応, Plan AC 2 件中 1 件未対応)
-  - #Q (Story AC 2 件中 1 件未対応)
+⏸️ Awaiting のまま保留: B 件
+  - #P, #Q
 
-次のステップ:
-- Awaiting のまま残った Story は未対応の AC があります。チャット出力の各 Story の checklist を確認してください
-- 追加 Task が必要なら `/agile-decompose-task-from-implementation-plan <story-number>` で起票
-- AC 自体の見直しが必要なら `/agile-refine-story <story-number>`
-- AC は満たしてるが evidence が曖昧 → 手動で `update-issue-status.sh <story-number> "Done"` を叩いて Done に進める
+⏪ In Coding Progress に差し戻し: C 件
+  - #R
 ```
 
 ---
@@ -316,7 +329,7 @@ Sprint Review 完了
 
 - **Step 1 の promote 実行** — `AskUserQuestion` で「これらを Awaiting に promote していい?」を必ず聞く (Status 変更は不可逆)
 - **Step 3.3 の AC checklist 更新** — Story / Plan の body を書き換える操作。LLM 判定で機械的に行う (= 後で気付けば手動で revert 可能、また AC verify の結果を視覚化するのが目的なので permissive)
-- **Step 3.4 の Done 自動遷移** — 全 AC verified の場合のみ。`AskUserQuestion` は使わない。AC verify そのものが「OK 判定」の代わり。一部 verified の場合は Status を触らない (Awaiting のまま)
+- **Step 5 の Done 化** — 全 Story について `AskUserQuestion` で 3 択を聞く。全 AC verified でも自動 Done にしない (AC に現れない追加確認の余地を残すため)
 
 NEVER (次節) はこのゲートの違反を具体的に列挙している。
 
@@ -338,11 +351,11 @@ NEVER (次節) はこのゲートの違反を具体的に列挙している。
 
 ## NEVER — アンチパターン
 
-- **絶対に** AC 内容を skill 起動中に書き換えない (= checklist にチェックを入れる以外の本文編集はしない)。AC 文言の見直しは `/agile-refine-story` の責務
-- **絶対に** 各 Story の判定で `AskUserQuestion` を投げない (= AC verify と表示で完結する設計)。判断はユーザーがチャット出力を見て自分で行う
-- **絶対に** 一部 AC が unverified なまま Story を Done に進めない (= 必ず全 verified が条件)
+- **絶対に** AC 内容 (文言) を skill 起動中に書き換えない (= checklist のチェック / evidence 追記以外の本文編集はしない)。AC 文言の見直しは `/agile-refine-story` の責務
+- **絶対に** Story を AskUserQuestion なしで Done に自動遷移させない (AC 全 verified であっても)。AC に現れない追加確認の余地をユーザーに残すため、Step 5 で必ず判定を仰ぐ
 - **絶対に** PR との対応関係を雑に判定して evidence を間違って付けない (= 確証が無ければ unverified のまま残す)
 - **絶対に** Step 1 の promote を AskUserQuestion なしで実行しない (= status 変更は要承認)
+- **絶対に** Step 4 のサマリーに不要情報を入れない (= Story 概要 + AC 状況のみ。関連 PR 一覧やリンク等は省略する。チェックリストの evidence (`#1192`) からたどれる)
 - **絶対に** 本スキルを「Scrum セレモニーとして強制」しない — 起動頻度は決め打ちせず、ユーザー裁量で都度実行
 
 ---
