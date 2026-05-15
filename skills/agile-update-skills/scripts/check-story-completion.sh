@@ -71,7 +71,7 @@ fi
 
 # Fetch issue details via GraphQL (we need: issue type, current Status, sub-issues with their statuses)
 QUERY='
-query($owner: String!, $repo: String!, $num: Int!, $projectNum: Int!) {
+query($owner: String!, $repo: String!, $num: Int!) {
   repository(owner: $owner, name: $repo) {
     issue(number: $num) {
       issueType { name }
@@ -101,7 +101,7 @@ REPO_NAME="${REPO#*/}"
 
 RESPONSE=$(gh api graphql -f query="$QUERY" \
   -f owner="$REPO_OWNER" -f repo="$REPO_NAME" \
-  -F num="$ISSUE" -F projectNum="$NUMBER")
+  -F num="$ISSUE")
 
 ISSUE_TYPE=$(echo "$RESPONSE" | jq -r '.data.repository.issue.issueType.name // "null"')
 
@@ -130,7 +130,7 @@ fi
 ALL_DONE=true
 for sub_num in $(echo "$RESPONSE" | jq -r '.data.repository.issue.subIssues.nodes[].number'); do
   sub_status=$(gh api graphql -f query='
-    query($owner: String!, $repo: String!, $num: Int!, $projectNum: Int!) {
+    query($owner: String!, $repo: String!, $num: Int!) {
       repository(owner: $owner, name: $repo) {
         issue(number: $num) {
           projectItems(first: 10) {
@@ -143,7 +143,7 @@ for sub_num in $(echo "$RESPONSE" | jq -r '.data.repository.issue.subIssues.node
           }
         }
       }
-    }' -f owner="$REPO_OWNER" -f repo="$REPO_NAME" -F num="$sub_num" -F projectNum="$NUMBER" \
+    }' -f owner="$REPO_OWNER" -f repo="$REPO_NAME" -F num="$sub_num" \
     --jq ".data.repository.issue.projectItems.nodes[] | select(.project.number == $NUMBER) | .fieldValueByName.name // \"null\"")
 
   if [[ "$sub_status" != "Done" ]]; then
