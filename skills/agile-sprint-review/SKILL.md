@@ -1,27 +1,27 @@
 ---
 name: agile-sprint-review
-description: "Story の受け入れ確認 (acceptance verification) を 1 件ずつ対話的に捌くスキル。子 Plan/Task が全 Done になった Story を `Awaiting sprint review` Status で検出し、AC / Outcome / 子 PR を walkthrough、ユーザーが OK/Reject/Skip 判定。OK なら Story Done + 子 Plan/Task の iteration をクリアして Sprint Board から落とす。skill 起動時に Status=In Coding Progress の Story を全 scan して取りこぼし回収もする。Scrum セレモニーとしてではなく「溜まった受け入れ確認を捌くツール」として使う。Triggers: sprint review, acceptance verification, AC verify, ストーリー受け入れ確認, スプリントレビュー, Story Done 判定."
+description: "Story の受け入れ確認 (acceptance verification) を一括処理するスキル。子 Plan/Task が全 Done になった Story を検出してユーザー承認を得て `Awaiting sprint review` に promote し、各 Story の AC を子 Task の linked PR と突き合わせて自動で checklist チェック + evidence 追記、結果をチャットに表示するだけ (yes/no question は投げない)。AC 全項目に evidence が揃った Story は Done に進めて子 Plan/Task の iteration をクリアし Sprint Board から落とす。残りは Awaiting のまま、ユーザーが結果を見て判断する。Scrum セレモニーではなく「溜まった受け入れ確認を捌くツール」。Triggers: sprint review, acceptance verification, AC verify, ストーリー受け入れ確認, スプリントレビュー, Story Done 判定."
 ---
 
 # Agile Sprint Review
 
-> 🗣️ **ユーザーへの質問**: 各 Story の判定 (OK / Reject / Skip) は `AskUserQuestion` を使う。一括承認はしない (Story 個別の AC verify が目的)。
+> 🗣️ **ユーザーへの質問**: Step 1 の promote 承認だけ `AskUserQuestion` を使う (= status 変更は不可逆操作)。各 Story の受け入れ確認結果は **AskUserQuestion を投げず、ただチャットに表示するだけ**。判定はユーザーが視覚的に確認するに留める。
 > 📋 **進捗管理**: 対象 Story 件数が複数のときは `TaskCreate` で 1 件 1 task として進捗を可視化する。1-2 件なら省略可。
-> 📐 **不可逆操作の承認**: Story Status を Done に進める / In Coding Progress に戻す操作の直前は `ExitPlanMode` で承認ゲートを通す (1 Story ずつ確認)。
+> 📐 **不可逆操作の承認**: Step 1 の promote 実行前は `AskUserQuestion` で承認、Step 3 で全 AC verified の Story を Done に進める処理は AskUserQuestion 不要 (= AC verify そのものが承認の代わり)。
 
-子 Plan/Task が全部 Done になった Story を `Awaiting sprint review` Status で集め、AC を 1 件ずつ verify して Done に進める (または差し戻す) スキル。
+子 Plan/Task が全 Done になった Story を `Awaiting sprint review` Status に promote し、AC を子 Task の linked PR と突き合わせて checklist に evidence 付きでチェックを入れる。AC が全部 evidence で埋まった Story は Done に進めて子 Plan/Task の iteration をクリア、Sprint Board から落とす。AC verify が完全でなかった Story は Awaiting のまま残し、結果をチャットに表示するだけ。ユーザーは表示を見て手動で追加対応する。
 
 ## When to Use
 
-- 「そろそろ受け入れ確認しよう」と思ったタイミング。iteration の終わり目に走らせても、Awaiting が溜まってきたタイミングで都度回しても OK
-- `Awaiting sprint review` がボードに 1 件以上見えるとき
+- 「そろそろ受け入れ確認しよう」と思ったタイミング。iteration 終わり目でも、Awaiting が溜まってきたタイミングでも都度回せる
+- 子 Plan/Task が全 Done になっているのに親 Story の Status が `In Coding Progress` のまま放置されている (lazy scan で拾える)
 - 過去 iteration から取り残された `Awaiting sprint review` をまとめて捌きたいとき
 
 ## When NOT to Use
 
-- 個別の Story / PR の review が目的 — それは `/agile-review-pr` (PR レビュー) や Story refinement 系 skill の仕事
-- AC 自体を変更したい — `/agile-refine-story` で Story body を編集
+- 個別の Story の AC を編集したい — `/agile-refine-story` で
 - まだ実装中の Story を進めたい — `/agile-implement-task` 等で実装を続ける
+- 受け入れ確認のために対話的に 1 件ずつ細かく判定したい — 本 skill は対話を投げない設計。判断はチャット表示の結果を見てユーザーが行う
 
 ---
 
@@ -29,38 +29,40 @@ description: "Story の受け入れ確認 (acceptance verification) を 1 件ず
 
 ```mermaid
 flowchart TB
-  scan["1. 取りこぼし回収 (lazy scan)\nIn Coding Progress の Story を全件 check"]
-  list["2. 候補列挙\nAwaiting sprint review の Story を取得"]
-  empty{"件数 == 0?"}
-  done["対象なしと案内して終了"]
-  loop["3. 各 Story を順にレビュー"]
-  show["3.1 内容案内\n(AC / Outcome / 子 + PR URL)"]
-  ask["3.2 AskUserQuestion\nOK / Reject / Skip"]
-  ok["3.3 OK 処理\nStory → Done + 子 iteration クリア"]
-  reject["3.4 Reject 処理\nStory → In Coding Progress + 追加 Task 案内"]
-  skip["3.5 Skip 処理"]
-  summary["4. 完了サマリー\n(scan 件数 / OK / Reject / Skip)"]
+  detect["1. promote 候補列挙\nIn Coding Progress の Story を detect-only で scan"]
+  empty1{"候補 0?"}
+  ask["1.5 AskUserQuestion\nこれらを Awaiting に promote していい?"]
+  promote["1.6 承認分を実際に promote"]
+  list["2. Awaiting sprint review の Story を取得"]
+  empty2{"件数 0?"}
+  loop["3. 各 Story を AC verify (ループ)"]
+  parse["3.1 Story / Plan の AC を抽出"]
+  match["3.2 子 Task の linked PR と AC を突き合わせ"]
+  update["3.3 Issue body の AC checklist を更新\n(chectk + evidence 追記)"]
+  done["3.4 全 AC verified なら Story → Done + 子 iteration クリア"]
+  show["3.5 結果をチャットに表示"]
+  summary["4. 完了サマリー"]
 
-  scan --> list --> empty
-  empty -- yes --> done
-  empty -- no --> loop --> show --> ask
-  ask --> ok --> loop
-  ask --> reject --> loop
-  ask --> skip --> loop
+  detect --> empty1
+  empty1 -- yes --> list
+  empty1 -- no --> ask --> promote --> list
+  list --> empty2
+  empty2 -- yes --> summary
+  empty2 -- no --> loop --> parse --> match --> update --> done --> show --> loop
   loop --> summary
 ```
 
 ---
 
-## Step 1: 取りこぼし回収 (lazy scan)
+## Step 1: promote 候補列挙 (lazy scan, detect-only)
 
-Story Status を Done に変える経路が複数あり、特に PR merge → Auto-close issue Workflow → Task Done のルートは skill から検知できない。なので本 skill 起動時に **In Coding Progress の Story を全件 scan** して、子が全 Done のものを `Awaiting sprint review` に拾い上げる。
+Story Status を Done に変える経路が複数あり、特に PR merge → Auto-close issue Workflow → Task Done のルートは skill から検知できない。本 skill 起動時に **In Coding Progress の Story を全件 scan** して、子が全 Done のものを Awaiting sprint review に promote 候補として列挙する。Status 変更は **ユーザー承認後** に行う。
 
 ### 手順
 
-1. `.claude/skills/references/github-projects.json` を `Read` し、Project の owner / number を取得 (複数アプリ運用なら Step 0 でアプリ識別子を確認、対応する JSON を読む)
+1. `.claude/skills/references/github-projects.json` (複数アプリ運用なら `github-projects.<app>.json`) を `Read` し、Project の owner / number を取得
 
-2. Project の items を GraphQL で取得して、Status = `In Coding Progress` かつ type = Story の Issue 番号を抽出:
+2. Project items から Status = `In Coding Progress` かつ type = Story の Issue 番号を抽出:
 
 ```bash
 gh api graphql -f query='
@@ -69,15 +71,8 @@ gh api graphql -f query='
     projectV2(number: <NUMBER>) {
       items(first: 100) {
         nodes {
-          content {
-            ... on Issue {
-              number
-              issueType { name }
-            }
-          }
-          fieldValueByName(name: "Status") {
-            ... on ProjectV2ItemFieldSingleSelectValue { name }
-          }
+          content { ... on Issue { number issueType { name } } }
+          fieldValueByName(name: "Status") { ... on ProjectV2ItemFieldSingleSelectValue { name } }
         }
       }
     }
@@ -87,25 +82,48 @@ gh api graphql -f query='
   | .content.number'
 ```
 
-3. 各 Story 番号に対して `bash ~/.claude/skills/agile-update-skills/scripts/check-story-completion.sh <story-number> [app-name]` を呼ぶ
-   - スクリプトが「子全 Done」と判定したら自動で `Awaiting sprint review` に遷移させ、`promoted: Story #N -> ...` を stdout に出す
-   - 子未完了 / 子なし / Status が `In Coding Progress` でない → silent no-op (exit 0)
+3. 各 Story 番号に対して `--detect-only` で check-story-completion を呼ぶ:
 
-4. promoted した件数を集計してユーザーに表示:
-
-```
-取りこぼし回収 (lazy scan): N 件の Story を Awaiting sprint review に遷移しました
-  - #X [Story title]
-  - #Y [Story title]
+```bash
+bash ~/.claude/skills/agile-update-skills/scripts/check-story-completion.sh <story-number> --detect-only [app-name]
 ```
 
-scan で 0 件遷移した場合は「取りこぼしなし」とだけ案内して Step 2 へ。
+stdout に `READY_TO_PROMOTE #N <title>` が出れば候補。子未完 / 子なし / Status 不一致は silent exit 0。
+
+4. 候補をユーザーに列挙して提示。**1 件もなければ Step 2 へスキップ** (ユーザー確認不要)。
+
+```
+以下の Story は子 Plan/Task が全部 Done なので Awaiting sprint review に promote 可能です:
+
+- #N1 [title 1]
+- #N2 [title 2]
+
+これらを Awaiting sprint review に promote していいですか?
+```
+
+5. `AskUserQuestion` で 3 択:
+
+| label | description |
+|---|---|
+| はい、全部 promote する (Recommended) | 候補全件を Awaiting sprint review に遷移、Step 2 へ |
+| いや、promote せずに skip | 何もせず Step 2 (Awaiting の Story だけ処理) |
+| キャンセル | skill を終了 |
+
+6. 「はい」なら各候補 Story に対して `check-story-completion.sh <number> [app-name]` を `--detect-only` 無しで呼んで実 promote:
+
+```bash
+for n in $candidates; do
+  bash ~/.claude/skills/agile-update-skills/scripts/check-story-completion.sh "$n" [app-name]
+done
+```
+
+何件 promote したかをユーザーに報告。
 
 ---
 
-## Step 2: 候補列挙
+## Step 2: Awaiting sprint review の Story を取得
 
-Project items から **Status = `Awaiting sprint review`** の Story を全部取得する (current iteration の縛りは付けない — 過去 iteration から取り残されたものも拾えるように):
+Status = `Awaiting sprint review` の Story を全件取得 (current iteration の縛りは付けない — 過去 iteration から取り残されたものも拾えるように):
 
 ```bash
 gh api graphql -f query='
@@ -116,15 +134,12 @@ gh api graphql -f query='
         nodes {
           content {
             ... on Issue {
-              number
-              title
+              number title
               repository { nameWithOwner }
               issueType { name }
             }
           }
-          fieldValueByName(name: "Status") {
-            ... on ProjectV2ItemFieldSingleSelectValue { name }
-          }
+          fieldValueByName(name: "Status") { ... on ProjectV2ItemFieldSingleSelectValue { name } }
         }
       }
     }
@@ -137,143 +152,160 @@ gh api graphql -f query='
 - 件数 0 → 「受け入れ確認対象の Story はありません」と案内して終了
 - 件数 ≥ 1 → 全件をユーザーに一覧表示 (番号 + タイトル) してから Step 3 のループへ
 
+3 件以上ある場合は `TaskCreate` で進捗を可視化する。
+
 ---
 
-## Step 3: 各 Story を順にレビュー (ループ)
+## Step 3: 各 Story の AC verify + checklist 自動更新 (ループ)
 
-候補 Story を 1 件ずつ処理する。3 件以上ある場合は `TaskCreate` で進捗を可視化する (例: "Story #X review", "Story #Y review", ...)。
+候補 Story を 1 件ずつ処理する。**AskUserQuestion は使わない**。Skill が機械的に AC と PR を突き合わせて checklist を更新し、結果をチャットに表示する。
 
-### Step 3.1: 内容案内 (チャット出力のみ)
+### Step 3.1: Story / 関連 Implementation Plan の AC を抽出
 
-対象 Story の内容を `Read` ではなく `gh issue view <story-number> --repo <owner/repo>` で取得し、以下を抽出して表示:
+`gh issue view <story-number> --repo <owner/repo>` で Story body を取得。AC は以下のパターンで markdown checklist として記述されている前提:
 
-- **AC (Acceptance Criteria / 受入基準)**: Story body の "受入基準" / "Acceptance Criteria" セクション
-- **Outcome 仮説**: "Outcome" / "成功指標" セクション
-- **DoR / DoD**: あれば
-- **子 Plan/Task のリスト**: 各々の番号、タイトル、Status、linked PR URL
-  - linked PR は `gh issue view <child-number> --json closedByPullRequestsReferences --jq '.closedByPullRequestsReferences[]?.url'` で取得
+```markdown
+### 受入基準
 
-表示形式の例:
+- [ ] AC item 1
+- [ ] AC item 2
+```
+
+セクション名は `受入基準` / `Acceptance Criteria` / `AC` のいずれか。本文中の最初に見つかったチェックリストを AC として扱う。
+
+子の Implementation Plan があれば、その body も同様に取得し、Plan 側の AC も別途抽出する (Plan は Story の補足として独自の AC を持つことがある)。**Implementation Plan の AC は Story の AC と区別して扱う** (それぞれ別に更新する)。
+
+### Step 3.2: 子 Task の linked PR と AC を突き合わせ
+
+子 Plan/Task の番号と linked PR を取得:
+
+```bash
+gh issue view <story-number> --repo <owner/repo> --json subIssues --jq '.subIssues[].number'
+
+# 各子 Issue について
+gh issue view <child-number> --repo <owner/repo> --json title,closedByPullRequestsReferences
+```
+
+各 PR について `gh pr view <pr-number> --repo <owner/repo> --json title,body` で詳細を取得。PR title / body / 子 Issue title を見て、AC 項目との対応関係を判定する。
+
+判定は LLM (skill 内の Claude) が行う:
+- AC 項目 1 件ずつに対して「どの PR (or どの子 Issue) が満たしている可能性が高いか」を考える
+- 明確に対応が取れた AC は evidence 付きで verified 扱い
+- 対応が曖昧 / 不明 / 該当 PR なし → unverified のまま残す
+
+### Step 3.3: Issue body の AC checklist を更新
+
+verified な AC は markdown を以下のように書き換える:
+
+変更前:
+```markdown
+- [ ] AC item 1
+```
+
+変更後:
+```markdown
+- [x] AC item 1 (#1192で対応済み)
+```
+
+- チェック `[ ]` → `[x]` に変更
+- 末尾に `(#<PR番号>で対応済み)` を追加 (複数 PR が evidence なら `(#1192, #1195 で対応済み)`)
+
+unverified な AC は変更しない (`- [ ]` のまま、evidence なし)。
+
+更新は **`gh issue edit <issue-number> --repo <owner/repo> --body-file -`** で body を書き戻す:
+
+```bash
+# 1. 現在の body を取得
+gh issue view <story-number> --repo <owner/repo> --json body --jq '.body' > /tmp/body.md
+
+# 2. 編集 (LLM が markdown を直接 Edit する)
+
+# 3. 書き戻し
+gh issue edit <story-number> --repo <owner/repo> --body-file /tmp/body.md
+```
+
+Implementation Plan の AC も同様に Plan 本体の body を更新する (`gh issue edit <plan-number> ...`)。
+
+### Step 3.4: 全 AC verified なら Story → Done + 子 iteration クリア
+
+Story の全 AC が verified (全 `- [x]` になった) なら、自動で Done に進める。**AskUserQuestion は投げない**:
+
+```bash
+bash ~/.claude/skills/agile-update-skills/scripts/update-issue-status.sh <story-number> "Done" [app-name]
+# → Auto-close issue Workflow で Story が closed に
+
+# Story の子全部から iteration field をクリア
+CHILD_NUMS=$(gh issue view <story-number> --repo <owner/repo> --json subIssues --jq '.subIssues[].number')
+for child in $CHILD_NUMS; do
+  bash ~/.claude/skills/agile-update-skills/scripts/clear-issue-iteration.sh "$child" [app-name]
+done
+```
+
+一部の AC が unverified で残った場合は **Status を変えない** (Awaiting のまま)。ユーザーが結果を見て:
+- 追加 Task を起こして実装するか
+- 手動で Story を Done にするか
+- AC 自体を書き換えるか (`/agile-refine-story`)
+
+を判断する。
+
+### Step 3.5: 結果表示 (チャットのみ、AskUserQuestion なし)
+
+各 Story の処理結果を以下のフォーマットでチャットに表示する:
 
 ```
 ─────────────────────────────────────
 Story #N: [title]
 ─────────────────────────────────────
 
-【受入基準】
-- [ ] AC 1
-- [ ] AC 2
-...
+【判定】 全 AC verified → Done (自動遷移、子 iteration クリア)
+   または
+【判定】 部分 verified → Awaiting sprint review のまま (ユーザー判断要)
 
-【Outcome 仮説】
-...
+【受入基準 (更新後)】
+- [x] AC 1 (#1192で対応済み)
+- [x] AC 2 (#1195で対応済み)
+- [ ] AC 3 (evidence なし、要手動対応)
 
-【子 (Plan/Task)】
-- #X [Implementation Plan: ...] Status: Done — PR: https://github.com/.../pull/N
-- #Y [Task: ...] Status: Done — PR: https://github.com/.../pull/M
-- #Z [Task: ...] Status: Done — PR: https://github.com/.../pull/L
+【Implementation Plan #M の AC (更新後)】 ← Plan があるとき
+- [x] Plan AC 1 (#1200で対応済み)
+- [ ] Plan AC 2 (evidence なし)
 
-【関連リンク】
+【関連 PR】
+- #1192 [title] — 対応 AC: Story AC 1
+- #1195 [title] — 対応 AC: Story AC 2
+- #1200 [title] — 対応 AC: Plan AC 1
+
+【リンク】
 Story URL: https://github.com/<owner>/<repo>/issues/N
 ```
 
-「以下の AC / PR を確認のうえ判定してください」とユーザーに案内し、Step 3.2 の判定取得へ進む。
-
-> **重要**: 本 skill は **AC を自動評価しない**。AC 内容を walkthrough して見せるだけ。実際の verify (AC 満たした? PR 適切?) はユーザーの責務。
-
-### Step 3.2: 判定取得
-
-`AskUserQuestion` で 3 択:
-
-| label | description |
-|---|---|
-| OK (承認) | AC 満たした。Story を Done にして Sprint Board から外す |
-| Reject (差し戻し) | AC 不足 / 不具合あり。Story を In Coding Progress に戻して追加作業 |
-| Skip (このセッションでは判定保留) | 一旦保留。Status は Awaiting sprint review のまま、次の Story へ |
-
-multiSelect は使わない (各 Story 個別に判定させるのが目的)。
-
-### Step 3.3: OK 処理 (Story → Done)
-
-1. Story の Status を Done に更新:
-
-```bash
-bash ~/.claude/skills/agile-update-skills/scripts/update-issue-status.sh <story-number> "Done" [app-name]
-```
-
-Auto-close issue Workflow が ON ならこれで Story issue が auto-close される (Status=Done が発火条件)。
-
-2. Story の子全部から iteration field をクリア:
-
-```bash
-# 子 Issue 番号を取得
-CHILD_NUMS=$(gh issue view <story-number> --repo <owner/repo> --json subIssues --jq '.subIssues[].number')
-
-for child in $CHILD_NUMS; do
-  bash ~/.claude/skills/agile-update-skills/scripts/clear-issue-iteration.sh "$child" [app-name]
-done
-```
-
-iteration がクリアされた Plan/Task は Sprint Filter (`iteration:@current ...`) にマッチしなくなり、Sprint Board から消える。Overview には引き続き全件見える。
-
-3. 案内出力:
-
-```
-✓ Story #N を Done にしました
-  - 子 M 件の iteration をクリア (Sprint Board から除外)
-  - Story issue が auto-close される (Auto-close issue Workflow)
-```
-
-### Step 3.4: Reject 処理 (Story → In Coding Progress)
-
-1. Story Status を In Coding Progress に戻す:
-
-```bash
-bash ~/.claude/skills/agile-update-skills/scripts/update-issue-status.sh <story-number> "In Coding Progress" [app-name]
-```
-
-2. ユーザーに追加作業の案内:
-
-```
-✗ Story #N を In Coding Progress に戻しました
-  追加作業が必要であれば以下を実行してください:
-    /agile-decompose-task-from-implementation-plan <story-number>
-    または
-    /agile-create-issue で個別に Task / Implementation Plan を追加
-```
-
-子 Plan/Task の iteration はクリアしない (= 引き続き Sprint Board に残り、追加作業が見える)。
-
-### Step 3.5: Skip 処理
-
-何もせず次の Story へ。Status は `Awaiting sprint review` のまま、次回 sprint-review 起動時にまた候補に並ぶ。
+ループ中はこれを次々表示するだけ。判定の Q&A は無し。ユーザーは表示を読んで、自分で次のアクションを取る (or 取らない)。
 
 ---
 
 ## Step 4: 完了サマリー
 
-全 Story を処理し終えたら、以下をユーザーに提示:
+全 Story の処理を終えたら、ユーザーに統計を提示:
 
 ```
 ─────────────────────────────────────
 Sprint Review 完了
 ─────────────────────────────────────
 
-📊 取りこぼし回収 (Step 1 lazy scan): N 件
-  - #A, #B (子が全 Done になっていた Story を Awaiting sprint review に促進)
+📊 Step 1 (promote): 候補 N 件 / 承認 M 件 / promote 実行 M 件
 
-✅ OK (Done に進めた): M 件
+✅ 全 AC verified で Done に進めた: A 件
   - #X, #Y, #Z
 
-⏪ Reject (In Coding Progress に戻した): L 件
-  - #P
-
-⏸️ Skip (保留): K 件
-  - #Q, #R
+⏸️ AC 一部 unverified で Awaiting のまま: B 件
+  - #P (Story AC 3 件中 1 件未対応, Plan AC 2 件中 1 件未対応)
+  - #Q (Story AC 2 件中 1 件未対応)
 
 次のステップ:
-- Reject した Story の追加作業は /agile-decompose-task-from-implementation-plan or /agile-create-issue で
-- Skip した Story は次回 /agile-sprint-review でまた候補に上がります
+- Awaiting のまま残った Story は未対応の AC があります。チャット出力の各 Story の checklist を確認してください
+- 追加 Task が必要なら `/agile-decompose-task-from-implementation-plan <story-number>` で起票
+- AC 自体の見直しが必要なら `/agile-refine-story <story-number>`
+- AC は満たしてるが evidence が曖昧 → 手動で `update-issue-status.sh <story-number> "Done"` を叩いて Done に進める
 ```
 
 ---
@@ -282,11 +314,9 @@ Sprint Review 完了
 
 全体マップは `docs/agile-workflow/concepts/ai-decision-boundary.md` を参照。本スキル固有の人間承認ゲート:
 
-**Plan mode の活用**: 下記の人間承認ゲートのうち、Status 変更 (Story → Done / In Coding Progress) の直前は `ExitPlanMode` 経由でユーザー承認を取る (1 Story ずつ確認)。読み取り系・対話系のゲートは通常のテキスト確認で十分。
-
-- **AC verify の判定** — Step 3.2 の OK / Reject / Skip は人間判断。AI は AC を walkthrough するだけ
-- **Status 変更実行** — Step 3.3 / 3.4 の `update-issue-status.sh` 呼び出し前に最終確認
-- **子 iteration クリア実行** — Step 3.3 で複数子をクリアする前に確認 (取り消しは可能だが手間)
+- **Step 1 の promote 実行** — `AskUserQuestion` で「これらを Awaiting に promote していい?」を必ず聞く (Status 変更は不可逆)
+- **Step 3.3 の AC checklist 更新** — Story / Plan の body を書き換える操作。LLM 判定で機械的に行う (= 後で気付けば手動で revert 可能、また AC verify の結果を視覚化するのが目的なので permissive)
+- **Step 3.4 の Done 自動遷移** — 全 AC verified の場合のみ。`AskUserQuestion` は使わない。AC verify そのものが「OK 判定」の代わり。一部 verified の場合は Status を触らない (Awaiting のまま)
 
 NEVER (次節) はこのゲートの違反を具体的に列挙している。
 
@@ -296,21 +326,23 @@ NEVER (次節) はこのゲートの違反を具体的に列挙している。
 
 | 状況 | 対応 |
 |---|---|
-| `Awaiting sprint review` の Story が 0 件 (Step 1 scan 後も 0) | 「対象なし」を案内して終了 (エラー扱いしない) |
-| Story の子に iteration が割り当てられていない | `clear-issue-iteration.sh` は no-op (元から未設定の場合は警告のみ)。OK 処理は続行 |
-| `github-projects.json` の `iteration_field` が未設定 | `clear-issue-iteration.sh` が exit 3。Step 3.3 でエラー報告して Story Done だけ進める (子の iteration クリアはスキップ) |
-| Reject 処理後に追加 Task 起票が即必要だが skill 内で `/agile-create-issue` を chain 呼び出ししたい | 本 skill はループ完了後に案内するだけ。chain は別 skill 起動でユーザーに任せる (skill 同士の暗黙連鎖を避ける) |
-| Story の sub-issues に Story 以外 (Epic 等) が混ざっている | type で filter してから状態 check (check-story-completion.sh は Plan/Task のみ対象、Epic 子は想定外。エラーなら警告して続行) |
+| Story body に AC セクションが無い | AC verify をスキップ、Step 3.5 で「AC セクションなし、手動判定してください」と表示。Status は変えない |
+| AC の文言と PR の対応関係が判定不能 | unverified として残す (チェックを入れない)。ユーザーが結果を見て判断 |
+| Implementation Plan が無い | Plan AC の処理はスキップ、Story AC だけ verify |
+| 子 Task に linked PR が無い | evidence が引けないので、その AC は unverified のまま |
+| AC checklist の markdown 形式が崩れている | parse 不能の場合は warnings を出して当該 Story を skip、Status は触らない |
+| Step 1 候補が 0 件 | AskUserQuestion を飛ばして Step 2 へ直行 |
+| Step 2 候補が 0 件 | 「対象なし」を案内して終了 (エラー扱いしない) |
 
 ---
 
 ## NEVER — アンチパターン
 
-- **絶対に** AC を AI が自動判定しない — 受け入れ確認は人間判断専用。AI は AC を読み上げ / 整形して見せるだけ
-- **絶対に** `AskUserQuestion` の `multiSelect` で複数 Story を一括承認させない — 1 Story ずつ AC を verify する設計が崩れる
-- **絶対に** Reject 時に子 Plan/Task の iteration をクリアしない — 引き続き Sprint Board で追加作業の動線が見える状態を保つ
-- **絶対に** Story 本文 (AC / Outcome) を本 skill 内で書き換えない — Story の更新は `/agile-refine-story` の責務
-- **絶対に** lazy scan 結果を黙って適用しない — Step 1 の promoted 件数はユーザーに見せて「これから review する候補が増えました」を明示する
+- **絶対に** AC 内容を skill 起動中に書き換えない (= checklist にチェックを入れる以外の本文編集はしない)。AC 文言の見直しは `/agile-refine-story` の責務
+- **絶対に** 各 Story の判定で `AskUserQuestion` を投げない (= AC verify と表示で完結する設計)。判断はユーザーがチャット出力を見て自分で行う
+- **絶対に** 一部 AC が unverified なまま Story を Done に進めない (= 必ず全 verified が条件)
+- **絶対に** PR との対応関係を雑に判定して evidence を間違って付けない (= 確証が無ければ unverified のまま残す)
+- **絶対に** Step 1 の promote を AskUserQuestion なしで実行しない (= status 変更は要承認)
 - **絶対に** 本スキルを「Scrum セレモニーとして強制」しない — 起動頻度は決め打ちせず、ユーザー裁量で都度実行
 
 ---
@@ -320,6 +352,5 @@ NEVER (次節) はこのゲートの違反を具体的に列挙している。
 このスキルが参考にしている書籍 / 概念:
 
 - 📖 [アジャイルサムライ](https://www.amazon.co.jp/s?k=アジャイルサムライ) — Inception Deck / 受入確認の文化
-- 📦 [Scrum Guide Expansion Pack](https://scrumexpansion.org/) — Sprint Review の参考 (本 skill は厳格な Scrum セレモニーとしては運用しない)
 - `docs/agile-workflow/concepts/outcome-done.md` — Outcome Done の概念 (AC verify と切り分け)
 - `docs/agile-workflow/operations.md` — Status フロー / iteration の運用ルール

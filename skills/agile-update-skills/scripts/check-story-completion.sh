@@ -1,13 +1,19 @@
 #!/usr/bin/env bash
-# agile-* 共通: Story 配下の Plan/Task が全 Done なら Story Status を `Awaiting sprint review` に遷移する
+# agile-* 共通: Story 配下の Plan/Task が全 Done か判定し、
+# `--detect-only` モードなら判定結果を出力するだけ、
+# それ以外なら Story Status を `Awaiting sprint review` に遷移する。
 #
-# `agile-sprint-review` の Step 1 (lazy scan) から呼ばれる想定。
-# 即時遷移パスは持たない (= skill 起動時にのみ反映される)。
+# `agile-sprint-review` の Step 1 (lazy scan) では --detect-only で候補列挙、
+# その後ユーザー承認を得たうえで本適用 (--detect-only なし) で呼び直す 2 段構え。
 #
 # Usage:
-#   check-story-completion.sh <story-issue-number> [app-name]
+#   check-story-completion.sh <story-issue-number> [--detect-only] [app-name]
 #
 #   <story-issue-number>  対象 Story の番号
+#   --detect-only         判定のみ。Status 遷移は行わず、stdout に
+#                         "READY_TO_PROMOTE #N <title>" を出して exit 0
+#                         (子が全 Done で promote 対象なら)。それ以外は
+#                         silent exit 0
 #   [app-name]            複数アプリ運用時のアプリ識別子 (省略時は単一アプリ前提)
 #
 # 必要な前提:
@@ -25,11 +31,25 @@
 
 set -euo pipefail
 
-ISSUE="${1:-}"
-APP_NAME="${2:-}"
+ISSUE=""
+APP_NAME=""
+DETECT_ONLY=0
+
+for arg in "$@"; do
+  case "$arg" in
+    --detect-only) DETECT_ONLY=1 ;;
+    *)
+      if [[ -z "$ISSUE" ]]; then
+        ISSUE="$arg"
+      elif [[ -z "$APP_NAME" ]]; then
+        APP_NAME="$arg"
+      fi
+      ;;
+  esac
+done
 
 if [[ -z "$ISSUE" ]]; then
-  echo "Usage: $0 <story-issue-number> [app-name]" >&2
+  echo "Usage: $0 <story-issue-number> [--detect-only] [app-name]" >&2
   exit 1
 fi
 
@@ -157,7 +177,16 @@ if [[ "$ALL_DONE" != "true" ]]; then
   exit 0
 fi
 
-# All children are Done — promote Story to Awaiting sprint review
+# All children are Done — either detect-only or promote
+STORY_TITLE=$(gh api "repos/$REPO/issues/$ISSUE" --jq '.title')
+
+if [[ "$DETECT_ONLY" -eq 1 ]]; then
+  # detect-only mode: emit the candidate marker and exit
+  echo "READY_TO_PROMOTE #$ISSUE $STORY_TITLE"
+  exit 0
+fi
+
+# Promote Story to Awaiting sprint review
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 bash "$SCRIPT_DIR/update-issue-status.sh" "$ISSUE" "Awaiting sprint review" ${APP_NAME:+"$APP_NAME"} >/dev/null || {
   echo "ERROR: failed to update Story #$ISSUE to 'Awaiting sprint review'" >&2
