@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# agile-setup-project Step 4: Status フィールド + 7 オプション作成
+# agile-setup-project Step 5: Status フィールド + 8 オプション作成
 #
 # Usage:
 #   setup-status-field.sh --owner <ORG> --project <NUMBER>
@@ -25,14 +25,14 @@ if [[ -z "$OWNER" || -z "$PROJECT" ]]; then
   exit 1
 fi
 
-EXPECTED_OPTIONS=("In Planning" "In Plan Refinement" "In Plan Review" "Ready" "In Coding Progress" "In Code Review" "Done")
+EXPECTED_OPTIONS=("In Planning" "In Plan Refinement" "In Plan Review" "Ready" "In Coding Progress" "In Code Review" "Awaiting sprint review" "Done")
 
 # Check whether Status field already exists
 EXISTING=$(gh project field-list "$PROJECT" --owner "$OWNER" --format json --jq '.fields[] | select(.name == "Status") | .id' || true)
 
 if [[ -n "$EXISTING" ]]; then
   echo "INFO: Status field already exists (id=$EXISTING)"
-  echo "      Verify the 7 options are present:"
+  echo "      Verify the 8 options are present:"
   for opt in "${EXPECTED_OPTIONS[@]}"; do
     echo "        - $opt"
   done
@@ -48,4 +48,4 @@ gh project field-create "$PROJECT" --owner "$OWNER" \
   --data-type "SINGLE_SELECT" \
   --single-select-options "$OPTIONS_CSV"
 
-echo "ok: Status field created with 7 options"
+echo "ok: Status field created with 8 options"
