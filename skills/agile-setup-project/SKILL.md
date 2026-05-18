@@ -1,6 +1,6 @@
 ---
 name: agile-setup-project
-description: "agile-* スキル群を動かすための GitHub Project (v2) を対話的にセットアップする。Project 新規作成または既存 Project の取り込み、Status フィールドの 7 オプション登録、推奨ビュー (Backlog / Sprint / Overview) 作成、Issue Type 確認、shared references の生成（プレースホルダ置換）までを 1 セッションで完了する。agile-* スキルを初めて自分のプロジェクトに入れるとき、または Project 設定が中途半端な状態を整えたいときに使う。Triggers: agile project setup, project setup, agile セットアップ, GitHub Projects 設定, github-projects.json 作成, agile 導入, プロジェクトセットアップ."
+description: "agile-* スキル群を動かすための GitHub Project (v2) を対話的にセットアップする。Project 新規作成または既存 Project の取り込み、Status フィールドの 8 オプション登録、Iteration field 作成 (180 日固定)、推奨ビュー (Backlog / Sprint / Overview) 作成、Issue Type 確認、shared references の生成（プレースホルダ置換）までを 1 セッションで完了する。agile-* スキルを初めて自分のプロジェクトに入れるとき、または Project 設定が中途半端な状態を整えたいときに使う。Triggers: agile project setup, project setup, agile セットアップ, GitHub Projects 設定, github-projects.json 作成, agile 導入, プロジェクトセットアップ."
 ---
 
 # Agile Project Setup
@@ -38,7 +38,7 @@ flowchart TB
   ctx["3. チームコンテキスト\nヒアリング"]
   proj["4. Project 用意\n(新規 or 既存)"]
   status["5. Status オプション登録 (8 つ)\n+ Iteration field 作成 (180 日固定)"]
-  done["6. Workflows 設定\n(Done 遷移 + Sub-issue 連鎖 close)"]
+  done["6. Workflows 設定\n(Item closed ON / Auto-add to project OFF / Auto-close issue OFF)"]
   views["7. ビュー作成案内\n(Backlog / Sprint / Overview)"]
   refs["8. shared references 生成"]
   docs["9. agile-update-skills\n委譲 (スキル + ドキュメント一括取得)"]
@@ -682,7 +682,7 @@ NG があれば原因候補:
   - Backlog: <ビュー URL>
   - Sprint: <ビュー URL>
   - Overview: <ビュー URL>
-✓ Workflows: <A: Item closed / Sub-issue 連鎖 close を有効化 + Auto-add を無効化 | B: 手動運用>
+✓ Workflows: <A: Item closed を有効化 + Auto-add to project / Auto-close issue を無効化 | B: 手動運用>
 ✓ 配置ファイル:
   - .claude/skills/references/github-projects.json
   - .claude/skills/references/team-context.json
@@ -709,7 +709,7 @@ NG があれば原因候補:
 - **Org 選択 / Issue Type 登録** — Web UI 操作のため完全に人間。AI は手順を案内するだけ
 - **Project 作成 vs 既存利用** — Step 4 の判断は人間。新規 Project URL を作るのは取り消しコストが高い操作
 - **Status オプション登録** — `gh project field-create` 実行前に人間承認
-- **Workflows 有効化判断** — Step 6 の Workflows (Item closed / Sub-issue 連鎖 close) を有効化するかは人間判断 (Web UI 操作必須、API 自動化不可)
+- **Workflows 設定判断** — Step 6 の Workflows (Item closed を有効化 / Auto-add to project / Auto-close issue を無効化) を反映するかは人間判断 (Web UI 操作必須、API 自動化不可)
 - **agile-update-skills 実行確認** — Step 9 で `/agile-update-skills` に委譲する判断 (ドキュメント配置先選択は委譲先の人間承認ゲート) は人間判断
 - **動作確認の実施可否** — Step 10 で smoke test を回すか、cleanup ポリシーは人間判断
 - **チームコンテキストとプリセット選択** — Step 3 の体制ヒアリングと「軽量 / 標準 / 集中」プリセット選択は人間判断。AI は提案するだけ

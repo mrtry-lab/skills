@@ -121,12 +121,12 @@ flowchart TB
 
 ## Status 遷移
 
-既存の 7 オプション (In Planning → In Plan Refinement → In Plan Review → Ready → In Coding Progress → In Code Review → Done) をそのまま流用。新規 Status は追加しない。
+既存の 8 オプション (In Planning → In Plan Refinement → In Plan Review → Ready → In Coding Progress → In Code Review → Awaiting sprint review → Done) をそのまま流用。Implementation Plan 用に新規 Status は追加しない。
 
 | Issue Type | 使う Status |
 |------------|------------|
-| Story | 全 7 ステップ |
-| **Implementation Plan** | Ready → In Coding Progress → In Code Review → Done (Task と同じ 4 Status) |
+| Story | In Planning → In Plan Refinement → In Plan Review → Ready → In Coding Progress → Awaiting sprint review → Done (7 ステップ、`In Code Review` は使わない) |
+| **Implementation Plan** | Ready → In Coding Progress → In Code Review → Done (Task と同じ 4 Status、`Awaiting sprint review` は使わない) |
 | Task | Ready → In Coding Progress → In Code Review → Done |
 
 Implementation Plan は Task と同じ 4 Status を使う。これにより Sprint ビュー (Filter: `Ready` / `In Coding Progress` / `In Code Review` / `Done`) に Implementation Plan も表示され、Story 配下で Implementation Plan と Task のレビュー進捗を統一的に追える。Implementation Plan は PR を出さないが、`In Code Review` は「Implementation Plan ドキュメントのレビュー (Dev + PdO + QA)」を意味する。
@@ -142,16 +142,16 @@ Implementation Plan は Task と同じ 4 Status を使う。これにより Spri
 
 **前提**: Plan の起票は親 Story が `Ready` 以降であることが前提 (`agile-refine-implementation-plan` Step 1.0 の Hard gate)。Refinement 未完了の Story から Plan を起票しようとすると拒否される。詳細は [operations.md](../operations.md) の「Plan / Task 起票の前提条件」参照。
 
-## Done のカスケード
+## Done への遷移
 
 Story の Done 条件:
 
 1. 受入基準すべて満たす
 2. Implementation Plan が Done (作成された場合のみ)
 3. 全 Task が Done
-4. 受入確認完了
+4. `/agile-sprint-review` で受け入れ確認 OK
 
-GitHub Projects 標準 Workflow「Sub-issue all closed → Parent auto-close」を有効化すれば半自動化できる。
+子の Plan/Task が全 Done になると、Story は `/agile-sprint-review` 起動時の lazy scan で `Awaiting sprint review` Status に自動移動する。その後ユーザーが AC 内容を確認して OK 判定したら Story Status を Done に進める。Auto-close issue Workflow は OFF にしておくので Story 自身は Backlog View に残る。Epic 配下の全 Story が Done になったタイミングで `/agile-sprint-review` の Step 6 が Epic close 可否を確認し、承認されたら Epic + 配下 Story を cascade close する。
 
 ## Three Amigos の責務分割
 

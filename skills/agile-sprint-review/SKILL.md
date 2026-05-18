@@ -62,7 +62,7 @@ flowchart TB
 
 ## Step 1: Awaiting sprint review に移動する候補を列挙 (lazy scan, detect-only)
 
-Story Status を Done に変える経路が複数あり、特に PR merge → Auto-close issue Workflow → Task Done のルートは skill から検知できない。本 skill 起動時に **In Coding Progress の Story を全件 scan** して、子が全 Done のものを Awaiting sprint review に移動する候補として列挙する。Status 変更は **ユーザー承認後** に行う。
+Plan/Task の Status を Done に変える経路が複数あり、特に PR merge による issue close → `Item closed` Workflow で Status=Done のルートは skill から検知できない。本 skill 起動時に **In Coding Progress の Story を全件 scan** して、子が全 Done のものを Awaiting sprint review に移動する候補として列挙する。Status 変更は **ユーザー承認後** に行う。
 
 ### 手順
 

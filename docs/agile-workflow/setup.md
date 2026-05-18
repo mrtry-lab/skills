@@ -6,7 +6,7 @@
 - **Issue Type の登録**: `Epic` / `Story` / `Implementation Plan` / `Task` の 4 つを Organization に登録済みであること
   - 設定箇所: Organization Settings → Planning → Issue types
   - 未登録の場合は skill 実行時にエラーで案内される
-- **GitHub Projects (v2)**: ステータス管理用の Project が存在し、Status フィールドに `In Planning` / `In Plan Refinement` / `In Plan Review` / `Ready` / `In Coding Progress` / `In Code Review` / `Done` の 7 オプションを設定
+- **GitHub Projects (v2)**: ステータス管理用の Project が存在し、Status フィールドに `In Planning` / `In Plan Refinement` / `In Plan Review` / `Ready` / `In Coding Progress` / `In Code Review` / `Awaiting sprint review` / `Done` の 8 オプションを設定。`Awaiting sprint review` は子 Plan/Task が全 Done になった Story が一時滞留する受け入れ確認待ち Status (`/agile-sprint-review` skill で処理)
 
 ### ローカル環境
 - `gh` CLI（最新版）
