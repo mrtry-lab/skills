@@ -63,7 +63,9 @@ agile-* スキル群の閾値は `~/.claude/skills/references/team-context.json`
 
 ## セットアップ手順
 
-> 💡 初回セットアップは `/agile-setup-project` スキルを使うと、GitHub Project 作成・Status オプション登録・ビュー作成案内・shared references 生成までを対話で一気通貫で完了できる。下記の手動手順は内部で何が起きているかを把握したい場合の参考。
+> 💡 **最速ルート (Recommended)**: `mrtry-lab/Agile Project Sample` (Project Template, `public: true` / `template: true`) を copyProjectV2 で複製すると、Status 8 options / Iteration field (180 日) / 3 Views (Backlog / Sprint / Overview) / Workflows (Item closed ON / Auto-add to project OFF / Auto-close issue OFF) が**初期状態で揃った状態** で新 Project が立ち上がる。`/agile-setup-project` の Step 4 で「Template からコピー」を選べばこの経路が走る。skill が引き継ぎ状況を自動検査し、不足項目だけ手動 setup の fallback (Step 5/6/7) に降りる。
+>
+> 💡 Template 経路が使えない (組織ポリシーで copyProjectV2 が叩けない等) 場合は新規作成 or 既存 Project 取り込みのパスに切り替えると、従来通り `gh project field-create` + Web UI 操作で組み立てる。`/agile-setup-project` の Step 4 で 3 択から選べる。下記の手動手順はその内部で何が起きているかを把握したい場合の参考。
 
 ### 1. skill のインストール
 
