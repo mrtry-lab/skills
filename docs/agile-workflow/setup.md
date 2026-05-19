@@ -63,9 +63,36 @@ agile-* スキル群の閾値は `~/.claude/skills/references/team-context.json`
 
 ## セットアップ手順
 
-> 💡 **最速ルート (Recommended)**: `mrtry-lab/Agile Project Sample` (Project Template, `public: true` / `template: true`) を copyProjectV2 で複製すると、Status 8 options / Iteration field (180 日) / 3 Views (Backlog / Sprint / Overview) / Workflows (Item closed ON / Auto-add to project OFF / Auto-close issue OFF) が**初期状態で揃った状態** で新 Project が立ち上がる。`/agile-setup-project` の Step 4 で「Template からコピー」を選べばこの経路が走る。skill が引き継ぎ状況を自動検査し、不足項目だけ手動 setup の fallback (Step 5/6/7) に降りる。
->
-> 💡 Template 経路が使えない (組織ポリシーで copyProjectV2 が叩けない等) 場合は新規作成 or 既存 Project 取り込みのパスに切り替えると、従来通り `gh project field-create` + Web UI 操作で組み立てる。`/agile-setup-project` の Step 4 で 3 択から選べる。下記の手動手順はその内部で何が起きているかを把握したい場合の参考。
+`/agile-setup-project` を実行すれば、対話で 1 回流すだけで以下のフローが回る。下記の手動手順は内部で何が起きているかを把握したい / Template 経路が使えない環境用の参考。
+
+### Project Template `mrtry-lab/Agile Project Sample` (Recommended)
+
+agile-* スキル群が前提とする GitHub Project 構成は **公開テンプレート Project として配布されている**。手動で `gh project field-create` を繰り返す代わりに、`copyProjectV2` mutation で 1 リクエスト複製するだけで以下が初期状態で揃う:
+
+- **Status 8 options**: In Planning → In Plan Refinement → In Plan Review → Ready → In Coding Progress → In Code Review → Awaiting sprint review → Done
+- **Iteration field**: duration 180 日固定 (auto-advance を避けるため意図的に長め)
+- **3 Views**: Backlog (Board, Story の Epic 別 swimlane) / Sprint (Board, Plan/Task の Story 別 swimlane + iteration:@current フィルタ) / Overview (Table, Type 別 + Show hierarchy)
+- **Workflows**: Item closed ON / Auto-add to project OFF / Auto-close issue OFF
+
+| 項目 | 値 |
+|---|---|
+| Template URL | https://github.com/orgs/mrtry-lab/projects/3 |
+| Template flags | `public: true` / `template: true` |
+| 複製方法 | GraphQL `copyProjectV2(input: { projectId, ownerId, title, includeDraftIssues: false })` |
+| 同梱スクリプト | `skills/agile-setup-project/scripts/copy-from-template.sh` |
+
+`/agile-setup-project` の **Step 4 で「Template からコピー」を選択** すれば、上記が自動実行される。複製後は skill が以下 4 つの assertion script で引き継ぎ状況を検査し、**全 OK なら Step 5/6/7 をスキップして Step 8 (JSON 生成) に直行**、不足あれば該当 Step だけ fallback に降りる:
+
+- `assert-status-options.sh` — Status 8 options 揃ってるか
+- `assert-iteration-field.sh` — Iteration field の duration=180 / iterations >= 1
+- `assert-workflows.sh` — 3 Workflow の有効/無効状態
+- `assert-views.sh` — Backlog / Sprint / Overview 揃ってるか
+
+Issue Type (Epic / Story / Implementation Plan / Task) は **Organization レベルの設定で Template には含まれない** ので、別途 `assert-issue-types.sh` で確認 → 未登録なら Step 2 で登録手順を案内。
+
+### Template が使えない場合 (新規作成 / 既存 Project 取り込み)
+
+組織ポリシーで copyProjectV2 が叩けない、別の独自 Project 構成を使いたい等の理由で Template が使えない場合は、`/agile-setup-project` の Step 4 で「新規作成」or「既存 Project を取り込む」を選ぶと、従来通り `gh project field-create` + Web UI 操作で Status / Iteration / Workflows / Views を組み立てる経路に降りる。同 4 つの assertion script で「何が足りないか」を検出して該当 Step だけ実行する設計。
 
 ### 1. skill のインストール
 
