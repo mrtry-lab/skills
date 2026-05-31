@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# post-checkout: branch 切替後にも sync する。
+# 引数: $1=prev_head $2=new_head $3=branch_checkout_flag (1=branch, 0=file)
+# branch 切替時のみ実行。
+
+set -euo pipefail
+
+if [ "${3:-0}" != "1" ]; then
+  exit 0
+fi
+
+REPO="$(git rev-parse --show-toplevel)"
+SCRIPT="$REPO/scripts/sync-user-skills.sh"
+
+if [ -x "$SCRIPT" ]; then
+  bash "$SCRIPT"
+fi

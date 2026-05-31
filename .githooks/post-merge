@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+# post-merge: git pull / git merge 後に skills/ を ~/.claude/skills/ へ自動 sync する。
+#
+# 有効化: 利用者が一度だけ実行
+#   git config core.hooksPath .githooks
+#
+# 無効化:
+#   git config --unset core.hooksPath
+
+set -euo pipefail
+
+REPO="$(git rev-parse --show-toplevel)"
+SCRIPT="$REPO/scripts/sync-user-skills.sh"
+
+if [ -x "$SCRIPT" ]; then
+  bash "$SCRIPT"
+fi
